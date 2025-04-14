@@ -11,11 +11,11 @@ public class RecipesController(AppDbContext context) : BaseApiController
    [HttpGet]
    public async Task<ActionResult<List<Recipe>>> GetRecipes()
    {
-    return await context.Recipes.ToListAsync();
+      return await context.Recipes.ToListAsync();
    }
 
-   [HttpGet( "{id}" )]
-   public async Task<ActionResult<Recipe>> GetRecipeDetail(string id) 
+   [HttpGet("{id}")]
+   public async Task<ActionResult<Recipe>> GetRecipeDetail(string id)
    {
       var recipe = await context.Recipes.FindAsync(id);
 
@@ -23,4 +23,29 @@ public class RecipesController(AppDbContext context) : BaseApiController
 
       return recipe;
    }
+
+   [HttpGet("user/{userId}")]
+   public async Task<ActionResult<List<Recipe>>> GetUserRecipes(string userId)
+   {
+      var recipes = await context.Recipes
+                                 .Where(r => r.UserId == userId)
+                                 .ToListAsync();
+
+      if (recipes == null) return NotFound();
+
+      return Ok(recipes);
+   }
+
+   [HttpGet("step/{recipeId}")]
+   public async Task<ActionResult<List<Recipe>>> GetURecipeSteps(string recipeId)
+   {
+      var steps = await context.Steps
+                                 .Where(s => s.RecipeId == recipeId)
+                                 .ToListAsync();
+
+      if (steps == null) return NotFound();
+
+      return Ok(steps);
+   }
+
 }
