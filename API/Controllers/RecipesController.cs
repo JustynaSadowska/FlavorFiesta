@@ -1,51 +1,48 @@
 using System;
+using Application.Recipes.Commands;
+using Application.Recipes.Queries;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace API.Controllers;
 
-public class RecipesController(AppDbContext context) : BaseApiController
+public class RecipesController : BaseApiController
 {
    [HttpGet]
    public async Task<ActionResult<List<Recipe>>> GetRecipes()
    {
-      return await context.Recipes.ToListAsync();
+      return await Mediator.Send(new GetRecipeList.Query());
    }
 
    [HttpGet("{id}")]
    public async Task<ActionResult<Recipe>> GetRecipeDetail(string id)
    {
-      var recipe = await context.Recipes.FindAsync(id);
-
-      if (recipe == null) return NotFound();
-
-      return recipe;
+      return await Mediator.Send(new GetRecipeDetails.Query{Id = id});
    }
 
-   [HttpGet("user/{userId}")]
-   public async Task<ActionResult<List<Recipe>>> GetUserRecipes(string userId)
+   [HttpPost]
+   public async Task<ActionResult<string>> CreateRecipe(Recipe recipe)
    {
-      var recipes = await context.Recipes
-                                 .Where(r => r.UserId == userId)
-                                 .ToListAsync();
-
-      if (recipes == null) return NotFound();
-
-      return Ok(recipes);
+      return await Mediator.Send(new CreateRecipe.Command{Recipe = recipe});
    }
 
-   [HttpGet("step/{recipeId}")]
-   public async Task<ActionResult<List<Recipe>>> GetURecipeSteps(string recipeId)
+   [HttpPut]
+   public async Task<ActionResult> EditRecipe(Recipe recipe)
    {
-      var steps = await context.Steps
-                                 .Where(s => s.RecipeId == recipeId)
-                                 .ToListAsync();
+      await Mediator.Send(new EditRecipe.Command{ Recipe = recipe });
 
-      if (steps == null) return NotFound();
+      return NoContent();
+   }
 
-      return Ok(steps);
+   [HttpDelete("{id}")]
+   public async Task<ActionResult> DeleteRecipe(string id)
+   {
+      await Mediator.Send(new DeleteRecipe.Command{ Id=id });
+
+      return Ok();
    }
 
 }
