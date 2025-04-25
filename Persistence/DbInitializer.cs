@@ -308,11 +308,15 @@ public class DbInitializer
             {
                 UserId = users[0].Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-10),
+                IsDeleted = false
+
             },
             new()
             {
                 UserId = users[1].Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-100),
+                IsDeleted = false
+
             }
         };
 
