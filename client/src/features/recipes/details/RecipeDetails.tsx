@@ -1,12 +1,18 @@
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material"
+import { useRecipes } from "../../../lib/hooks/useRecipes"
 
 type Props ={
-    recipe: Recipe
+    selectedrecipe: Recipe
     cancelSelectedRecipe: () => void
     openForm: (id: string) => void
-    deleteRecipe: (id: string) => void
 }
-export default function RecipeDetails({recipe, cancelSelectedRecipe, openForm, deleteRecipe } : Props) {
+export default function RecipeDetails({selectedrecipe, cancelSelectedRecipe, openForm } : Props) {
+    const {recipes} = useRecipes();
+    const recipe = recipes?.find(x => x.id === selectedrecipe.id);
+    const{deleteRecipe} = useRecipes();
+
+    if (!recipe) return  <Typography >Loading ...</Typography>
+
   return (
    <Card>
         <CardContent>
@@ -20,7 +26,7 @@ export default function RecipeDetails({recipe, cancelSelectedRecipe, openForm, d
         <CardActions>
             <Button onClick={() => openForm(recipe.id)}> Edit</Button>
             <Button onClick={cancelSelectedRecipe}>Cancel</Button>
-            <Button onClick={()=> deleteRecipe(recipe.id)} size = 'medium' color= 'error'    
+            <Button onClick={()=> deleteRecipe.mutate(recipe.id)} disabled={deleteRecipe.isPending} size = 'medium' color= 'error'    
                 variant="contained">Delete</Button>
         </CardActions>
    </Card>

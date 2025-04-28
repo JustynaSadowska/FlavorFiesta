@@ -1,14 +1,15 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { FormEvent } from "react";
+import { useRecipes } from "../../../lib/hooks/useRecipes";
 type Props = {
     recipe?: Recipe
     closeForm: () => void
-    submitForm: (recipe: Recipe) => void
 }
 
-export default function RecipeForm({recipe, closeForm, submitForm}: Props) {
+export default function RecipeForm({recipe, closeForm}: Props) {
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const{updateRecipe, createRecipe} = useRecipes();
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
         const formData = new FormData(event.currentTarget);
@@ -18,9 +19,14 @@ export default function RecipeForm({recipe, closeForm, submitForm}: Props) {
             data[key] = value;
         });
 
-        if(recipe) data.id = recipe.id
-        
-        submitForm(data as unknown as Recipe)
+        if(recipe){
+            data.id = recipe.id
+            await updateRecipe.mutateAsync(data as unknown as Recipe)
+            closeForm();
+        } else{
+            await createRecipe.mutateAsync(data as unknown as Recipe)
+            closeForm();
+        }
     }
 
   return (
@@ -36,7 +42,7 @@ export default function RecipeForm({recipe, closeForm, submitForm}: Props) {
                  <TextField name='difficulty' label='Difficulty'  defaultValue={recipe?.difficulty}/>
                  <Box display='flex' justifyContent='end' gap={3}>
                      <Button onClick={closeForm} color='inherit'>Cancel</Button>
-                     <Button type="submit" color='success' variant="contained">Submit</Button>
+                     <Button type="submit" color='success' variant="contained" disabled={updateRecipe.isPending || createRecipe.isPending}>Submit</Button>
                  </Box>
         </Box>
    </Paper>

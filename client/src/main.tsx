@@ -9,13 +9,19 @@ import App from './app/layout/App';
 import theme from "./app/layout/Theme";  // Zaimportowanie pliku z theme
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { CssBaseline } from '@mui/material';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
      <ThemeProvider theme={theme}>
       <CssBaseline /> {/* Resetuje style, stosuje nasz theme */}
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        <App />
+      </QueryClientProvider>
     </ThemeProvider>
   </StrictMode>,
 )

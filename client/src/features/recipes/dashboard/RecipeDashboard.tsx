@@ -11,8 +11,6 @@ type Props = {
     openForm: (id: string) => void
     closeForm: () => void
     editMode: boolean
-    submitForm: (recipe: Recipe) => void
-    deleteRecipe: (id:string) => void 
 }
 export default function RecipeDashboard({
   recipes,
@@ -22,8 +20,6 @@ export default function RecipeDashboard({
   openForm,
   closeForm,
   editMode, 
-  submitForm,
-  deleteRecipe
 }
   : Props) {
   return (
@@ -37,15 +33,15 @@ export default function RecipeDashboard({
         <Grid2 size={5}>
           {selectedRecipe && !editMode &&
           <RecipeDetails
-            recipe={selectedRecipe}
+            selectedrecipe={selectedRecipe}
             cancelSelectedRecipe= {cancelSelectedRecipe} 
             openForm={openForm}
-            deleteRecipe={deleteRecipe}/>
+            />
           }
           {editMode && <RecipeForm 
           closeForm={closeForm} 
           recipe={selectedRecipe} 
-          submitForm = {submitForm}/>}
+          />}
         </Grid2>
     </Grid2>
   )
