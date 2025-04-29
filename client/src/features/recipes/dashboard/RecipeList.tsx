@@ -1,11 +1,12 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import RecipeCard from "./RecipeCard";
+import { useRecipes } from "../../../lib/hooks/useRecipes";
 
-type Props = {
-    recipes: Recipe[]
-    selectRecipe: (id: string) => void
-}
-export default function RecipeList({recipes, selectRecipe}: Props) {
+
+export default function RecipeList() {
+  const {recipes, isPending} = useRecipes();
+   
+  if(!recipes || isPending) return <Typography>Loading...</Typography>
   return (
     <Box sx={{display: "flex",
         flexWrap: "wrap",           
@@ -15,7 +16,6 @@ export default function RecipeList({recipes, selectRecipe}: Props) {
         {recipes.map(recipe => (
             <RecipeCard key={recipe.id} 
               recipe ={recipe} 
-              selectRecipe={selectRecipe}
               />
         ))}
     </Box>

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 
-export const useRecipes = () => {
+export const useRecipes = (id?: string) => {
     const queryClient = useQueryClient();
 
     const {data: recipes, isPending} = useQuery({
@@ -11,6 +11,15 @@ export const useRecipes = () => {
           return response.data;
         }
       });   
+
+      const {data: recipe, isLoading: isLoadingRecipe} = useQuery({
+        queryKey: ['recipes', id],
+        queryFn: async () => {
+          const response = await agent.get<Recipe>(`/recipes/${id}`);
+          return response.data;
+        },
+        enabled: !!id
+      });
 
       const updateRecipe = useMutation({
         mutationFn: async(recipe: Recipe) => {
@@ -25,7 +34,8 @@ export const useRecipes = () => {
 
         const createRecipe = useMutation({
         mutationFn: async(recipe: Recipe) => {
-            await agent.post('/recipes', recipe)
+            const response = await agent.post('/recipes', recipe);
+            return response.data;
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({
@@ -50,6 +60,8 @@ export const useRecipes = () => {
         isPending,
         updateRecipe,
         createRecipe,
-        deleteRecipe
+        deleteRecipe,
+        recipe,
+        isLoadingRecipe
       }
 }

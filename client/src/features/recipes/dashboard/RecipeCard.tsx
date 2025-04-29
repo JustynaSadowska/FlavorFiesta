@@ -1,13 +1,13 @@
 import {Card, CardActionArea, CardContent, Typography } from "@mui/material"
+import { Link } from "react-router"
 
 type Props ={
     recipe : Recipe
-    selectRecipe: (id: string) => void
 }
-export default function RecipeCard({recipe, selectRecipe} : Props) {
+export default function RecipeCard({recipe} : Props) {
   return (
       <Card sx={{ maxWidth: 360, mb:3}}>
-        <CardActionArea onClick={() => selectRecipe(recipe.id)}>
+        <CardActionArea component = {Link} to = {`/recipes/${recipe.id}`}>
           {/* <CardMedia
             component="img"
             height="140"

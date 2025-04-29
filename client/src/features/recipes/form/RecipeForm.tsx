@@ -1,14 +1,14 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { FormEvent } from "react";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
-type Props = {
-    recipe?: Recipe
-    closeForm: () => void
-}
+import { useNavigate, useParams } from "react-router";
 
-export default function RecipeForm({recipe, closeForm}: Props) {
 
-    const{updateRecipe, createRecipe} = useRecipes();
+export default function RecipeForm() {
+    const {id} = useParams();
+    const{updateRecipe, createRecipe, recipe, isLoadingRecipe} = useRecipes(id);
+    const navigate = useNavigate();
+
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
@@ -20,19 +20,24 @@ export default function RecipeForm({recipe, closeForm}: Props) {
         });
 
         if(recipe){
-            data.id = recipe.id
-            await updateRecipe.mutateAsync(data as unknown as Recipe)
-            closeForm();
+            data.id = recipe.id;
+            await updateRecipe.mutateAsync(data as unknown as Recipe);
+            navigate(`/recipes/${recipe.id}`);
         } else{
-            await createRecipe.mutateAsync(data as unknown as Recipe)
-            closeForm();
+            createRecipe.mutate(data as unknown as Recipe, {
+                onSuccess: (id) => {
+                    navigate(`/recipes/${id}`)
+                }
+            });
         }
     }
 
+    if(isLoadingRecipe) return <Typography>Loading...</Typography>
+    
   return (
     <Paper sx={{ borderRadius: 3, padding: 3 }}>
         <Typography variant="h5" gutterBottom color="primary">
-            Create Recipe
+           {recipe ? 'Edit recipe' : ' Create Recipe'}
         </Typography>
         <Box component='form' onSubmit={handleSubmit} display='flex' flexDirection='column' gap={3}>
                  <TextField name='title' label='Title' defaultValue={recipe?.title} />
@@ -41,7 +46,7 @@ export default function RecipeForm({recipe, closeForm}: Props) {
                  <TextField name='preparationTime' label='PreparationTime'defaultValue={recipe?.preparationTime} />
                  <TextField name='difficulty' label='Difficulty'  defaultValue={recipe?.difficulty}/>
                  <Box display='flex' justifyContent='end' gap={3}>
-                     <Button onClick={closeForm} color='inherit'>Cancel</Button>
+                     <Button onClick={() => navigate('/recipes')} color='inherit'>Cancel</Button>
                      <Button type="submit" color='success' variant="contained" disabled={updateRecipe.isPending || createRecipe.isPending}>Submit</Button>
                  </Box>
         </Box>

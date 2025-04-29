@@ -1,17 +1,16 @@
 import { Button, Card, CardActions, CardContent, Typography } from "@mui/material"
 import { useRecipes } from "../../../lib/hooks/useRecipes"
+import { Link, useNavigate, useParams } from "react-router";
 
-type Props ={
-    selectedrecipe: Recipe
-    cancelSelectedRecipe: () => void
-    openForm: (id: string) => void
-}
-export default function RecipeDetails({selectedrecipe, cancelSelectedRecipe, openForm } : Props) {
-    const {recipes} = useRecipes();
-    const recipe = recipes?.find(x => x.id === selectedrecipe.id);
+export default function RecipeDetails() {
+    const navigate = useNavigate();
+    const {id} = useParams();
+    const {recipe, isLoadingRecipe} = useRecipes(id);
     const{deleteRecipe} = useRecipes();
 
-    if (!recipe) return  <Typography >Loading ...</Typography>
+    if (isLoadingRecipe) return <Typography>Loading...</Typography>
+
+    if (!recipe) return <Typography>Recipe not found</Typography>
 
   return (
    <Card>
@@ -24,8 +23,8 @@ export default function RecipeDetails({selectedrecipe, cancelSelectedRecipe, ope
             <Typography variant="body1">servings: {recipe.servings}</Typography>
         </CardContent>
         <CardActions>
-            <Button onClick={() => openForm(recipe.id)}> Edit</Button>
-            <Button onClick={cancelSelectedRecipe}>Cancel</Button>
+            <Button component= {Link} to = {`/manage/${recipe.id}`}> Edit</Button>
+            <Button onClick={() => navigate('/recipes')}>Cancel</Button>
             <Button onClick={()=> deleteRecipe.mutate(recipe.id)} disabled={deleteRecipe.isPending} size = 'medium' color= 'error'    
                 variant="contained">Delete</Button>
         </CardActions>

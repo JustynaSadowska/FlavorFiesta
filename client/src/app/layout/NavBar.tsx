@@ -11,15 +11,11 @@ import PersonIcon from '@mui/icons-material/Person';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import { Link, NavLink } from 'react-router';
+import MenuItemLink from '../shared/components/MenuItemLink';
 const pages = ['Recipes', 'Users'];
-const settings = ['Account', 'Shopping Lists', 'Create Recipe','Logout'];
 
-type Props = {
-  openForm: () => void;
-
-}
-
-export default function NavBar({openForm}: Props) {
+export default function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -44,22 +40,20 @@ export default function NavBar({openForm}: Props) {
         <Toolbar disableGutters>
         <RestaurantMenuIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
-            variant="h4"
-            noWrap
-            component="a"
-            //href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'Lora',
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
+              variant="h4"
+              noWrap
+              component= {NavLink} to = '/'
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'Lora',
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
             FlavorFiesta
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -88,39 +82,38 @@ export default function NavBar({openForm}: Props) {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem component ={Link} to={`/${page.toLowerCase()}`} key={page} onClick={handleCloseNavMenu}>
                   <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
           <RestaurantMenuIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h4"
-            noWrap
-            component="a"
-            //href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'Lora',
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
+            <Typography
+              variant="h4"
+              noWrap
+              component= {Link} to = '/'
+              //href="#app-bar-with-responsive-menu"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                fontFamily: 'Lora',
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
             FlavorFiesta
-          </Typography>
+            </Typography>
+          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <MenuItem
+              <MenuItemLink  to={`/${page.toLowerCase()}`}
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'black', display: 'block', backgroundColor: 'transparent', fontFamily: 'Lora' }}
               >
                 {page}
-              </MenuItem>
+              </MenuItemLink>
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
@@ -145,16 +138,18 @@ export default function NavBar({openForm}: Props) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting}  onClick={() => {
-                  if (setting === "Create Recipe") {
-                    openForm();
-                  }
-                  handleCloseUserMenu();
-                }}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem component={Link} to="/account" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Account</Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/shoppinglists" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Shopping Lists</Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/createRecipe" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Create Recipe</Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/logout" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
