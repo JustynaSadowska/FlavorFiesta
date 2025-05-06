@@ -5,8 +5,10 @@ type Props ={
     recipe : Recipe
 }
 export default function RecipeCard({recipe} : Props) {
+ 
+
   return (
-      <Card sx={{ maxWidth: 360, mb:3}}>
+      <Card elevation={3} sx={{ maxWidth: 360, mb:3}}>
         <CardActionArea component = {Link} to = {`/recipes/${recipe.id}`}>
           {/* <CardMedia
             component="img"
