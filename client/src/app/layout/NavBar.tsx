@@ -13,11 +13,15 @@ import MenuItem from '@mui/material/MenuItem';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import { Link, NavLink } from 'react-router';
 import MenuItemLink from '../shared/components/MenuItemLink';
+import { useStore } from '../../lib/hooks/useStore';
+import { Observer } from 'mobx-react-lite';
+import { LinearProgress } from '@mui/material';
 const pages = ['Recipes', 'Users'];
 
 export default function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const {uiStore} = useStore();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -35,7 +39,7 @@ export default function NavBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="relative">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
         <RestaurantMenuIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -147,6 +151,9 @@ export default function NavBar() {
               <MenuItem component={Link} to="/createRecipe" onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Create Recipe</Typography>
               </MenuItem>
+              <MenuItem component={Link} to="/counter" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Counter</Typography>
+              </MenuItem>
               <MenuItem component={Link} to="/logout" onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
@@ -154,6 +161,20 @@ export default function NavBar() {
           </Box>
         </Toolbar>
       </Container>
+
+      <Observer>
+        {() => uiStore.isLoading ? (
+            <LinearProgress 
+              color = "inherit"
+              sx ={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: 2
+              }}/>
+        ): null}
+      </Observer>
     </AppBar>
   );
 }

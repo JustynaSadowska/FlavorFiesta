@@ -1,15 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
+import { useLocation } from "react-router";
 
 export const useRecipes = (id?: string) => {
     const queryClient = useQueryClient();
+    const location = useLocation();
 
     const {data: recipes, isPending} = useQuery({
         queryKey: ['recipes'],
         queryFn: async () => {
           const response = await agent.get<Recipe[]>('/recipes');
           return response.data;
-        }
+        },
+        enabled: !id && location.pathname === '/recipes'
       });   
 
       const {data: recipe, isLoading: isLoadingRecipe} = useQuery({

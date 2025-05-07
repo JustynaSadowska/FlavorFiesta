@@ -4,6 +4,7 @@ import HomePage from "../../features/home/HomePage";
 import RecipeDashboard from "../../features/recipes/dashboard/RecipeDashboard";
 import RecipeForm from "../../features/recipes/form/RecipeForm";
 import RecipeDetails from "../../features/recipes/details/RecipeDetails";
+import Counter from "../../features/counter/Counter";
 
 export const router = createBrowserRouter([
     {
@@ -15,6 +16,8 @@ export const router = createBrowserRouter([
             {path: 'createRecipe', element: <RecipeForm key='create'/>},
             {path: 'recipes/:id', element: <RecipeDetails/>},
             {path: 'manage/:id', element: <RecipeForm/>},
+            {path: 'counter', element: <Counter/>},
+
 
         ]
     }
