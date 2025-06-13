@@ -1,5 +1,8 @@
+using API.Middleware;
 using Application.Core;
 using Application.Recipes.Queries;
+using Application.Recipes.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -15,11 +18,20 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 builder.Services.AddCors();
-builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining<GetRecipeList.Handler>());
+builder.Services.AddMediatR(x =>
+{
+    x.RegisterServicesFromAssemblyContaining<GetRecipeList.Handler>();
+    x.AddOpenBehavior(typeof(ValidationBehavior<,>));
+}); 
+
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+builder.Services.AddValidatorsFromAssemblyContaining<CreateRecipeValidator>();
+builder.Services.AddTransient<ExceptionMiddleware>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
 app.MapControllers();
 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod()

@@ -154,6 +154,9 @@ export default function NavBar() {
               <MenuItem component={Link} to="/counter" onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Counter</Typography>
               </MenuItem>
+              <MenuItem component={Link} to="/errors" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Errors</Typography>
+              </MenuItem>
               <MenuItem component={Link} to="/logout" onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
