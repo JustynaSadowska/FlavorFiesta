@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Typogr
 import { useRecipes } from "../../../lib/hooks/useRecipes"
 import { Link, useNavigate, useParams } from "react-router";
 import { AccessTime } from "@mui/icons-material";
-import { formatDate } from "../../../lib/unitl/util";
+import { formatDate } from "../../../lib/util/util";
 
 export default function RecipeDetails() {
     const navigate = useNavigate();

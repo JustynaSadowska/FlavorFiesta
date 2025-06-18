@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import PersonIcon from '@mui/icons-material/Person';
-import Tooltip from '@mui/material/Tooltip';
+//import PersonIcon from '@mui/icons-material/Person';
+//import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import { Link, NavLink } from 'react-router';
@@ -16,26 +16,22 @@ import MenuItemLink from '../shared/components/MenuItemLink';
 import { useStore } from '../../lib/hooks/useStore';
 import { Observer } from 'mobx-react-lite';
 import { LinearProgress } from '@mui/material';
+import { useAccount } from '../../lib/hooks/useAccount';
+import UserMenu from './UserMenu';
+import { useState } from 'react';
 const pages = ['Recipes', 'Users'];
 
 export default function NavBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const {uiStore} = useStore();
+  const {currentUser} = useAccount();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   return (
@@ -121,46 +117,14 @@ export default function NavBar() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-             <PersonIcon/>
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem component={Link} to="/account" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Account</Typography>
-              </MenuItem>
-              <MenuItem component={Link} to="/shoppinglists" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Shopping Lists</Typography>
-              </MenuItem>
-              <MenuItem component={Link} to="/createRecipe" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Create Recipe</Typography>
-              </MenuItem>
-              <MenuItem component={Link} to="/counter" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Counter</Typography>
-              </MenuItem>
-              <MenuItem component={Link} to="/errors" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Errors</Typography>
-              </MenuItem>
-              <MenuItem component={Link} to="/logout" onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
+            {currentUser ? (
+              <UserMenu />
+            ) : (
+              <>
+                <MenuItemLink to="/login">Login</MenuItemLink>
+                <MenuItemLink to="/register">Register</MenuItemLink>
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>

@@ -4,9 +4,11 @@ import { useRecipes } from "../../../lib/hooks/useRecipes";
 
 
 export default function RecipeList() {
-  const {recipes, isPending} = useRecipes();
+  const {recipes, isLoading} = useRecipes();
    
-  if(!recipes || isPending) return <Typography>Loading...</Typography>
+  if(isLoading) return <Typography>Loading...</Typography>
+  if(!recipes) return <Typography>No recipes found</Typography>
+
   return (
     <Box sx={{display: "flex",
         flexWrap: "wrap",           
