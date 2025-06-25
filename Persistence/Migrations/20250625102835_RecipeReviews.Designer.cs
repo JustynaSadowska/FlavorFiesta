@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250616130929_UserIdentity")]
-    partial class UserIdentity
+    [Migration("20250625102835_RecipeReviews")]
+    partial class RecipeReviews
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

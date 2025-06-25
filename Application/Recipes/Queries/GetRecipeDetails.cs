@@ -1,27 +1,33 @@
 using System;
 using Application.Core;
+using Application.Recipes.DTOs;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Recipes.Queries;
 
 public class GetRecipeDetails
 {
-    public class Query : IRequest<Result<Recipe>>
+    public class Query : IRequest<Result<RecipeDto>>
     {
         public required string Id { get; set; }
     }
 
-    public class Handler (AppDbContext context) :IRequestHandler<Query, Result<Recipe>>
+    public class Handler (AppDbContext context, IMapper mapper) :IRequestHandler<Query, Result<RecipeDto>>
     {
-        public async Task<Result<Recipe>> Handle (Query request, CancellationToken cancellationToken)
+        public async Task<Result<RecipeDto>> Handle (Query request, CancellationToken cancellationToken)
         {
-            var recipe = await context.Recipes.FindAsync([request.Id], cancellationToken);
+            var recipe = await context.Recipes
+                .ProjectTo<RecipeDto>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => request.Id == x.Id, cancellationToken);
 
-            if (recipe == null) return Result<Recipe>.Failure("Recipe not found", 404);
+            if (recipe == null) return Result<RecipeDto>.Failure("Recipe not found", 404);
 
-            return Result<Recipe>.Success(recipe);
+            return Result<RecipeDto>.Success(recipe);
         }
     }
 }

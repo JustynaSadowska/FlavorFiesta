@@ -48,7 +48,7 @@ public class DbInitializer
         };
 
         context.Allergens.AddRange(allergens);
-        
+
         var tags = new List<Tag>
         {
             new Tag { Name = "Vegan" },
@@ -70,114 +70,111 @@ public class DbInitializer
             new Tag { Name = "Keto" },
             new Tag { Name = "Diabetic-Friendly" },
         };
-
         context.Tags.AddRange(tags);
+
+        var users = new List<User>
+        {
+            new() {
+                UserName = "anna@test.com",
+                Email = "anna@test.com",
+                FirstName = "Anna",
+                LastName = "Marek",
+                //Allergens = new List<Allergen> { allergens[1], allergens[2], allergens[10], allergens[12] }
+            },
+            new() {
+                UserName = "antoni@test.com",
+                Email = "antoni@test.com",
+                FirstName = "Antoni",
+                LastName = "Kowalski",
+                //Allergens = new List<Allergen> { allergens[2] }
+            },
+            new() {
+                UserName = "tomek@test.com",
+                Email = "tomek@test.com",
+                FirstName = "Tomek",
+                LastName = "Kowaleski",
+                //Allergens = new List<Allergen> { allergens[2] }
+            }
+        };
 
         if (!userManager.Users.Any())
         {
-            var users = new List<User>
-            {
-                new() {
-                    UserName = "anna@test.com",
-                    Email = "anna@test.com",
-                    FirstName = "Anna",
-                    LastName = "Marek",
-                    //Allergens = new List<Allergen> { allergens[1], allergens[2], allergens[10], allergens[12] }
-                },
-                new() {
-                    UserName = "antoni@test.com",
-                    Email = "antoni@test.com",
-                    FirstName = "Antoni",
-                    LastName = "Kowalski",
-                    //Allergens = new List<Allergen> { allergens[2] }
-                },
-                new() {
-                    UserName = "tomek@test.com",
-                    Email = "tomek@test.com",
-                    FirstName = "Tomek",
-                    LastName = "Kowaleski",
-                    //Allergens = new List<Allergen> { allergens[2] }
-                },
-            };
-
             foreach (var user in users)
             {
                 await userManager.CreateAsync(user, "Pa$$w0rd");
             }
-            context.Users.AddRange(users);
         }
-            if (context.Recipes.Any()) return;
-            var userList = context.Users.ToList();
-            var recipes = new List<Recipe>
+        if (context.Recipes.Any()) return;
+
+        var recipes = new List<Recipe>
+        {
+            new()
             {
-                new()
+                Title = "Spaghetti Carbonara",
+                UserId = users[0].Id,
+                Description = "Klasyczne włoskie danie z boczkiem, jajkami i serem pecorino.",
+                Servings = 4,
+                PreparationTime = 25,
+                Difficulty = RecipeDifficulty.Medium,
+                IsVisible = false,
+                CreatedAt = DateTime.UtcNow,
+                Tags =
                 {
-                    Title = "Spaghetti Carbonara",
-                    UserId = userList[0].Id,
-                    Description = "Klasyczne włoskie danie z boczkiem, jajkami i serem pecorino.",
-                    Servings = 4,
-                    PreparationTime = 25,
-                    Difficulty = RecipeDifficulty.Medium,
-                    IsVisible = false,
-                    CreatedAt = DateTime.UtcNow,
-                    Tags =
-                    {
-                        tags[8],
-                        tags[11]
-                    },
-                    Allergens =
-                    {
-                        allergens[4]
-                    }
+                    tags[8],
+                    tags[11]
                 },
-                new()
+                Allergens =
                 {
-                    Title = "Kurczak Tikka Masala",
-                    UserId = userList[1].Id,
-                    Description = "Aromatyczne kawałki kurczaka w kremowym sosie pomidorowym z przyprawami.",
-                    Servings = 4,
-                    PreparationTime = 40,
-                    Difficulty = RecipeDifficulty.Hard,
-                    IsVisible = true,
-                    CreatedAt = DateTime.Now.AddMonths(-2),
-                    Tags =
-                    {
-                        tags[8],
-                        tags[5]
-                    },
-                    Allergens =
-                    {
-                        allergens[13]
-                    }
-                },
-                new()
+                    allergens[4]
+                }
+            },
+            new()
+            {
+                Title = "Kurczak Tikka Masala",
+                UserId = users[1].Id,
+                Description = "Aromatyczne kawałki kurczaka w kremowym sosie pomidorowym z przyprawami.",
+                Servings = 4,
+                PreparationTime = 40,
+                Difficulty = RecipeDifficulty.Hard,
+                IsVisible = true,
+                CreatedAt = DateTime.Now.AddMonths(-2),
+                Tags =
                 {
-                    Title = "Tosty z Awokado",
-                    UserId = userList[0].Id,
-                    Description = "Zdrowe i smaczne tosty z awokado, pomidorem i jajkiem w koszulce.",
-                    Servings = 1,
-                    PreparationTime = 10,
-                    Difficulty = RecipeDifficulty.Easy,
-                    IsVisible = true,
-                    CreatedAt = DateTime.UtcNow,
-                    Tags =
-                    { tags[6], tags[10], tags[12], tags[13]
-                    },
-                    Allergens =
-                    { allergens[0], allergens[4]
-                    }
+                    tags[8],
+                    tags[5]
                 },
-            };
-            context.Recipes.AddRange(recipes);
+                Allergens =
+                {
+                    allergens[13]
+                }
+            },
+            new()
+            {
+                Title = "Tosty z Awokado",
+                UserId = users[0].Id,
+                Description = "Zdrowe i smaczne tosty z awokado, pomidorem i jajkiem w koszulce.",
+                Servings = 1,
+                PreparationTime = 10,
+                Difficulty = RecipeDifficulty.Easy,
+                IsVisible = true,
+                CreatedAt = DateTime.UtcNow,
+                Tags =
+                { tags[6], tags[10], tags[12], tags[13]
+                },
+                Allergens =
+                { allergens[0], allergens[4]
+                }
+            },
+        };
+        context.Recipes.AddRange(recipes);
 
-
-            var reviews = new List<Review>
+        var reviews = new List<Review>
             {
                 // recipe 1
                 new()
                 {
                     RecipeId = recipes[0].Id,
-                    UserId = userList[1].Id,
+                    UserId = users[1].Id,
                     Rating = 5,
                     Comment = "Świetny przepis! Bardzo smaczne danie, na pewno zrobię je ponownie.",
                     CreatedAt = DateTime.UtcNow.AddDays(-5),
@@ -186,7 +183,7 @@ public class DbInitializer
                 new()
                 {
                     RecipeId = recipes[0].Id,
-                    UserId = userList[2].Id,
+                    UserId = users[2].Id,
                     Rating = 3,
                     Comment = "Przepis ok, ale wymaga poprawek. Myślę, że dodałbym więcej przypraw.",
                     CreatedAt = DateTime.UtcNow.AddDays(-15),
@@ -196,7 +193,7 @@ public class DbInitializer
                 new()
                 {
                     RecipeId = recipes[1].Id,
-                    UserId = userList[0].Id,
+                    UserId = users[0].Id,
                     Rating = 4,
                     Comment = "Super przepis!",
                     CreatedAt = DateTime.UtcNow.AddDays(-5),
@@ -205,7 +202,7 @@ public class DbInitializer
                 new()
                 {
                     RecipeId = recipes[1].Id,
-                    UserId = userList[2].Id,
+                    UserId = users[2].Id,
                     Rating = 2,
                     Comment = "Niesmaczne!!! Nie polecam",
                     CreatedAt = DateTime.UtcNow.AddDays(-15),
@@ -215,7 +212,7 @@ public class DbInitializer
                 new()
                 {
                     RecipeId = recipes[2].Id,
-                    UserId = userList[1].Id,
+                    UserId = users[1].Id,
                     Rating = 5,
                     Comment = "Świetny przepis!",
                     CreatedAt = DateTime.UtcNow.AddDays(-5),
@@ -224,7 +221,7 @@ public class DbInitializer
                 new()
                 {
                     RecipeId = recipes[2].Id,
-                    UserId = userList[2].Id,
+                    UserId = users[2].Id,
                     Rating = 4,
                     Comment = "Dobre, ale mogłoby być trochę bardziej pikantne. Smaczne!",
                     CreatedAt = DateTime.UtcNow.AddDays(-10),
@@ -232,9 +229,9 @@ public class DbInitializer
                 }
             };
 
-            context.Reviews.AddRange(reviews);
+        context.Reviews.AddRange(reviews);
 
-            var steps = new List<Step>
+        var steps = new List<Step>
             {
                 // recipe 1
                 new()
@@ -287,9 +284,9 @@ public class DbInitializer
 
             };
 
-            context.Steps.AddRange(steps);
+        context.Steps.AddRange(steps);
 
-            var ingredients = new List<Ingredient>
+        var ingredients = new List<Ingredient>
             {
                 // recipe 1
                 new()
@@ -359,29 +356,29 @@ public class DbInitializer
                 },
             };
 
-            context.Ingredients.AddRange(ingredients);
+        context.Ingredients.AddRange(ingredients);
 
-            var shoppingLists = new List<ShoppingList>
+        var shoppingLists = new List<ShoppingList>
             {
                 new()
                 {
-                    UserId = userList[0].Id,
+                    UserId = users[0].Id,
                     CreatedAt = DateTime.UtcNow.AddDays(-10),
                     IsDeleted = false
 
                 },
                 new()
                 {
-                    UserId = userList[1].Id,
+                    UserId = users[1].Id,
                     CreatedAt = DateTime.UtcNow.AddDays(-100),
                     IsDeleted = false
 
                 }
             };
 
-            context.ShoppingLists.AddRange(shoppingLists);
+        context.ShoppingLists.AddRange(shoppingLists);
 
-            var shoppingListItems = new List<ShoppingListItem>
+        var shoppingListItems = new List<ShoppingListItem>
             {
                 // shopping list 1
                 new()
@@ -415,40 +412,40 @@ public class DbInitializer
                 },
             };
 
-            context.ShoppingListItems.AddRange(shoppingListItems);
+        context.ShoppingListItems.AddRange(shoppingListItems);
 
-            var followers = new List<UserFollowing>
+        var followers = new List<UserFollowing>
             {
                 new()
                 {
-                    ObserverId = userList[0].Id,
-                    TargetId = userList[1].Id,
+                    ObserverId = users[0].Id,
+                    TargetId = users[1].Id,
                 },
                 new()
                 {
-                    ObserverId = userList[2].Id,
-                    TargetId = userList[1].Id,
+                    ObserverId = users[2].Id,
+                    TargetId = users[1].Id,
                 }
             };
 
-            context.UserFollowings.AddRange(followers);
+        context.UserFollowings.AddRange(followers);
 
-            var favorites = new List<UserFavoriteRecipe>
+        var favorites = new List<UserFavoriteRecipe>
             {
                 new()
                 {
-                    UserId = userList[0].Id,
+                    UserId = users[0].Id,
                     RecipeId = recipes[1].Id,
                 },
                 new()
                 {
-                    UserId = userList[1].Id,
+                    UserId = users[1].Id,
                     RecipeId = recipes[2].Id,
                 }
             };
 
-            context.UserFavoriteRecipes.AddRange(favorites);
-            await context.SaveChangesAsync();
-             
-     }
+        context.UserFavoriteRecipes.AddRange(favorites);
+        await context.SaveChangesAsync();
+
+    }
 }

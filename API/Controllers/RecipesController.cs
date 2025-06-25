@@ -16,13 +16,13 @@ public class RecipesController : BaseApiController
 {
    //[AllowAnonymous]
    [HttpGet]
-   public async Task<ActionResult<List<Recipe>>> GetRecipes()
+   public async Task<ActionResult<List<RecipeDto>>> GetRecipes()
    {
       return await Mediator.Send(new GetRecipeList.Query());
    }
 
    [HttpGet("{id}")]
-   public async Task<ActionResult<Recipe>> GetRecipeDetail(string id)
+   public async Task<ActionResult<RecipeDto>> GetRecipeDetail(string id)
    {
       return HandleResult(await Mediator.Send(new GetRecipeDetails.Query { Id = id }));
    }
@@ -33,16 +33,25 @@ public class RecipesController : BaseApiController
       return HandleResult(await Mediator.Send(new CreateRecipe.Command { RecipeDto = recipeDto }));
    }
 
-   [HttpPut]
-   public async Task<ActionResult> EditRecipe(EditRecipeDto recipe)
+   [HttpPut("{id}")]
+   [Authorize(Policy = "IsRecipeAuthor")]
+   public async Task<ActionResult> EditRecipe(string id, EditRecipeDto recipe)
    {
+      recipe.Id = id;
       return HandleResult(await Mediator.Send(new EditRecipe.Command { RecipeDto = recipe }));
    }
 
    [HttpDelete("{id}")]
+   [Authorize(Policy = "IsRecipeAuthor")]
    public async Task<ActionResult> DeleteRecipe(string id)
    {
       return HandleResult(await Mediator.Send(new DeleteRecipe.Command { Id = id }));
+   }
+
+   [HttpPost("{id}/visibility")]
+   public async Task<ActionResult> UpdateVisibility(string id)
+   {
+      return HandleResult(await Mediator.Send(new UpdateVisibility.Command { Id = id }));
    }
 
 }

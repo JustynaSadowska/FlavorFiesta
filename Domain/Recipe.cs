@@ -19,7 +19,7 @@ public class Recipe
 
     public ICollection<Step> Steps { get; set; } = [];
     public ICollection<Ingredient> Ingredients { get; set; } = [];
-    public ICollection<Review> Reviews { get; set; } =[];
+    public ICollection<Review>? Reviews { get; set; } = [];
     public User User { get; set; } = null!;
     public ICollection<Tag> Tags { get; set; } = [];
     public ICollection<Allergen> Allergens { get; set; } = [];

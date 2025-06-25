@@ -19,7 +19,7 @@ public class DeleteRecipe
             var recipe = await context.Recipes
                 .FindAsync([request.Id], cancellationToken);
 
-            if (recipe != null) return Result<Unit>.Failure("Recipe not found", 404);
+            if (recipe == null || recipe.IsDeleted == true) return Result<Unit>.Failure("Recipe not found", 404);
 
             recipe.IsDeleted = true;
 

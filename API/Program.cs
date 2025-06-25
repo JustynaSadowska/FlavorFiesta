@@ -1,9 +1,12 @@
 using API.Middleware;
 using Application.Core;
+using Application.Interfaces;
 using Application.Recipes.Queries;
 using Application.Recipes.Validators;
 using Domain;
 using FluentValidation;
+using Infrastructure;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Identity;
@@ -30,8 +33,9 @@ builder.Services.AddMediatR(x =>
 {
     x.RegisterServicesFromAssemblyContaining<GetRecipeList.Handler>();
     x.AddOpenBehavior(typeof(ValidationBehavior<,>));
-}); 
+});
 
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateRecipeValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
@@ -41,6 +45,15 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 })
 .AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("IsRecipeAuthor", policy =>
+    {
+        policy.Requirements.Add(new IsAuthorRequirement());
+    });
+});
+builder.Services.AddTransient<IAuthorizationHandler, IsAuthorRequirementHandler>();
+
 
 var app = builder.Build();
 
