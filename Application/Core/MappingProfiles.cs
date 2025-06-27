@@ -18,8 +18,8 @@ public class MappingProfiles : Profile
         CreateMap<CreateRecipeDto, Recipe>();
         CreateMap<EditRecipeDto, Recipe>();
         CreateMap<Recipe, RecipeDto>()
-            .ForMember(d => d.FirstName, o => o.MapFrom(s => s.User.FirstName))
-            .ForMember(d => d.LastName, o => o.MapFrom(s => s.User.LastName))
+            .ForMember(d => d.AuthorFirstName, o => o.MapFrom(s => s.User.FirstName))
+            .ForMember(d => d.AuthorLastName, o => o.MapFrom(s => s.User.LastName))
             .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
             .ForMember(d => d.User, o => o.MapFrom(s => s.User));
 

@@ -7,6 +7,14 @@ type Recipe = {
   difficulty: number;
   isVisible: boolean;
   createdAt: string;
+  steps: Step[];
+  authorFirstName: string;
+  authorLastName: string;
+  isAuthor: boolean;
+  userId: string;
+  ingredients: Ingredient[];
+  tag: TagAllergen[];
+  allergens: TagAllergen[];  
 }
 
 type User = {
@@ -14,5 +22,28 @@ type User = {
   email: string
   firstName: string
   lastName: string
+}
+
+type Step = {
+  id: string;
+  description: string;
+}
+
+type Ingredient = {
+  id: string;
+  name: string;
+  quantity: decimal;
+  unit: Unit
+}
+
+type Unit = {
+  id: string;
+  displayName: string;
+}
+
+type TagAllergen = {
+    id: string;
+  name: string;
+
 }
 

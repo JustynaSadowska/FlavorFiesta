@@ -46,8 +46,12 @@ export default function RecipeForm() {
                  <TextField name='preparationTime' label='PreparationTime'defaultValue={recipe?.preparationTime} />
                  <TextField name='difficulty' label='Difficulty'  defaultValue={recipe?.difficulty}/>
                  <Box display='flex' justifyContent='end' gap={3}>
-                     <Button onClick={() => navigate('/recipes')} color='inherit'>Cancel</Button>
-                     <Button type="submit" color='success' variant="contained" disabled={updateRecipe.isPending || createRecipe.isPending}>Submit</Button>
+                    {recipe ? (
+                        <Button onClick={() => navigate(`/recipes/${id}`)} color='inherit'>Cancel</Button>
+                    ) : (
+                        <Button onClick={() => navigate('/recipes')} color='inherit'>Cancel</Button>
+                    )}
+                    <Button type="submit" color='success' variant="contained" disabled={updateRecipe.isPending || createRecipe.isPending}>Submit</Button>
                  </Box>
         </Box>
    </Paper>

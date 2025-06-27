@@ -14,7 +14,15 @@ export const useRecipes = (id?: string) => {
           const response = await agent.get<Recipe[]>('/recipes');
           return response.data;
         },
-        enabled: !id && location.pathname === '/recipes' && !!currentUser
+        enabled: !id && location.pathname === '/recipes' && !!currentUser,
+        select : data => {
+          return data.map(recipe => {
+            return {
+              ...recipe,
+              isAuthor: currentUser?.id === recipe.userId
+            }
+          })
+        }
       });   
 
       const {data: recipe, isLoading: isLoadingRecipe} = useQuery({
@@ -23,7 +31,13 @@ export const useRecipes = (id?: string) => {
           const response = await agent.get<Recipe>(`/recipes/${id}`);
           return response.data;
         },
-        enabled: !!id && !!currentUser
+        enabled: !!id && !!currentUser,
+        select : data => {
+            return {
+              ...data,
+              isAuthor: currentUser?.id === data.userId
+            }
+          }
       });
 
       const updateRecipe = useMutation({

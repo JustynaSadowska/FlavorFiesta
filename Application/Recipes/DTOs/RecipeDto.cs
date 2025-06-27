@@ -12,8 +12,8 @@ public class RecipeDto
 {
     public required string Id { get; set; }
     public required string UserId { get; set; }
-    public required string FirstName { get; set; }
-    public required string LastName { get; set; }
+    public required string AuthorFirstName { get; set; }
+    public required string AuthorLastName { get; set; }
     public required string Title { get; set; }
     public string? Description { get; set; }
     public int Servings { get; set; }
