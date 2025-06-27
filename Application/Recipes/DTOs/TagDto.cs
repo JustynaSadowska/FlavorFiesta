@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Application.Recipes.DTOs
 {
-    public class EditRecipeDto
+    public class TagDto
     {
-        public string Id { get; set; } = "";
+        public required string Id { get; set; }
+        public required string Name { get; set; }
     }
 }

@@ -12,63 +12,73 @@ public class DbInitializer
 
         var units = new List<Unit>
         {
-            new Unit { DisplayName = "g" },     // grams
-            new Unit { DisplayName = "kg" },    // kilograms
-            new Unit { DisplayName = "pcs" },   // pieces
-            new Unit { DisplayName = "ml" },    // milliliters
-            new Unit { DisplayName = "l" },     // liters
-            new Unit { DisplayName = "tsp" },   // teaspoon
-            new Unit { DisplayName = "tbsp" },  // tablespoon
-            new Unit { DisplayName = "cup" },   // cup
-            new Unit { DisplayName = "oz" },    // ounces
-            new Unit { DisplayName = "lb" },    // pounds
-            new Unit { DisplayName = "slice" }, // slice
-            new Unit { DisplayName = "pinch" }, // pinch
-            new Unit { DisplayName = "dash" }   // dash
+            new() { DisplayName = "g" },     // grams
+            new() { DisplayName = "kg" },    // kilograms
+            new() { DisplayName = "pcs" },   // pieces
+            new() { DisplayName = "ml" },    // milliliters
+            new() { DisplayName = "l" },     // liters
+            new() { DisplayName = "tsp" },   // teaspoon
+            new() { DisplayName = "tbsp" },  // tablespoon
+            new() { DisplayName = "cup" },   // cup
+            new() { DisplayName = "oz" },    // ounces
+            new() { DisplayName = "lb" },    // pounds
+            new() { DisplayName = "slice" }, // slice
+            new() { DisplayName = "pinch" }, // pinch
+            new() { DisplayName = "dash" }   // dash
         };
 
         context.Units.AddRange(units);
 
         var allergens = new List<Allergen>
         {
-            new Allergen { Name = "Gluten" },
-            new Allergen { Name = "Peanuts" },
-            new Allergen { Name = "Tree Nuts" },
-            new Allergen { Name = "Dairy" },
-            new Allergen { Name = "Eggs" },
-            new Allergen { Name = "Fish" },
-            new Allergen { Name = "Soy" },
-            new Allergen { Name = "Seafood" },
-            new Allergen { Name = "Lactose"},
-            new Allergen { Name = "Celery" },
-            new Allergen { Name = "Wheat" },
-            new Allergen { Name = "Barley" },//Jęczmień
-            new Allergen { Name = "Rye" },//zyto
-            new Allergen { Name = "Tomatoes" },
+            new() { Name = "Gluten" },
+            new() { Name = "Peanuts" },
+            new() { Name = "Tree Nuts" },
+            new() { Name = "Dairy" },
+            new() { Name = "Eggs" },
+            new() { Name = "Fish" },
+            new() { Name = "Soy" },
+            new() { Name = "Seafood" },
+            new() { Name = "Lactose"},
+            new() { Name = "Celery" },
+            new() { Name = "Wheat" },
+            new() { Name = "Barley" },//Jęczmień
+            new() { Name = "Rye" },//zyto
+            new() { Name = "Tomatoes" },
+            new() { Name = "Mustard" },           
+            new() { Name = "Sesame" },            
+            new() { Name = "Sulphites" },// Siarczyny (np. w suszonych owocach, winie)
+            new() { Name = "Corn" },              
+            new() { Name = "Kiwi" },             
+            new() { Name = "Banana" },            
+            new() { Name = "Chocolate" },         
+            new() { Name = "Garlic" },            
+            new() { Name = "Onion" },             
+            new() { Name = "Mushrooms" }
         };
 
         context.Allergens.AddRange(allergens);
 
         var tags = new List<Tag>
         {
-            new Tag { Name = "Vegan" },
-            new Tag { Name = "Vegetarian" },
-            new Tag { Name = "Gluten-Free" },
-            new Tag { Name = "Dairy-Free" },
-            new Tag { Name = "Low-Carb" },
-            new Tag { Name = "High-Protein" },
-            new Tag { Name = "Breakfast" },
-            new Tag { Name = "Lunch" },
-            new Tag { Name = "Dinner" },
-            new Tag { Name = "Dessert" },
-            new Tag { Name = "Snack" },
-            new Tag { Name = "Spicy" },
-            new Tag { Name = "Quick & Easy" },
-            new Tag { Name = "Healthy" },
-            new Tag { Name = "Comfort Food" },
-            new Tag { Name = "Sugar-Free" },
-            new Tag { Name = "Keto" },
-            new Tag { Name = "Diabetic-Friendly" },
+            new() { Name = "Vegan" },
+            new() { Name = "Vegetarian" },
+            new() { Name = "Gluten-Free" },
+            new() { Name = "Dairy-Free" },
+            new() { Name = "Low-Carb" },
+            new() { Name = "High-Protein" },
+            new() { Name = "Breakfast" },
+            new() { Name = "Lunch" },
+            new() { Name = "Dinner" },
+            new() { Name = "Dessert" },
+            new() { Name = "Snack" },
+            new() { Name = "Spicy" },
+            new() { Name = "Quick & Easy" },
+            new() { Name = "Healthy" },
+            new() { Name = "Comfort Food" },
+            new() { Name = "Sugar-Free" },
+            new() { Name = "Keto" },
+            new() { Name = "Diabetic-Friendly" },
         };
         context.Tags.AddRange(tags);
 
@@ -79,21 +89,21 @@ public class DbInitializer
                 Email = "anna@test.com",
                 FirstName = "Anna",
                 LastName = "Marek",
-                //Allergens = new List<Allergen> { allergens[1], allergens[2], allergens[10], allergens[12] }
+                //Allergens = [allergens[1], allergens[2], allergens[10], allergens[12]]
             },
             new() {
                 UserName = "antoni@test.com",
                 Email = "antoni@test.com",
                 FirstName = "Antoni",
                 LastName = "Kowalski",
-                //Allergens = new List<Allergen> { allergens[2] }
+                //Allergens = [allergens[2]]
             },
             new() {
                 UserName = "tomek@test.com",
                 Email = "tomek@test.com",
                 FirstName = "Tomek",
                 LastName = "Kowaleski",
-                //Allergens = new List<Allergen> { allergens[2] }
+                //Allergens = [allergens[2]]
             }
         };
 
@@ -118,15 +128,13 @@ public class DbInitializer
                 Difficulty = RecipeDifficulty.Medium,
                 IsVisible = false,
                 CreatedAt = DateTime.UtcNow,
-                Tags =
-                {
-                    tags[8],
-                    tags[11]
-                },
-                Allergens =
-                {
-                    allergens[4]
-                }
+                // Tags =
+                // {
+                //     tags[8],
+                //     tags[11]
+                // },
+                // Allergens = new List<Allergen> { allergens[5] }
+
             },
             new()
             {
@@ -138,15 +146,13 @@ public class DbInitializer
                 Difficulty = RecipeDifficulty.Hard,
                 IsVisible = true,
                 CreatedAt = DateTime.Now.AddMonths(-2),
-                Tags =
-                {
-                    tags[8],
-                    tags[5]
-                },
-                Allergens =
-                {
-                    allergens[13]
-                }
+                // Tags =
+                // {
+                //     tags[8],
+                //     tags[5]
+                // },
+                // Allergens = new List<Allergen> { allergens[13] }
+
             },
             new()
             {
@@ -158,12 +164,10 @@ public class DbInitializer
                 Difficulty = RecipeDifficulty.Easy,
                 IsVisible = true,
                 CreatedAt = DateTime.UtcNow,
-                Tags =
-                { tags[6], tags[10], tags[12], tags[13]
-                },
-                Allergens =
-                { allergens[0], allergens[4]
-                }
+            //     Tags =
+            //     { tags[6], tags[10], tags[12], tags[13]
+            //     },
+            //    Allergens = new List<Allergen> { allergens[0], allergens[4] }
             },
         };
         context.Recipes.AddRange(recipes);
@@ -414,37 +418,37 @@ public class DbInitializer
 
         context.ShoppingListItems.AddRange(shoppingListItems);
 
-        var followers = new List<UserFollowing>
-            {
-                new()
-                {
-                    ObserverId = users[0].Id,
-                    TargetId = users[1].Id,
-                },
-                new()
-                {
-                    ObserverId = users[2].Id,
-                    TargetId = users[1].Id,
-                }
-            };
+        // var followers = new List<UserFollowing>
+        //     {
+        //         new()
+        //         {
+        //             ObserverId = users[0].Id,
+        //             TargetId = users[1].Id,
+        //         },
+        //         new()
+        //         {
+        //             ObserverId = users[2].Id,
+        //             TargetId = users[1].Id,
+        //         }
+        //     };
 
-        context.UserFollowings.AddRange(followers);
+        // context.UserFollowings.AddRange(followers);
 
-        var favorites = new List<UserFavoriteRecipe>
-            {
-                new()
-                {
-                    UserId = users[0].Id,
-                    RecipeId = recipes[1].Id,
-                },
-                new()
-                {
-                    UserId = users[1].Id,
-                    RecipeId = recipes[2].Id,
-                }
-            };
+        // var favorites = new List<UserFavoriteRecipe>
+        //     {
+        //         new()
+        //         {
+        //             UserId = users[0].Id,
+        //             RecipeId = recipes[1].Id,
+        //         },
+        //         new()
+        //         {
+        //             UserId = users[1].Id,
+        //             RecipeId = recipes[2].Id,
+        //         }
+        //     };
 
-        context.UserFavoriteRecipes.AddRange(favorites);
+        // context.UserFavoriteRecipes.AddRange(favorites);
         await context.SaveChangesAsync();
 
     }

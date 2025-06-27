@@ -12,6 +12,6 @@ namespace Domain
         public required string PublicId { get; set; }
         public required string RecipeId { get; set; }
         
-        public Recipe Recipe { get; set; } = null!;
+        //public Recipe Recipe { get; set; } = null!;
     }
 }

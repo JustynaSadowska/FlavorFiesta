@@ -1,5 +1,8 @@
 using System;
+using Application.Allergens.DTOs;
+using Application.Ingredients.DTOs;
 using Application.Profiles.DTOs;
+using Application.Steps.DTOs;
 using Domain;
 using Domain.Enums;
 
@@ -18,14 +21,14 @@ public class RecipeDto
     public RecipeDifficulty Difficulty { get; set; }
     public bool IsVisible { get; set; }
     public DateTime CreatedAt { get; set; }
-    public bool IsDeleted { get; set; }
+    //public bool IsDeleted { get; set; }
     public UserProfile User { get; set; } = null!;
-    //public ICollection<Step> Steps { get; set; } = [];
-    //public ICollection<Ingredient> Ingredients { get; set; } = [];
+    public ICollection<StepDto> Steps { get; set; } = [];
+    public ICollection<IngredientDto> Ingredients { get; set; } = [];
     //public ICollection<Review>? Reviews { get; set; } = [];
 
-    //public ICollection<Tag> Tags { get; set; } = [];
-    //public ICollection<Allergen> Allergens { get; set; } = [];
+    public ICollection<TagDto>? Tags { get; set; } = [];
+    public ICollection<AllergenDto>? Allergens { get; set; } = [];
     //public ICollection<Photo> Photos { get; set; } = [];
     //public ICollection<UserFavoriteRecipe> FavoritedByUsers { get; set; } = [];
 }

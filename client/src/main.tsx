@@ -30,6 +30,5 @@ createRoot(document.getElementById('root')!).render(
         </QueryClientProvider>
       </ThemeProvider>
     </StoreContext.Provider>
-    
   </StrictMode>,
 )

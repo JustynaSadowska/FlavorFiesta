@@ -17,9 +17,9 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
     public required DbSet<ShoppingListItem> ShoppingListItems { get; set; }
     public required DbSet<Tag> Tags { get; set; }
     public required DbSet<Unit> Units { get; set; }
-    public required DbSet<UserFollowing> UserFollowings { get; set; }
-    public required DbSet<Photo> Photos { get; set; }
-    public DbSet<UserFavoriteRecipe> UserFavoriteRecipes { get; set; }
+    //public required DbSet<UserFollowing> UserFollowings { get; set; }
+   // public required DbSet<Photo> Photos { get; set; }
+   // public DbSet<UserFavoriteRecipe> UserFavoriteRecipes { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -95,42 +95,42 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
             .WithMany(u => u.Allergens)
             .UsingEntity("UserAllergen");
         
-        modelBuilder.Entity<UserFollowing>(x => 
-        {
-            x.HasKey(k => new {k.ObserverId, k.TargetId});
+        // modelBuilder.Entity<UserFollowing>(x => 
+        // {
+        //     x.HasKey(k => new {k.ObserverId, k.TargetId});
 
-            x.HasOne(o => o.Observer)
-                .WithMany(f => f.Followings)
-                .HasForeignKey(o => o.ObserverId)
-                .OnDelete(DeleteBehavior.Cascade);
+        //     x.HasOne(o => o.Observer)
+        //         .WithMany(f => f.Followings)
+        //         .HasForeignKey(o => o.ObserverId)
+        //         .OnDelete(DeleteBehavior.Cascade);
             
-            x.HasOne(o => o.Target)
-                .WithMany(f => f.Followers)
-                .HasForeignKey(o => o.TargetId)
-                .OnDelete(DeleteBehavior.NoAction);
-        });
+        //     x.HasOne(o => o.Target)
+        //         .WithMany(f => f.Followers)
+        //         .HasForeignKey(o => o.TargetId)
+        //         .OnDelete(DeleteBehavior.NoAction);
+        // });
 
-        modelBuilder.Entity<Photo>()
-            .HasOne(p => p.Recipe)
-            .WithMany(r => r.Photos)
-            .HasForeignKey(p => p.RecipeId)
-            .IsRequired();
+        // modelBuilder.Entity<Photo>()
+        //     .HasOne(p => p.Recipe)
+        //     .WithMany(r => r.Photos)
+        //     .HasForeignKey(p => p.RecipeId)
+        //     .IsRequired();
         
-         modelBuilder.Entity<UserFavoriteRecipe>(x => 
-         {
-            x.HasKey(k => new{k.RecipeId, k.UserId});
+        //  modelBuilder.Entity<UserFavoriteRecipe>(x => 
+        //  {
+        //     x.HasKey(k => new{k.RecipeId, k.UserId});
 
-            x.HasOne(uf => uf.User)
-                .WithMany(u => u.FavoriteRecipes)
-                .HasForeignKey(uf => uf.UserId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Cascade);
+        //     x.HasOne(uf => uf.User)
+        //         .WithMany(u => u.FavoriteRecipes)
+        //         .HasForeignKey(uf => uf.UserId)
+        //         .IsRequired(false)
+        //         .OnDelete(DeleteBehavior.Cascade);
             
-            x.HasOne(uf => uf.Recipe)
-                .WithMany(r => r.FavoritedByUsers)
-                .HasForeignKey(uf => uf.RecipeId)
-                .IsRequired(false)
-                .OnDelete(DeleteBehavior.Cascade);;
-         });
+        //     x.HasOne(uf => uf.Recipe)
+        //         .WithMany(r => r.FavoritedByUsers)
+        //         .HasForeignKey(uf => uf.RecipeId)
+        //         .IsRequired(false)
+        //         .OnDelete(DeleteBehavior.Cascade);;
+        //  });
     }
 }

@@ -2,10 +2,12 @@ using System;
 using Application.Core;
 using Application.Interfaces;
 using Application.Recipes.DTOs;
+using Application.Steps.DTOs;
 using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Recipes.Commands;
@@ -29,7 +31,27 @@ public class CreateRecipe
             recipe.User = user;
             recipe.CreatedAt = DateTime.UtcNow;
 
-            context.Recipes.Add(recipe);
+            var steps = mapper.Map<List<Step>>(request.RecipeDto.Steps);
+           
+            recipe.Steps = steps;
+
+            var ingredients = mapper.Map<List<Ingredient>>(request.RecipeDto.Ingredients);
+
+            recipe.Ingredients = ingredients;
+
+            var tags = await context.Tags
+                .Where(x => request.RecipeDto.TagsIds.Contains(x.Id))
+                .ToListAsync();
+
+            recipe.Tags = tags;
+            
+            var allergens = await context.Allergens
+                .Where(x => request.RecipeDto.AllergensIds.Contains(x.Id))
+                .ToListAsync();
+
+            recipe.Allergens = allergens;
+
+            context.Recipes.Add(recipe);    
 
             var result = await context.SaveChangesAsync(cancellationToken) > 0;
 

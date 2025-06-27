@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
         path: '/',
         element: <App/>,
         children: [
-            {element: <RequireAuth/>, children: [
+            {element: <RequireAuth />, children: [
                 {path: 'recipes', element: <RecipeDashboard/>},
                 {path: 'createRecipe', element: <RecipeForm key='create'/>},
                 {path: 'recipes/:id', element: <RecipeDetails/>},

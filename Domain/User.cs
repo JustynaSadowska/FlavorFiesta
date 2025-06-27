@@ -15,8 +15,8 @@ namespace Domain
         public ICollection<Review>? Reviews { get; set; } = [];
         public ICollection<ShoppingList>? ShoppingLists { get; set; } = [];
         public ICollection<Allergen>? Allergens { get; set; } = [];
-        public ICollection<UserFollowing>? Followings { get; set; } = [];
-        public ICollection<UserFollowing>? Followers { get; set; } = [];
-        public ICollection<UserFavoriteRecipe>? FavoriteRecipes { get; set; } = [];
+        //public ICollection<UserFollowing>? Followings { get; set; } = [];
+       // public ICollection<UserFollowing>? Followers { get; set; } = [];
+        //public ICollection<UserFavoriteRecipe>? FavoriteRecipes { get; set; } = [];
     }
 }

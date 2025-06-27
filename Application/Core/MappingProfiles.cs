@@ -1,6 +1,10 @@
 using System;
+using Application.Allergens.DTOs;
+using Application.Ingredients.DTOs;
 using Application.Profiles.DTOs;
 using Application.Recipes.DTOs;
+using Application.Shared.DTOs;
+using Application.Steps.DTOs;
 using AutoMapper;
 using Domain;
 
@@ -23,5 +27,13 @@ public class MappingProfiles : Profile
             .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
             .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id));
+
+        CreateMap<Step, StepDto>();
+        CreateMap<Tag, TagDto>();
+        CreateMap<Allergen, AllergenDto>();
+        CreateMap<Ingredient, IngredientDto>();
+        CreateMap<Unit, UnitDto>();
+        CreateMap<CreateIngredientDto, Ingredient>();
+        CreateMap<CreateStepDto, Step>();
     }
 }
