@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250627104412_ChangedDb")]
-    partial class ChangedDb
+    [Migration("20250627105603_TagAdded")]
+    partial class TagAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

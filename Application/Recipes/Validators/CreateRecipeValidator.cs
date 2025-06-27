@@ -25,6 +25,16 @@ namespace Application.Recipes.Validators
 
             RuleFor(x => x.RecipeDto.Servings)
                 .NotEmpty().WithMessage("Servings are required");
+
+            RuleFor(x => x.RecipeDto.Steps)
+                .NotEmpty().WithMessage("At least one step is required");
+
+            RuleFor(x => x.RecipeDto.Ingredients)
+                .NotEmpty().WithMessage("At least one ingredient is required");
+
+            RuleFor(x => x.RecipeDto.TagsIds)
+                .NotEmpty().WithMessage("At least one tag is required");
+                
         }
     }
 }

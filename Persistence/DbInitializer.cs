@@ -89,7 +89,7 @@ public class DbInitializer
                 Email = "anna@test.com",
                 FirstName = "Anna",
                 LastName = "Marek",
-                //Allergens = [allergens[1], allergens[2], allergens[10], allergens[12]]
+                Allergens = [allergens[1], allergens[2], allergens[10], allergens[12]]
             },
             new() {
                 UserName = "antoni@test.com",
@@ -103,7 +103,7 @@ public class DbInitializer
                 Email = "tomek@test.com",
                 FirstName = "Tomek",
                 LastName = "Kowaleski",
-                //Allergens = [allergens[2]]
+                Allergens = [allergens[2]]
             }
         };
 
@@ -128,12 +128,12 @@ public class DbInitializer
                 Difficulty = RecipeDifficulty.Medium,
                 IsVisible = false,
                 CreatedAt = DateTime.UtcNow,
-                // Tags =
-                // {
-                //     tags[8],
-                //     tags[11]
-                // },
-                // Allergens = new List<Allergen> { allergens[5] }
+                Tags =
+                {
+                    tags[8],
+                    tags[11]
+                },
+                Allergens = [allergens[5]]
 
             },
             new()
@@ -146,12 +146,12 @@ public class DbInitializer
                 Difficulty = RecipeDifficulty.Hard,
                 IsVisible = true,
                 CreatedAt = DateTime.Now.AddMonths(-2),
-                // Tags =
-                // {
-                //     tags[8],
-                //     tags[5]
-                // },
-                // Allergens = new List<Allergen> { allergens[13] }
+                Tags =
+                {
+                    tags[8],
+                    tags[5]
+                },
+                Allergens = [allergens[13]]
 
             },
             new()
@@ -164,10 +164,10 @@ public class DbInitializer
                 Difficulty = RecipeDifficulty.Easy,
                 IsVisible = true,
                 CreatedAt = DateTime.UtcNow,
-            //     Tags =
-            //     { tags[6], tags[10], tags[12], tags[13]
-            //     },
-            //    Allergens = new List<Allergen> { allergens[0], allergens[4] }
+                Tags =
+                { tags[6], tags[10], tags[12], tags[13]
+                },
+               Allergens = [allergens[0], allergens[4]]
             },
         };
         context.Recipes.AddRange(recipes);

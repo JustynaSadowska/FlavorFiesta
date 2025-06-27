@@ -27,7 +27,7 @@ public class RecipeDto
     public ICollection<IngredientDto> Ingredients { get; set; } = [];
     //public ICollection<Review>? Reviews { get; set; } = [];
 
-    public ICollection<TagDto>? Tags { get; set; } = [];
+    public required ICollection<TagDto> Tags { get; set; }
     public ICollection<AllergenDto>? Allergens { get; set; } = [];
     //public ICollection<Photo> Photos { get; set; } = [];
     //public ICollection<UserFavoriteRecipe> FavoritedByUsers { get; set; } = [];
