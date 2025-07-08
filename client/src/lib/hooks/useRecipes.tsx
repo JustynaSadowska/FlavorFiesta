@@ -52,9 +52,9 @@ export const useRecipes = (id?: string) => {
       });
 
         const createRecipe = useMutation({
-        mutationFn: async(recipe: Recipe) => {
-            const response = await agent.post('/recipes', recipe);
-            return response.data;
+          mutationFn: async(recipe: Recipe) => {
+              const response = await agent.post('/recipes', recipe);
+                return response.data;
         },
         onSuccess: async () => {
             await queryClient.invalidateQueries({
@@ -64,15 +64,26 @@ export const useRecipes = (id?: string) => {
       });
 
       const deleteRecipe = useMutation({
-        mutationFn: async(id: string) => {
-            await agent.delete(`/recipes/${id}`)
-        },
+          mutationFn: async(id: string) => {
+              await agent.delete(`/recipes/${id}`)
+          },
         onSuccess: async () => {
             await queryClient.invalidateQueries({
                 queryKey: ['recipes']
             })
         }
       });
+
+      const updateVisibility = useMutation({
+          mutationFn: async(id:string) => {
+              await agent.post(`/recipes/${id}/visibility`)
+          }, 
+          onSuccess : async() => {
+              await queryClient.invalidateQueries({
+                  queryKey: ['recipes', id]
+              })
+          }
+      })
 
       return {
         recipes,
@@ -81,6 +92,7 @@ export const useRecipes = (id?: string) => {
         createRecipe,
         deleteRecipe,
         recipe,
-        isLoadingRecipe
+        isLoadingRecipe,
+        updateVisibility
       }
 }

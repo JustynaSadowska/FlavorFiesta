@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Typography } from "@mui/material"
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Typography, Switch, FormControlLabel} from "@mui/material"
 import { useRecipes } from "../../../lib/hooks/useRecipes"
 import { Link, useNavigate, useParams } from "react-router";
 import { AccessTime } from "@mui/icons-material";
@@ -7,9 +7,13 @@ import { formatDate } from "../../../lib/util/util";
 export default function RecipeDetails() {
     const navigate = useNavigate();
     const {id} = useParams();
-    const {recipe, isLoadingRecipe} = useRecipes(id);
+    const {recipe, isLoadingRecipe, updateVisibility} = useRecipes(id);
     const{deleteRecipe} = useRecipes();
 
+    const handleVisibilityToggle = (id?: string) => {
+  if (!id) return;
+  updateVisibility.mutate(id);
+};
     if (isLoadingRecipe) return <Typography>Loading...</Typography>
 
     if (!recipe) return <Typography>Recipe not found</Typography>
@@ -17,6 +21,18 @@ export default function RecipeDetails() {
   return (
     <Card>
         <CardContent>
+            {recipe.isAuthor && (
+           <FormControlLabel
+                control={
+                    <Switch
+                    checked={recipe?.isVisible}
+                    onChange={() => handleVisibilityToggle(recipe?.id)}
+                    inputProps={{ 'aria-label': 'Visibility toggle' }}
+                    />
+                }
+                label="Visible"
+            />
+            )}
             <Typography variant="h5" mb={1}>{recipe.title}</Typography>
             <Typography variant="body1">{recipe.description}</Typography>
             <Typography variant="body1">difficulty level: {recipe.difficulty}</Typography>
