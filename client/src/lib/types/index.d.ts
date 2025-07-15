@@ -1,20 +1,24 @@
 type Recipe = {
-  id: string;
+  id?: string;
   title: string;
   description?: string;
   servings: number;
   preparationTime: number;
   difficulty: number;
   isVisible: boolean;
-  createdAt: string;
+  createdAt?: string;
   steps: Step[];
-  authorFirstName: string;
-  authorLastName: string;
-  isAuthor: boolean;
-  userId: string;
-  ingredients: Ingredient[];
-  tags: TagAllergen[];
+  authorFirstName?: string;
+  authorLastName?: string;
+  isAuthor?: boolean;
+  userId?: string;
+  ingredients:
+    | Ingredient[]
+    | { name: string; quantity: decimal; unitId: string }[];
+  tags?: TagAllergen[];
+  tagsIds?: string[];
   allergens?: TagAllergen[];
+  allergensIds?: string[];
 };
 
 type User = {
@@ -25,12 +29,12 @@ type User = {
 };
 
 type Step = {
-  id: string;
+  id?: string;
   description: string;
 };
 
 type Ingredient = {
-  id: string;
+  id?: string;
   name: string;
   quantity: decimal;
   unit: Unit;
@@ -42,6 +46,6 @@ type Unit = {
 };
 
 type TagAllergen = {
-  id: string;
+  id?: string;
   name: string;
 };

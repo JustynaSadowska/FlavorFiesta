@@ -46,7 +46,7 @@ export default function UserMenu() {
         {/* <MenuItem component={Link} to="/account" onClick={handleCloseMenu}>
           <Typography textAlign="center">Account</Typography>
         </MenuItem> */}
-        <MenuItem component={Link} to='/profiles/${id}' onClick={handleCloseMenu}>
+        <MenuItem component={Link} to={`/profiles/${currentUser.id}`} onClick={handleCloseMenu}>
             <ListItemIcon>
                 <AccountCircleIcon />
             </ListItemIcon>

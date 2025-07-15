@@ -35,7 +35,7 @@ public class RecipesController : BaseApiController
 
    [HttpPut("{id}")]
    [Authorize(Policy = "IsRecipeAuthor")]
-   public async Task<ActionResult> EditRecipe(string id, EditRecipeDto recipe)
+   public async Task<ActionResult> EditRecipe(string id, [FromBody] EditRecipeDto recipe)
    {
       recipe.Id = id;
       return HandleResult(await Mediator.Send(new EditRecipe.Command { RecipeDto = recipe }));

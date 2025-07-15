@@ -1,9 +1,11 @@
 using System;
 using Application.Core;
+using Application.Interfaces;
 using Application.Recipes.DTOs;
 using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Recipes.Commands;
@@ -15,31 +17,53 @@ public class EditRecipe
         public required EditRecipeDto RecipeDto { get; set; }
     }
 
-    public class Handler(AppDbContext context, IMapper mapper) : IRequestHandler<Command, Result<MediatR.Unit>>
+    public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor) : IRequestHandler<Command, Result<MediatR.Unit>>
     {
         public async Task<Result<MediatR.Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
+            var user = await userAccessor.GetUserAsync();
+
             var recipe = await context.Recipes
-                .FindAsync([request.RecipeDto.Id], cancellationToken);
-                   
-            if (recipe != null) return Result<MediatR.Unit>.Failure("Recipe not found", 404);
+                .Include(r => r.Steps)
+                .Include(r => r.Ingredients)
+                .Include(r => r.Tags)
+                .Include(r => r.Allergens)
+                .FirstOrDefaultAsync(x => x.Id == request.RecipeDto.Id, cancellationToken);
 
+            if (recipe == null)
+                return Result<MediatR.Unit>.Failure("Recipe not found", 404);
 
-            // recipe.Title = request.Recipe.Title;
-            // recipe.Allergens = request.Recipe.Allergens;
-            // recipe.Servings = request.Recipe.Servings;
-            // recipe.Tags = request.Recipe.Tags;  
-            // recipe.Description = request.Recipe.Description;
-            // recipe.Ingredients = request.Recipe.Ingredients;
-            // recipe.Difficulty = request.Recipe.Difficulty;
-            // recipe.Steps = request.Recipe.Steps;
-            // recipe.Photos = request.Recipe.Photos;
-            // recipe.IsVisible = request.Recipe.IsVisible;
-            // recipe.PreparationTime = request.Recipe.PreparationTime
+            if (recipe.UserId != user.Id)
+                return Result<MediatR.Unit>.Failure("Unauthorized", 403);
+
+            // recipe.Title = request.RecipeDto.Title;
+            // recipe.Description = request.RecipeDto.Description;
+            // recipe.Servings = request.RecipeDto.Servings;
+            // recipe.PreparationTime = request.RecipeDto.PreparationTime;
+            // recipe.Difficulty = request.RecipeDto.Difficulty;
+            // recipe.IsVisible = request.RecipeDto.IsVisible;
+
+            recipe.Steps.Clear();
+            // var newSteps = mapper.Map<List<Step>>(request.RecipeDto.Steps);
+            // recipe.Steps = newSteps;//dodac kolejnosc?
+
+            recipe.Ingredients.Clear();
+            // var newIngredients = mapper.Map<List<Ingredient>>(request.RecipeDto.Ingredients);
+            // recipe.Ingredients = newIngredients;
 
             mapper.Map(request.RecipeDto, recipe);
 
-             var result = await context.SaveChangesAsync(cancellationToken) > 0;
+            var tags = await context.Tags
+                .Where(x => request.RecipeDto.TagsIds.Contains(x.Id))
+                .ToListAsync(cancellationToken);
+            recipe.Tags = tags;
+
+            var allergens = await context.Allergens
+                .Where(x => request.RecipeDto.AllergensIds.Contains(x.Id))
+                .ToListAsync(cancellationToken);
+            recipe.Allergens = allergens;
+
+            var result = await context.SaveChangesAsync(cancellationToken) > 0;
 
             if (!result) return Result<MediatR.Unit>.Failure("Failed to update the recipe", 400);
 
