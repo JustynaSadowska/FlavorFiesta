@@ -38,6 +38,7 @@ builder.Services.AddMediatR(x =>
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateRecipeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<EditRecipeValidator>();
 builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddIdentityApiEndpoints<User>(opt =>
 {

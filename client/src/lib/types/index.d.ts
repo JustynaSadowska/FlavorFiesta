@@ -1,7 +1,7 @@
 type Recipe = {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   servings: number;
   preparationTime: number;
   difficulty: number;
@@ -13,37 +13,35 @@ type Recipe = {
   isAuthor: boolean;
   userId: string;
   ingredients: Ingredient[];
-  tag: TagAllergen[];
-  allergens: TagAllergen[];  
-}
+  tags: TagAllergen[];
+  allergens?: TagAllergen[];
+};
 
 type User = {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
-}
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+};
 
 type Step = {
   id: string;
   description: string;
-}
+};
 
 type Ingredient = {
   id: string;
   name: string;
   quantity: decimal;
-  unit: Unit
-}
+  unit: Unit;
+};
 
 type Unit = {
   id: string;
   displayName: string;
-}
+};
 
 type TagAllergen = {
-    id: string;
+  id: string;
   name: string;
-
-}
-
+};

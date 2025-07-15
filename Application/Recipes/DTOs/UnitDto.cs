@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Shared.DTOs
+namespace Application.Recipes.DTOs
 {
     public class UnitDto
     {

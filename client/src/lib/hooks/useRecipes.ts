@@ -85,6 +85,16 @@ export const useRecipes = (id?: string) => {
           }
       })
 
+      const { data: tags = []} = useQuery({
+        queryKey: ["tags"],
+        queryFn: () => agent.get<TagAllergen[]>("/recipes/tags").then(res => res.data),
+      });
+
+      const { data: units = []} = useQuery({
+        queryKey: ["units"],
+        queryFn: () => agent.get<Unit[]>("/recipes/units").then(res => res.data),
+      });
+
       return {
         recipes,
         isLoading,
@@ -93,6 +103,8 @@ export const useRecipes = (id?: string) => {
         deleteRecipe,
         recipe,
         isLoadingRecipe,
-        updateVisibility
+        updateVisibility,
+        tags,
+        units
       }
 }

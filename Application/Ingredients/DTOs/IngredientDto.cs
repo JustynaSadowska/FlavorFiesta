@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Shared.DTOs;
+using Application.Recipes.DTOs;
 
 namespace Application.Ingredients.DTOs
 {

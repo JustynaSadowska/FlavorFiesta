@@ -3,7 +3,6 @@ using Application.Allergens.DTOs;
 using Application.Ingredients.DTOs;
 using Application.Profiles.DTOs;
 using Application.Recipes.DTOs;
-using Application.Shared.DTOs;
 using Application.Steps.DTOs;
 using AutoMapper;
 using Domain;

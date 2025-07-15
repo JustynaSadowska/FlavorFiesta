@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Typography, Switch, FormControlLabel} from "@mui/material"
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Typography, Switch, FormControlLabel, Chip} from "@mui/material"
 import { useRecipes } from "../../../lib/hooks/useRecipes"
 import { Link, useNavigate, useParams } from "react-router";
 import { AccessTime } from "@mui/icons-material";
@@ -11,9 +11,9 @@ export default function RecipeDetails() {
     const{deleteRecipe} = useRecipes();
 
     const handleVisibilityToggle = (id?: string) => {
-  if (!id) return;
-  updateVisibility.mutate(id);
-};
+        if (!id) return;
+        updateVisibility.mutate(id);
+    };
     if (isLoadingRecipe) return <Typography>Loading...</Typography>
 
     if (!recipe) return <Typography>Recipe not found</Typography>
@@ -67,6 +67,27 @@ export default function RecipeDetails() {
                     <Typography variant="body2" sx={{ ml: 2 }}>No ingredients provided.</Typography>
                 )}
             </Box>
+            {recipe.tags && recipe.tags.length > 0 && (
+        <Box mt={2}>
+            <Typography variant="h6">Tags:</Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+            {recipe.tags.map((tag) => (
+                <Chip key={tag.id} label={tag.name} color="secondary" variant="outlined" />
+            ))}
+            </Box>
+        </Box>
+        )}
+
+        {recipe.allergens && recipe.allergens.length > 0 && (
+        <Box mt={2}>
+            <Typography variant="h6">Allergens:</Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
+            {recipe.allergens.map((allergen) => (
+                <Chip key={allergen.id} label={allergen.name} color="error" variant="outlined" />
+            ))}
+            </Box>
+        </Box>
+        )}
         </CardContent>
         {!recipe.isAuthor && (
             <CardHeader color="black" avatar = {<Avatar sx={{height: 30, width: 30}}/>}
@@ -81,7 +102,11 @@ export default function RecipeDetails() {
             <CardActions>
                 <Button component= {Link} to = {`/manage/${recipe.id}`}> Edit</Button>
                 
-                <Button onClick={()=> deleteRecipe.mutate(recipe.id)} disabled={deleteRecipe.isPending} size = 'medium' color= 'error'    
+                <Button onClick={() =>
+                        deleteRecipe.mutate(recipe.id, {
+                        onSuccess: () => navigate('/recipes')
+                        })
+                    } disabled={deleteRecipe.isPending} size = 'medium' color= 'error'    
                     variant="contained">Delete</Button>
             </CardActions>
         )}
