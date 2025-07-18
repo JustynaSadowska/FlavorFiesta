@@ -1,8 +1,9 @@
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Typography, Switch, FormControlLabel, Chip} from "@mui/material"
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Typography, Switch, FormControlLabel, Chip} from "@mui/material"
 import { useRecipes } from "../../../lib/hooks/useRecipes"
 import { Link, useNavigate, useParams } from "react-router";
 import { AccessTime } from "@mui/icons-material";
 import { formatDate } from "../../../lib/util/util";
+import AvatarPopover from "../../../app/shared/components/AvatarPopover";
 
 export default function RecipeDetails() {
     const navigate = useNavigate();
@@ -90,10 +91,17 @@ export default function RecipeDetails() {
         )}
         </CardContent>
         {!recipe.isAuthor && (
-            <CardHeader color="black" avatar = {<Avatar sx={{height: 30, width: 30}}/>}
+            <CardHeader 
+                color="black"
+                avatar = {
+                    <AvatarPopover profile = {{
+                    id: recipe.userId,
+                    firstName: recipe.authorFirstName,
+                    lastName: recipe.authorLastName,
+                    }}/>}
                     subheader = {
                         <>
-                        By {''} <Link to = {`/profiles/${recipe.userId}}`}>{recipe.authorFirstName} {recipe.authorLastName}</Link>
+                        By {''} <Link to = {`/profiles/${recipe.userId}`}>{recipe.authorFirstName} {recipe.authorLastName}</Link>
                         </>
                     }>          
             </CardHeader>

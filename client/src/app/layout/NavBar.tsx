@@ -19,7 +19,7 @@ import { LinearProgress } from '@mui/material';
 import { useAccount } from '../../lib/hooks/useAccount';
 import UserMenu from './UserMenu';
 import { useState } from 'react';
-const pages = ['Recipes', 'Users'];
+const pages = ['Recipes', 'Profiles'];
 
 export default function NavBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);

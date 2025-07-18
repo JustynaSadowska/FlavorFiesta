@@ -10,6 +10,7 @@ export default function RecipeCard({recipe} : Props) {
   return (
       <Card elevation={3} sx={{ maxWidth: 360, mb:3}}>
         <CardActionArea component = {Link} to = {`/recipes/${recipe.id}`}>
+        {/* zamienic miejscami  */}
           {/* <CardMedia
             component="img"
             height="140"

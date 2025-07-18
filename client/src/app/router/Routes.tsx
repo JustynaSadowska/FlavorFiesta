@@ -12,6 +12,7 @@ import LoginForm from "../../features/account/LoginForm";
 import RequireAuth from "./RequireAuth";
 import RegisterForm from "../../features/account/RegisterForm";
 import ProfilePage from "../../features/profiles/ProfilePage";
+import UserDashboard from "../../features/profiles/UserDashboard";
 
 export const router = createBrowserRouter([
     {
@@ -23,7 +24,9 @@ export const router = createBrowserRouter([
                 {path: 'createRecipe', element: <RecipeForm key='create'/>},
                 {path: 'recipes/:id', element: <RecipeDetails/>},
                 {path: 'manage/:id', element: <RecipeForm/>},
-                {path: 'profiles/:id', element: <ProfilePage/>}
+                {path: 'profiles/:id', element: <ProfilePage/>},
+                {path: 'profiles', element: <UserDashboard/>}
+               
             ]},
             {path: '', element: <HomePage/>},
             {path: 'counter', element: <Counter/>},

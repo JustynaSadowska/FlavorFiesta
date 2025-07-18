@@ -1,4 +1,4 @@
-type Recipe = {
+type CreateUpdateRecipe = {
   id?: string;
   title: string;
   description?: string;
@@ -6,19 +6,29 @@ type Recipe = {
   preparationTime: number;
   difficulty: number;
   isVisible: boolean;
-  createdAt?: string;
   steps: Step[];
-  authorFirstName?: string;
-  authorLastName?: string;
-  isAuthor?: boolean;
-  userId?: string;
-  ingredients:
-    | Ingredient[]
-    | { name: string; quantity: decimal; unitId: string }[];
-  tags?: TagAllergen[];
-  tagsIds?: string[];
-  allergens?: TagAllergen[];
+  ingredients: CreateUpdateIngredient[];
+  tagsIds: string[];
   allergensIds?: string[];
+};
+
+type Recipe = {
+  id: string;
+  title: string;
+  description?: string;
+  servings: number;
+  preparationTime: number;
+  difficulty: number;
+  isVisible: boolean;
+  createdAt: string;
+  steps: Step[];
+  authorFirstName: string;
+  authorLastName: string;
+  isAuthor: boolean;
+  userId: string;
+  ingredients: Ingredient[];
+  tags: TagAllergen[];
+  allergens?: TagAllergen[];
 };
 
 type User = {
@@ -34,10 +44,16 @@ type Step = {
 };
 
 type Ingredient = {
-  id?: string;
+  id: string;
   name: string;
   quantity: decimal;
   unit: Unit;
+};
+
+type CreateUpdateIngredient = {
+  name: string;
+  quantity: decimal;
+  unitId: string;
 };
 
 type Unit = {
@@ -49,3 +65,10 @@ type TagAllergen = {
   id?: string;
   name: string;
 };
+
+type Profile = {
+  id: string;
+  firstName: string;
+  lastName: string
+ // bio?: string
+}

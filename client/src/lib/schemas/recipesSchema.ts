@@ -25,7 +25,6 @@ export const recipeSchema = z.object({
   steps: z
     .array(
       z.object({
-       // id: requiredString("Step id"),
         description: requiredString("Step description is required"),
       })
     )

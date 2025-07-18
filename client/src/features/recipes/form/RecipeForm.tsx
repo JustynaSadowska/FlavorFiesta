@@ -38,7 +38,7 @@ export default function RecipeForm() {
 
 
       const onSubmit = async (data: RecipeSchema) => {
-        const dto: Recipe = { //zmienić na oddzielny interface
+        const dto: CreateUpdateRecipe = { //zmienić na oddzielny interface
           id: recipe ? recipe.id : undefined,
           title: data.title,
           servings: data.servings,
@@ -84,13 +84,14 @@ export default function RecipeForm() {
           name="preparationTime"
           type = "number"
           sx={{ width: '25ch' }}
+          onWheel={(e) => (e.target as HTMLElement).blur()}
           slotProps={{
             input: {
               endAdornment: <InputAdornment position="end">min</InputAdornment>,
             },
           }}
         />
-        <TextInput label='Servings' control = {control} name='servings' type="number" />
+        <TextInput label='Servings' control = {control} name='servings' type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}/>
         <Controller
           control={control}
           name="difficulty"
@@ -138,6 +139,7 @@ export default function RecipeForm() {
                       control={control}
                       name={`ingredients.${index}.quantity`}
                       label="Quantity"
+                      onWheel={(e) => (e.target as HTMLElement).blur()}
                       type="number"
                       sx={{ width: 350 }}
                     />

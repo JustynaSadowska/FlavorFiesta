@@ -41,7 +41,7 @@ export const useRecipes = (id?: string) => {
   });
 
   const updateRecipe = useMutation({
-    mutationFn: async (recipe: Recipe) => {
+    mutationFn: async (recipe: CreateUpdateRecipe) => {
       await agent.put(`/recipes/${recipe.id}`, recipe);
     },
     onSuccess: async () => {
@@ -52,7 +52,7 @@ export const useRecipes = (id?: string) => {
   });
 
   const createRecipe = useMutation({
-    mutationFn: async (recipe: Recipe) => {
+    mutationFn: async (recipe: CreateUpdateRecipe) => {
       const response = await agent.post("/recipes", recipe);
       return response.data;
     },
