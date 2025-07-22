@@ -19,7 +19,7 @@ export default function RecipeList() {
   return (
     <Box sx={{display: "flex",
         flexWrap: "wrap",           
-        gap: 2,
+        gap: 3,
         justifyContent: "center"
         }}>
         {dataToShow.map(recipe => (

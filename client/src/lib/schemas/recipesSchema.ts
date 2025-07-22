@@ -4,9 +4,10 @@ import { z } from "zod";
 const requiredString = (fieldName: string) =>
   z
     .string({ required_error: `${fieldName} is required` })
-    .min(1, { message: `${fieldName} is required` });
+    .min(1, { message: `${fieldName} is required` })
+   ;
 export const recipeSchema = z.object({
-  title: requiredString("Title"),
+  title: requiredString("Title").max(20,{ message: `Max 20 characters` }),
   description: z.string().optional(),
   servings: z
     .number({ required_error: `Servings are required` })
