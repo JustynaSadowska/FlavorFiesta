@@ -4,11 +4,11 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   Typography,
   Chip,
   Rating,
   IconButton,
+  Divider,
 } from "@mui/material";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import { Link, useNavigate, useParams } from "react-router";
@@ -39,7 +39,7 @@ export default function RecipeDetails() {
   if (!recipe) return <Typography>Recipe not found</Typography>;
 
   return (
-    <Card sx={{ maxWidth: 1200, margin: "auto", mt: 4, borderRadius: 3, p: 2 }}>
+    <Card sx={{ maxWidth: 1200, margin: "auto", mt: 4, borderRadius: 3, p: 2,  position: "relative" }}>
         <Box
             sx={{
             display: "flex",
@@ -48,155 +48,140 @@ export default function RecipeDetails() {
             }}
         >
             
-        <Box
-            component="img"
-            src={"/images/jedzenie.jpg"}
-            alt={recipe.title}
-            sx={{
-            width: { xs: "100%", md: "40%" },
-            height: { xs: 250, md: 400 },
-            objectFit: "cover",
-            borderRadius: 3,
-            flexShrink: 0,
-            }}
-        />
-
-        <Box
-          sx={{
-            width: { xs: "100%", md: "60%" },
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            gap: 2,
-          }}
-        >
-        {recipe.isAuthor && (
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, position: "relative" }}>
-                <IconButton component={Link} to={`/manage/${recipe.id}`} aria-label="edit">
-                    <EditIcon />
-                </IconButton>
-                <IconButton
-                    onClick={() =>
-                        deleteRecipe.mutate(recipe.id, {
-                            onSuccess: () => navigate("/recipes"),
-                        })
-                    }
-                    disabled={deleteRecipe.isPending}
-                    aria-label="delete"
-                >
-                    <DeleteOutlinedIcon />
-                </IconButton>
-            </Box>
-            )}
-          <Typography
-            variant="h3"
-            component="h1"
-            fontWeight="bold"
-            sx={{ lineHeight: 1.2 }}
-          >
-            {recipe.title}
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              fontWeight: "500",
-              color: "text.secondary",
-            }}
-          >
-            <Rating
-              name="recipe-rating"
-              value={4.5}
-              precision={0.5}
-              readOnly
-              size="medium"
+            <Box
+                component="img"
+                src={"/images/jedzenie.jpg"}
+                alt={recipe.title}
+                sx={{
+                width: { xs: "100%", md: "40%" },
+                height: { xs: 250, md: 400 },
+                objectFit: "cover",
+                borderRadius: 3,
+                flexShrink: 0,
+                }}
             />
-            <Link
-              to={{
-                pathname: "/some/path",
-              }}
-              style={{  color: "inherit" }}
-            >
-              4.5 (456)
-            </Link>
-          </Box>
 
-          {recipe.description && (
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              whiteSpace="pre-line"
-            >
-              {recipe.description}
-            </Typography>
-          )}
-
-          <Box
-            display="flex"
-            gap={4}
-            mb={1}
+            <Box
             sx={{
-              borderTop: 1,
-              borderColor: "divider",
-              pt: 2,
-              justifyContent: "flex-start",
+                width: { xs: "100%", md: "60%" },
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                gap: 2,
             }}
-          >
-            <Box>
-              <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
-                Difficulty
-              </Typography>
-              <Typography variant="body1" fontWeight="bold">
-                {difficultyOptions.find(
-                  (opt) => opt.value === recipe.difficulty
-                )?.label || "Unknown"}
-              </Typography>
-            </Box>
-
-            <Box>
-              <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
-                Preparation Time
-              </Typography>
-              <Typography variant="body1" fontWeight="bold">
-                {formatPreparationTime(recipe.preparationTime)}
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box
-            sx={{
-              borderTop: 1,
-              borderColor: "divider",
-              pt: 2,
-              display: "flex",
-              justifyContent: "space-between",
-              flexWrap: "wrap",
-              gap: 1,
-            }}
-          >
-            {!recipe.isAuthor && (
-              <CardHeader 
-                color="black"
-                avatar = {
-                    <AvatarPopover profile = {{
-                    id: recipe.userId,
-                    firstName: recipe.authorFirstName,
-                    lastName: recipe.authorLastName,
-                    }}/>}
-                    subheader = {
-                        <>
-                        <Link to = {`/profiles/${recipe.userId}`}>{recipe.authorFirstName} {recipe.authorLastName}</Link>
-                        </>
-                    }>          
-            </CardHeader>
+                >
+            {recipe.isAuthor && (
+                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, position: "relative"}}>
+                    <IconButton component={Link} to={`/manage/${recipe.id}`} aria-label="edit">
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton
+                        onClick={() =>
+                            deleteRecipe.mutate(recipe.id, {
+                                onSuccess: () => navigate("/recipes"),
+                            })
+                        }
+                        disabled={deleteRecipe.isPending}
+                        aria-label="delete"
+                    >
+                        <DeleteOutlinedIcon />
+                    </IconButton>
+                </Box>
             )}
-            <Typography variant="body2" color="text.secondary">
-              Created at: {formatDate(recipe.createdAt)}
+            <Typography
+                variant="h3"
+                component="h1"
+                fontWeight="bold"
+                sx={{ lineHeight: 1.2 }}
+            >
+                {recipe.title}
             </Typography>
-          </Box>
-        </Box>
+
+            <Box
+                sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                fontWeight: "500",
+                color: "text.secondary",
+                mt: 1
+                }}
+            >
+                <Rating
+                    name="recipe-rating"
+                    value={4.5}
+                    precision={0.5}
+                    readOnly
+                    size="medium"
+                />
+                <Link
+                    to={{
+                        pathname: "/some/path",
+                    }}
+                    style={{  color: "inherit", fontSize: "0.875rem" }}
+                    >
+                    4.5 (456)
+                </Link>
+            </Box>
+            {!recipe.isAuthor && (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: -1 }} >
+                    <Box sx={{ width: 24, height: 24 }} >
+                        <AvatarPopover
+                            profile={{
+                            id: recipe.userId,
+                            firstName: recipe.authorFirstName,
+                            lastName: recipe.authorLastName,
+                            }}
+                            avatarProps={{ sx: { width: 24, height: 24 } }}
+                            showName={true}
+                        />
+                    </Box>
+                </Box>
+            )}
+            <Box display="flex" alignItems="center" gap={1} mb={-1}>
+                <Typography variant="subtitle2" color="text.secondary" >
+                    Created at:
+                </Typography>
+                <Typography variant="subtitle2" >
+                    {formatDate(recipe.createdAt)}
+                </Typography>
+            </Box>
+            <Divider />
+            {recipe.description && (
+                <Typography
+                variant="body1"
+                color="text.secondary"
+                whiteSpace="pre-line"
+                >
+                {recipe.description}
+                </Typography>
+            )}
+            <Divider />
+            <Box  >
+                <Box display="flex" alignItems="center" gap={1}>
+                    <Typography variant="body1" color="text.secondary" >
+                        Difficulty:
+                    </Typography>
+                    <Typography variant="body1" fontWeight="bold">
+                        {difficultyOptions.find(
+                        (opt) => opt.value === recipe.difficulty
+                        )?.label || "Unknown"}
+                    </Typography>
+                </Box>
+                <Box display="flex" alignItems="center" gap={1} >
+                    <Typography variant="body1" color="text.secondary">
+                        Preparation Time:
+                    </Typography>
+                    <Typography variant="body1" fontWeight="bold">
+                        {formatPreparationTime(recipe.preparationTime)}
+                    </Typography>
+                </Box>
+               
+            </Box>
+            
+            </Box>
+
+          
       </Box>
 
       <CardContent sx={{ mt: 4 }}>
