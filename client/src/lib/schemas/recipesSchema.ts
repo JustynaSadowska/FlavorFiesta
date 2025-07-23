@@ -8,7 +8,7 @@ const requiredString = (fieldName: string) =>
    ;
 export const recipeSchema = z.object({
   title: requiredString("Title").max(20,{ message: `Max 20 characters` }),
-  description: z.string().optional(),
+  description: z.string().max(330,{ message: `Max 330 characters` }).optional(),
   servings: z
     .number({ required_error: `Servings are required` })
     .int({ message: "Servings must be an integer" })

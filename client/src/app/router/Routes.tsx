@@ -3,7 +3,7 @@ import App from "../layout/App";
 import HomePage from "../../features/home/HomePage";
 import RecipeDashboard from "../../features/recipes/dashboard/RecipeDashboard";
 import RecipeForm from "../../features/recipes/form/RecipeForm";
-import RecipeDetails from "../../features/recipes/details/RecipeDetails";
+import RecipeDetails from "../../features/recipes/details/RecipeDetailsPage";
 import Counter from "../../features/counter/Counter";
 import TestErrors from "../../features/errors/TestErrors";
 import NotFound from "../../features/errors/NotFound";

@@ -7,15 +7,7 @@ import {
   FormControl,
   Button,
 } from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-
-type Ingredient = {
-  name: string;
-  quantity: number;
-  unit: {
-    displayName: string;
-  };
-};
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 type IngredientsSectionProps = {
   ingredients: Ingredient[];
@@ -36,14 +28,18 @@ export default function IngredientsSection({
   };
 
   return (
-    <Box mb={5} maxWidth={500}>
+    <Box mb={5} maxWidth={430} sx={{
+    border: "1px solid #ccc",
+    borderRadius: 2,
+    p: 2,
+  }} >
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         flexWrap="wrap"
         gap={2}
-        mb={3}
+        mb={2}
       >
         <Typography variant="h5" fontWeight="bold">
           Ingredients
@@ -69,16 +65,15 @@ export default function IngredientsSection({
 
           <Button
             variant="text"
-            color="primary"
-            startIcon={<ShoppingCartIcon />}
+            color="error"
+            startIcon={<AddShoppingCartIcon />}
           >
-            Add to Shopping List
+            Add 
           </Button>
         </Box>
       </Box>
-
       {ingredients && ingredients.length > 0 ? (
-        <Box>
+        <Box display="flex" flexDirection="column" gap={1}>
           {ingredients.map((ingredient, index) => (
             <Box
               key={index}
@@ -86,14 +81,11 @@ export default function IngredientsSection({
               justifyContent="space-between"
               alignItems="center"
               py={1}
-              borderBottom="1px solid #eee"
+              sx={{
+              borderBottom: index !== ingredients.length - 1 ? "1px solid rgb(205, 199, 199)" : "none",
+              }}
             >
-             <Typography variant="body1" display="flex" alignItems="center" gap={1}>
-                <Box component="span" sx={{ color: 'black', fontWeight: 'bold' }}>
-                    •
-                </Box>
-                {ingredient.name}
-                </Typography>
+            <Typography variant="body1">{ingredient.name}</Typography>
               <Typography variant="body1" fontWeight="medium">
                 {getScaledQuantity(ingredient.quantity).toFixed(2)}{" "}
                 {ingredient.unit.displayName}
