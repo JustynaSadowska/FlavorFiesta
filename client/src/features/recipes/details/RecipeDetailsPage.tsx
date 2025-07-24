@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -8,6 +7,7 @@ import {
   Rating,
   IconButton,
   Divider,
+  styled,
 } from "@mui/material";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import { Link, useNavigate, useParams } from "react-router";
@@ -22,19 +22,21 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+
+export const StyledBox = styled(Box)({
+  display: "flex", 
+  justifyContent: "flex-end", 
+  gap: 1, 
+  position: "relative", 
+  mb:-2
+})
+
+
 export default function RecipeDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { recipe, isLoadingRecipe } = useRecipes(id);
   const { deleteRecipe } = useRecipes();
-
-  const [selectedServings, setSelectedServings] = useState<number>(1);
-
-  useEffect(() => {
-    if (recipe?.servings) {
-      setSelectedServings(recipe.servings);
-    }
-  }, [recipe]);
 
   if (isLoadingRecipe) return <Typography>Loading...</Typography>;
 
@@ -72,7 +74,7 @@ export default function RecipeDetails() {
             >
                 
                 {recipe.isAuthor ? (
-                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, position: "relative", mb:-2}}>
+                    <StyledBox>
                         <IconButton component={Link} to={`/manage/${recipe.id}`} aria-label="edit">
                             <EditIcon />
                         </IconButton>
@@ -87,9 +89,9 @@ export default function RecipeDetails() {
                         >
                             <DeleteOutlinedIcon />
                         </IconButton>
-                    </Box>
+                    </StyledBox>
                 ): (
-                    <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1, position: "relative", mb:-2 }}>
+                    <StyledBox>
                         <IconButton
                         aria-label="add to favorites"
                         onClick={() => {
@@ -97,7 +99,7 @@ export default function RecipeDetails() {
                         >
                         <FavoriteBorderIcon  />
                         </IconButton>
-                    </Box>
+                    </StyledBox>
                 )}    
             <Typography
                 variant="h3"
@@ -239,8 +241,6 @@ export default function RecipeDetails() {
             <IngredientsSection
               ingredients={recipe.ingredients}
               baseServings={recipe.servings}
-              selectedServings={selectedServings}
-              onServingsChange={setSelectedServings}
             />
           </Box>
            <Box sx={{ flex: 1.36}}>
