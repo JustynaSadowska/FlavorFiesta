@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Reviews.Commands;
 using Application.Reviews.DTOs;
 using Application.Reviews.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -21,14 +22,16 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreateReview.Command { ReviewDto = reviewDto }));
         }
-        [HttpPost("{reviewId}")]
-        public async Task<ActionResult<string>> EditRecipe(string reviewId, [FromBody] EditReviewDto review)
+        [HttpPost("{id}")]
+        [Authorize(Policy = "IsReviewAuthor")]
+        public async Task<ActionResult<string>> EditRecipe(string id, [FromBody] EditReviewDto review)
         {
-            review.Id = reviewId;
+            review.Id = id;
             return HandleResult(await Mediator.Send(new EditReview.Command { ReviewDto = review }));
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "IsReviewAuthor")]
         public async Task<ActionResult> DeleteRecipe(string id)
         {
             return HandleResult(await Mediator.Send(new DeleteReview.Command { Id = id }));

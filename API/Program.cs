@@ -54,7 +54,16 @@ builder.Services.AddAuthorization(opt =>
         policy.Requirements.Add(new IsAuthorRequirement());
     });
 });
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("IsReviewAuthor", policy =>
+    {
+        policy.Requirements.Add(new IsReviewAuthorRequirement());
+    });
+});
+
 builder.Services.AddTransient<IAuthorizationHandler, IsAuthorRequirementHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, IsReviewAuthorRequirementHandler>();
 builder.Services.AddScoped<RatingService>();
 
 
