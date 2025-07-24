@@ -2,6 +2,7 @@ using System;
 using Application.Allergens.DTOs;
 using Application.Ingredients.DTOs;
 using Application.Profiles.DTOs;
+using Application.Reviews.DTOs;
 using Application.Steps.DTOs;
 using Domain;
 using Domain.Enums;
@@ -25,7 +26,7 @@ public class RecipeDto
     public UserProfile User { get; set; } = null!;
     public ICollection<StepDto> Steps { get; set; } = [];
     public ICollection<IngredientDto> Ingredients { get; set; } = [];
-    //public ICollection<Review>? Reviews { get; set; } = [];
+    public ICollection<ReviewDto>? Reviews { get; set; } = [];
 
     public required ICollection<TagDto> Tags { get; set; }
     public ICollection<AllergenDto>? Allergens { get; set; } = [];

@@ -3,6 +3,7 @@ using Application.Allergens.DTOs;
 using Application.Ingredients.DTOs;
 using Application.Profiles.DTOs;
 using Application.Recipes.DTOs;
+using Application.Reviews.DTOs;
 using Application.Steps.DTOs;
 using AutoMapper;
 using Domain;
@@ -34,5 +35,7 @@ public class MappingProfiles : Profile
         CreateMap<Unit, UnitDto>();
         CreateMap<CreateIngredientDto, Ingredient>();
         CreateMap<CreateStepDto, Step>();
+        CreateMap<Review, ReviewDto>()
+            .ForMember(d => d.ReviewAuthor, o => o.MapFrom(s => s.User));
     }
 }

@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 type IngredientsSectionProps = {
@@ -12,10 +12,6 @@ export default function IngredientsSection({
   baseServings,
 }: IngredientsSectionProps) {
   const [selectedServings, setSelectedServings] = useState(baseServings);
-
-  useEffect(() => {
-    setSelectedServings(baseServings);
-  }, [baseServings]);
 
   const getScaledQuantity = (quantity: number) => {
     if (!baseServings || baseServings === 0) return quantity;
