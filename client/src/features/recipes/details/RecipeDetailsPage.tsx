@@ -119,35 +119,44 @@ export default function RecipeDetails() {
                 color: "text.secondary",
                 }}
             >
+              <>
                 <Rating
-                    name="recipe-rating"
-                    value={4.5}
-                    precision={0.5}
-                    readOnly
-                    size="medium"
-                />
-                <Link
-                    to={{
-                        pathname: "/some/path",
-                    }}
-                    style={{  color: "inherit", fontSize: "0.875rem" }}
+                  name="recipe-rating"
+                  value={recipe.averageRating}
+                  precision={0.5}
+                  readOnly
+                  size="medium"
+              />
+                  {recipe.reviewCount > 0 ? (
+                    <Link
+                        to={{
+                            pathname: "/some/path",
+                        }}
+                        style={{ color: "inherit", fontSize: "0.925rem" }}
                     >
-                    4.5 (456)
-                </Link>
-                 {recipe.tags && recipe.tags.length > 0 && (
-                  <Box ml={3}>
-                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                      {recipe.tags.map((tag) => (
-                        <Chip
-                          key={tag.id}
-                          label={tag.name}
-                          variant="outlined"
-                          size= "small"
-                          color="secondary"
-                        />
-                      ))}
-                    </Box>
+                        <span style={{ fontWeight: "bold" }}>{recipe.averageRating.toFixed(1)}</span>{" "}
+                          ({recipe.reviewCount})
+                    </Link>
+              ) : (
+                    <Typography style={{ fontSize: "0.875rem", color: "#888" }}>
+                      No reviews yet
+                    </Typography>
+              )}
+              </>
+                {recipe.tags && recipe.tags.length > 0 && (
+                <Box ml={3}>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {recipe.tags.map((tag) => (
+                      <Chip
+                        key={tag.id}
+                        label={tag.name}
+                        variant="outlined"
+                        size= "small"
+                        color="secondary"
+                      />
+                    ))}
                   </Box>
+                </Box>
                 )}
             </Box>
             {!recipe.isAuthor && (

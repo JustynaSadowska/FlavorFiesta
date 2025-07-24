@@ -3,6 +3,7 @@ using Application.Core;
 using Application.Interfaces;
 using Application.Recipes.Queries;
 using Application.Recipes.Validators;
+using Application.Services;
 using Domain;
 using FluentValidation;
 using Infrastructure;
@@ -54,6 +55,7 @@ builder.Services.AddAuthorization(opt =>
     });
 });
 builder.Services.AddTransient<IAuthorizationHandler, IsAuthorRequirementHandler>();
+builder.Services.AddScoped<RatingService>();
 
 
 var app = builder.Build();

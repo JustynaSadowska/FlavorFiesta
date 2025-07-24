@@ -29,6 +29,8 @@ type Recipe = {
   ingredients: Ingredient[];
   tags: TagAllergen[];
   allergens?: TagAllergen[];
+  averageRating: number;
+  reviewCount: number;
 };
 
 type User = {

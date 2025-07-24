@@ -15,8 +15,6 @@ type Props = {
 };
 
 export default function RecipeCard({ recipe }: Props) {
-  const averageRating = 4.1;//jesli ktos nie ma rating to dac ze nowy 
-
   return (
     <Card
       elevation={4}
@@ -66,11 +64,17 @@ export default function RecipeCard({ recipe }: Props) {
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
               <StarIcon fontSize="small" sx={{ color: "#fbc02d" }} />
-              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                {averageRating.toFixed(1)}
-              </Typography>
-              <span>(456)</span>
-              {/* ilosc recenzji */}
+                {recipe.reviewCount > 0 ? (
+                <>
+                  <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                    {recipe.averageRating.toFixed(1)}
+                  </Typography><Typography fontSize="small">({recipe.reviewCount})</Typography></>
+                  ): (
+                    <Typography style={{ fontSize: "0.875rem", color: "#888" }}>
+                     No reviews
+                    </Typography>
+                )}
+              
             </Box>
             <span>{formatPreparationTime(recipe.preparationTime)}</span>
           </Box>

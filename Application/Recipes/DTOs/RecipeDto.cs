@@ -22,11 +22,12 @@ public class RecipeDto
     public RecipeDifficulty Difficulty { get; set; }
     public bool IsVisible { get; set; }
     public DateTime CreatedAt { get; set; }
-    //public bool IsDeleted { get; set; }
     public UserProfile User { get; set; } = null!;
     public ICollection<StepDto> Steps { get; set; } = [];
     public ICollection<IngredientDto> Ingredients { get; set; } = [];
     public ICollection<ReviewDto>? Reviews { get; set; } = [];
+    public double AverageRating { get; set; }
+    public int ReviewCount { get; set; }
 
     public required ICollection<TagDto> Tags { get; set; }
     public ICollection<AllergenDto>? Allergens { get; set; } = [];
