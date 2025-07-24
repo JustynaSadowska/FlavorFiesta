@@ -21,5 +21,17 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreateReview.Command { ReviewDto = reviewDto }));
         }
+        [HttpPost("{reviewId}")]
+        public async Task<ActionResult<string>> EditRecipe(string reviewId, [FromBody] EditReviewDto review)
+        {
+            review.Id = reviewId;
+            return HandleResult(await Mediator.Send(new EditReview.Command { ReviewDto = review }));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteRecipe(string id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteReview.Command { Id = id }));
+        }
     }
 }

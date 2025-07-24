@@ -38,5 +38,7 @@ public class MappingProfiles : Profile
         CreateMap<Review, ReviewDto>()
             .ForMember(d => d.ReviewAuthor, o => o.MapFrom(s => s.User));
         CreateMap<CreateReviewDto, Review>();
+        CreateMap<EditReviewDto, Review>();
+
     }
 }

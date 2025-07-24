@@ -10,7 +10,7 @@ namespace Application.Services
         public async Task<Result<RatingDto>> GetRatings(string recipeId)
         {
             var ratings = await context.Reviews
-                .Where(r => r.RecipeId == recipeId)
+                .Where(r => r.RecipeId == recipeId && r.IsDeleted == false)
                 .Select(r => r.Rating)
                 .ToListAsync();
                 
