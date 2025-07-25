@@ -19,7 +19,7 @@ export const useRecipes = (id?: string) => {
       return data.map((recipe) => {
         return {
           ...recipe,
-          isAuthor: currentUser?.id === recipe.userId,
+          isAuthor: currentUser?.id === recipe.userId
         };
       });
     },
@@ -36,6 +36,10 @@ export const useRecipes = (id?: string) => {
       return {
         ...data,
         isAuthor: currentUser?.id === data.userId,
+        reviews: data.reviews?.map((review) => ({
+        ...review,
+        isReviewAuthor: currentUser?.id === review.reviewAuthor.id
+      }))
       };
     },
   });

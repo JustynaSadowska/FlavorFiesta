@@ -31,6 +31,7 @@ type Recipe = {
   allergens?: TagAllergen[];
   averageRating: number;
   reviewCount: number;
+  reviews: Review[];
 };
 
 type User = {
@@ -73,4 +74,20 @@ type Profile = {
   firstName: string;
   lastName: string
  // bio?: string
+}
+
+type Review = {
+  id: string;
+  comment? : string;
+  rating: number;
+  createdAt: string;
+  reviewAuthor : Profile;
+  isReviewAuthor: boolean;
+}
+
+type CreateUpdateReview = {
+  id?: string;
+  comment? : string;
+  rating: number;
+  recipeId: string;
 }

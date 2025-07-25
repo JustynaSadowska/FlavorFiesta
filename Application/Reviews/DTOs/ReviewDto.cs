@@ -14,6 +14,7 @@ namespace Application.Reviews.DTOs
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool IsDeleted { get; set; }
         public UserProfile ReviewAuthor { get; set; } = null!;
     }
 }

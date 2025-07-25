@@ -28,19 +28,23 @@ public class GetRecipeDetails
 
             if (recipe == null) return Result<RecipeDto>.Failure("Recipe not found", 404);
 
-            var ratings = await ratingService.GetRatings(request.Id);
+            recipe.Reviews = recipe.Reviews?.Where(r => !r.IsDeleted).ToList() ?? [];
 
-            if (ratings.Value != null)
-            {
-                recipe.AverageRating = ratings.Value.AverageRating;
-                recipe.ReviewCount = ratings.Value.ReviewCount;
-            }
-            else
+            if (recipe.Reviews.Count == 0)
             {
                 recipe.AverageRating = 0;
                 recipe.ReviewCount = 0;
             }
+            else
+            {
+                var ratings = await ratingService.GetRatings(request.Id);
 
+                if (ratings.Value != null)
+                {
+                    recipe.AverageRating = ratings.Value.AverageRating;
+                    recipe.ReviewCount = ratings.Value.ReviewCount;
+                }
+            }
             return Result<RecipeDto>.Success(recipe);
         }
     }
