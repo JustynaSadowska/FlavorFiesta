@@ -5,6 +5,8 @@ import ReviewForm from "./form/ReviewForm";
 import { useParams } from "react-router";
 import { useRecipes } from "../../lib/hooks/useRecipes";
 import AddIcon from '@mui/icons-material/Add';
+import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+
 
 type Props = {
   reviews: Review[];
@@ -49,8 +51,27 @@ export default function ReviewSection({ reviews }: Props) {
                 )}
             </Box>
         
+            {reviews.length === 0 ? (
+              <Box
+                textAlign="center"
+                color="text.secondary"
+                sx={{ mt: 4, mb: 2 }}
+              >
+                <RateReviewOutlinedIcon sx={{ fontSize: 64, mb: 1 }} />
+                {recipe?.isAuthor && (
+                <Typography variant="subtitle1" fontStyle="italic">
+                  No reviews yet.
+                </Typography>)}
+                 {!recipe?.isAuthor && (
+                <Typography variant="subtitle1" fontStyle="italic">
+                  Be the first one to leave a review!
+                </Typography>)}
+              </Box>
+            )
+           : (
             <ReviewList reviews={reviews} />
-        </Stack>
+          )}
+          </Stack>
       </CardContent>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
