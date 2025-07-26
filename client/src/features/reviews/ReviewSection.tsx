@@ -75,7 +75,7 @@ export default function ReviewSection({ reviews }: Props) {
       </CardContent>
 
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Add Review</DialogTitle>
+        <DialogTitle fontWeight="bold">Add Review</DialogTitle>
         <ReviewForm onClose={() => setOpen(false)} />
       </Dialog>
     </Card>

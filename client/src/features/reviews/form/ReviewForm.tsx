@@ -50,45 +50,45 @@ export default function ReviewForm({ onClose }: Props) {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent>
-            <Box mt={2}>
-            <Typography variant="subtitle1" gutterBottom>
-                Rating
-            </Typography>
-            <Controller
-                name="rating"
-                control={control}
-                render={({ field }) => (
-                <Rating
-                    {...field}
-                    value={field.value}
-                    onChange={(_, value) => field.onChange(value)}
-                    size="large"
+        <DialogContent sx ={{mt:-1}}>
+            <Box display="flex" flexDirection="column" gap={0.5} alignItems="flex-start">
+                {/* <Typography variant="subtitle1" sx={{ fontWeight: 500 }}  >
+                    Rating:
+                </Typography> */}
+                <Controller
+                    name="rating"
+                    control={control}
+                    render={({ field }) => (
+                    <Rating
+                        {...field}
+                        value={field.value}
+                        onChange={(_, value) => field.onChange(value)}
+                        size="large"
+                    />
+                    )}
                 />
+                {errors.rating && (
+                    <Typography color="error" variant="caption" ml={0.5} mb={-2}>
+                    {errors.rating.message}
+                    </Typography>
                 )}
-            />
-            {errors.rating && (
-                <Typography color="error" variant="caption">
-                {errors.rating.message}
-                </Typography>
-            )}
 
-            <Controller
-                name="comment"
-                control={control}
-                render={({ field }) => (
-                <TextField
-                    {...field}
-                    fullWidth
-                    multiline
-                    minRows={3}
-                    label="Comment"
-                    sx={{ mt: 3 }}
-                    error={!!errors.comment}
-                    helperText={errors.comment?.message}
+                <Controller
+                    name="comment"
+                    control={control}
+                    render={({ field }) => (
+                    <TextField
+                        {...field}
+                        fullWidth
+                        multiline
+                        minRows={3}
+                        label="Comment (optional)"
+                        sx={{ mt: 3 }}
+                        error={!!errors.comment}
+                        helperText={errors.comment?.message}
+                    />
+                    )}
                 />
-                )}
-            />
             </Box>
         </DialogContent>
 
