@@ -1,13 +1,11 @@
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { useState } from "react";
-//import { LoadingButton } from "@mui/lab";
 
 interface Props<T extends { id: string }> {
   open: boolean;
   setOpen: (state: boolean) => void;
   item: T;
   itemType: "recipe" | "review";
-  getDisplayName: (item: T) => string;
   deleteAction: (id: string) => Promise<void>;
   redirectAfterDelete?: string;
 }
@@ -17,7 +15,6 @@ export default function DeleteDialog<T extends { id: string }>({
   setOpen,
   item,
   itemType,
-  getDisplayName,
   deleteAction,
   redirectAfterDelete,
 }: Props<T>) {
@@ -40,16 +37,15 @@ export default function DeleteDialog<T extends { id: string }>({
 
   const handleCancel = () => setOpen(false);
 
-  const itemName = getDisplayName(item);
   const title = `Delete ${itemType.charAt(0).toUpperCase() + itemType.slice(1)}`;
 
   return (
     <Dialog open={open} onClose={handleCancel}>
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle sx={{fontWeight: "bold"}}>{title}</DialogTitle>
       <DialogContent>
         <Box>
           <Typography variant="body1" mb={2}>
-            Are you sure you want to delete this {itemType}: <strong>{itemName}</strong>?
+            Are you sure you want to delete this {itemType}?
           </Typography>
           {itemType === "recipe" && (
             <Typography variant="body2" color="error">

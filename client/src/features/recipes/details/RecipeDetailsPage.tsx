@@ -280,7 +280,6 @@ export default function RecipeDetails() {
       setOpen={setDeleteDialogOpen}
       item={recipe}
       itemType="recipe"
-      getDisplayName={(r) => r.title}
       deleteAction={deleteRecipe.mutateAsync}
       redirectAfterDelete="/recipes"
     />
