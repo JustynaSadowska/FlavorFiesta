@@ -260,7 +260,10 @@ export default function RecipeDetails() {
 
             {recipe.steps && recipe.steps.length > 0 ? (
               <Box component="ol" sx={{ pl: 3, m: 0, display: "flex", flexDirection: "column", gap: 1 }}>
-                {recipe.steps.map((step, i) => (
+               {recipe.steps
+                .slice()
+                .sort((a, b) => (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER))
+                .map((step, i) => (
                   <li key={i} style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
                     <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
                       {step.description}

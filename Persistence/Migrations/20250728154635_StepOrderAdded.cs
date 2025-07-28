@@ -5,7 +5,7 @@
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class TagAdded : Migration
+    public partial class StepOrderAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,6 +18,13 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserFollowings");
+
+            migrationBuilder.AddColumn<int>(
+                name: "Order",
+                table: "Steps",
+                type: "INTEGER",
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsDeleted",
@@ -46,6 +53,10 @@ namespace Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "Order",
+                table: "Steps");
+
             migrationBuilder.DropColumn(
                 name: "IsDeleted",
                 table: "ShoppingLists");

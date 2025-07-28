@@ -33,6 +33,7 @@ export default function RecipeForm() {
     ],
     difficulty: 1,  
     servings: 1,
+    isVisible: false,
   },
 });
    const servingsOptions = [1, 2, 3, 4, 5, 6, 12].map(num => ({ label: num.toString(), value: num }));
@@ -63,7 +64,10 @@ export default function RecipeForm() {
           preparationTime: data.preparationTime,
           difficulty: data.difficulty,
           isVisible: data.isVisible,
-          steps: data.steps,
+          steps: data.steps.map((step, index) => ({
+              ...step,
+              order: index + 1,
+            })),
           ingredients: data.ingredients.map(x => ({ name: x.name, quantity: x.quantity , unitId: x.unit.id})),
           tagsIds: data.tags.map(x => x.id),
           allergensIds: data.allergens?.map(x => x.id),

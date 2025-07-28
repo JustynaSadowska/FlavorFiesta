@@ -368,53 +368,20 @@ public class DbInitializer
         var steps = new List<Step>
         {
             // recipe 1
-            new()
-            {
-                RecipeId = recipes[0].Id,
-                Description = "Ugotuj makaron al dente",
-            },
-            new()
-            {
-                RecipeId = recipes[0].Id,
-                Description = "Podsmaż boczek na patelni"
-            },
+            new() { RecipeId = recipes[0].Id, Description = "Ugotuj makaron al dente" },
+            new() { RecipeId = recipes[0].Id, Description = "Podsmaż boczek na patelni" },
+
             // recipe 2
-            new()
-            {
-                RecipeId = recipes[1].Id,
-                Description = "Pokroj kurczaka"
-            },
-            new()
-            {
-                RecipeId = recipes[1].Id,
-                Description = "Usmaz go"
-            },
-            new()
-            {
-                RecipeId = recipes[1].Id,
-                Description = "Dodaj sos"
-            },
-            new()
-            {
-                RecipeId = recipes[1].Id,
-                Description = "Wymieszaj"
-            },
+            new() { RecipeId = recipes[1].Id, Description = "Pokroj kurczaka" },
+            new() { RecipeId = recipes[1].Id, Description = "Usmaz go" },
+            new() { RecipeId = recipes[1].Id, Description = "Dodaj sos" },
+            new() { RecipeId = recipes[1].Id, Description = "Wymieszaj" },
+
             // recipe 3
-            new()
-            {
-                RecipeId = recipes[2].Id,
-                Description = "Pokroj awokado"
-            },
-            new()
-            {
-                RecipeId = recipes[2].Id,
-                Description = "Podpiecz chleb"
-            },
-            new()
-            {
-                RecipeId = recipes[2].Id,
-                Description = "Usmax jajko sadzone"
-            },
+            new() { RecipeId = recipes[2].Id, Description = "Pokroj awokado" },
+            new() { RecipeId = recipes[2].Id, Description = "Podpiecz chleb" },
+            new() { RecipeId = recipes[2].Id, Description = "Usmax jajko sadzone" },
+
             // Pancakes
             new() { RecipeId = recipes[3].Id, Description = "Mix flour, baking powder, and sugar." },
             new() { RecipeId = recipes[3].Id, Description = "Add milk and eggs, whisk until smooth." },
@@ -466,7 +433,17 @@ public class DbInitializer
             new() { RecipeId = recipes[12].Id, Description = "Simmer until cauliflower is tender." }
         };
 
-        context.Steps.AddRange(steps);
+        var orderedSteps = steps
+            .GroupBy(s => s.RecipeId)
+            .SelectMany(g => g.Select((step, index) =>
+            {
+                step.Order = index + 1;
+                return step;
+            }))
+            .ToList();
+
+        context.Steps.AddRange(orderedSteps);
+
 
         var ingredients = new List<Ingredient>
         {

@@ -195,6 +195,9 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("RecipeId")
                         .IsRequired()
                         .HasColumnType("TEXT");
