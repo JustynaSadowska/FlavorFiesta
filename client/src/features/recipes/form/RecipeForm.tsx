@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button,  FormControlLabel, IconButton, InputAdornment, Paper, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, IconButton, InputAdornment, Paper, Stack, Switch, TextField, Typography } from "@mui/material";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import { useNavigate, useParams } from "react-router";
 import { useAllergens } from "../../../lib/hooks/useAllergens";
@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { difficultyOptions } from "../../../lib/util/constants";
 import TextInput from "../../../app/shared/components/TextInput";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 
 export default function RecipeForm() {
@@ -157,22 +159,26 @@ export default function RecipeForm() {
               />
             )}
           />
-          <FormControlLabel
-            control={
-              <Controller
-                name="isVisible"
-                control={control}
-                render={({ field }) => (
+            <Controller
+              name="isVisible"
+              control={control}
+              render={({ field }) => (
+                <Box display="flex" alignItems="center" mb={1}>
                   <Switch
                     {...field}
                     checked={field.value}
                     onChange={(e) => field.onChange(e.target.checked)}
                   />
-                )}
-              />
-            }
-            label="Visible"
-          />
+                  <IconButton onClick={() => field.onChange(!field.value)}>
+                    {field.value ? (
+                      <VisibilityIcon color="action" />
+                    ) : (
+                      <VisibilityOffIcon color="disabled" />
+                    )}
+                  </IconButton>
+                </Box>
+              )}
+            />
           </Box>
           <TextInput label='Description' control = {control} name='description'  sx={{maxWidth: 1200}} multiline rows={2} />
         </Box> 

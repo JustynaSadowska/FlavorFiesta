@@ -4,11 +4,11 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Box
-} from "@mui/material";
+  Box} from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import { Link } from "react-router"; 
 import { formatPreparationTime } from "../../../lib/util/timeFormatter";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 type Props = {
   recipe: Recipe;
@@ -36,6 +36,39 @@ export default function RecipeCard({ recipe }: Props) {
           alt={recipe.title}
           sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
         />
+         <Box
+            sx={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              backgroundColor: "#F3EDE4",
+              borderRadius: 2,
+              px: 0.5,
+              py: 0.2,
+              display: "flex",
+              alignItems: "center",
+              boxShadow: 1,
+            }}
+          >
+            {!recipe.isVisible && (
+              <VisibilityOffIcon color="disabled" fontSize="small" />
+            )}
+          </Box>
+           {/* <Box
+            sx={{
+              position: "absolute",
+              px: 1,
+              py: 1,
+              display: "flex",
+                justifyContent: "flex-end", 
+
+            }}
+          >
+          
+            {recipe.isVisible && (
+              <VisibilityOffIcon color="disabled" fontSize="small" />
+            )}
+          </Box> */}
         <CardContent sx={{ px: 2, pb: 2 }}>
           <Typography
             variant="subtitle1"
@@ -83,3 +116,16 @@ export default function RecipeCard({ recipe }: Props) {
     </Card>
   );
 }
+{/* <Box display="flex" alignItems="center" >
+                  <Switch 
+                    checked={recipe.isVisible}
+                    onChange={() => {
+                        updateVisibility.mutate(recipe.id);
+                    }}
+                  />
+                    {recipe.isVisible ? (
+                      <VisibilityIcon color="action" />
+                    ) : (
+                      <VisibilityOffIcon color="disabled" />
+                    )}
+                </Box> */}

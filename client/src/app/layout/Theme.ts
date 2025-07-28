@@ -39,6 +39,29 @@ const theme = createTheme({
           },
         },
       },
+      MuiSwitch: {
+      styleOverrides: {
+        switchBase: {
+          padding: 9,
+          color: '#EAC1B1', // kolor kółka gdy wyłączony
+          '&.Mui-checked': {
+            transform: 'translateX(20px)',
+            color: '#EAC1B1', // kolor kółka gdy włączony
+            '& + .MuiSwitch-track': {
+              backgroundColor: '#EAC1B1', // kolor toru gdy włączony
+              opacity: 1,
+            },
+          },
+        },
+        // track: {
+        //   borderRadius: 16,
+        //   backgroundColor: '#f5d6cc', // kolor toru gdy wyłączony
+        //   opacity: 1,
+        // },
+      },
+    },
+  },
+});
       // MuiButton: {
       //   styleOverrides: {
       //     root: {
@@ -51,7 +74,5 @@ const theme = createTheme({
       //     },
       //   },
       // },
-    },
-  });
   
   export default theme;
