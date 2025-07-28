@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogActions,
   Rating,
-  TextField,
   Typography,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
@@ -13,14 +12,17 @@ import { useRecipes } from "../../../lib/hooks/useRecipes";
 import { ReviewSchema, reviewsSchema } from "../../../lib/schemas/reviewsSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "react-router";
+import { useEffect } from "react";
+import TextInput from "../../../app/shared/components/TextInput";
 
 type Props = {
   onClose: () => void;
+  review?: CreateUpdateReview;
 };
 
-export default function ReviewForm({ onClose }: Props) {
+export default function ReviewForm({ onClose, review }: Props) {
     const {id} = useParams(); 
-    const { createReview } = useReviews();
+    const { createReview, updateReview } = useReviews();
     const { recipe } = useRecipes(id);
 
     const {
@@ -31,16 +33,35 @@ export default function ReviewForm({ onClose }: Props) {
     } = useForm<ReviewSchema>({
         mode: "onTouched",
         resolver: zodResolver(reviewsSchema),
+        defaultValues: {
+            rating: review?.rating ?? 0,
+            comment: review?.comment ?? "", 
+    },
     });
+    
+    useEffect(() => {
+        if (review) {
+        reset(review);
+        }
+    }, [review, reset]);
 
     const onSubmit = async (data: ReviewSchema) => {
-        if (!recipe?.id) return;
 
+        const reviewRecipeId = review?.recipeId || recipe?.id;
+        if (!reviewRecipeId) return;
+
+        const dto: CreateUpdateReview = {
+            id: review ? review.id : undefined,
+            comment: data?.comment,
+            rating: data.rating,
+            recipeId: reviewRecipeId
+         } 
         try {
-        await createReview.mutateAsync({
-            ...data,
-            recipeId: recipe.id
-        });
+            if (review) {
+                updateReview.mutateAsync(dto);
+            } else {
+                createReview.mutateAsync(dto);
+            }
         reset();
         onClose();
         } catch (error) {
@@ -73,34 +94,19 @@ export default function ReviewForm({ onClose }: Props) {
                     </Typography>
                 )}
 
-                <Controller
-                    name="comment"
-                    control={control}
-                    render={({ field }) => (
-                    <TextField
-                        {...field}
-                        fullWidth
-                        multiline
-                        minRows={3}
-                        label="Comment (optional)"
-                        sx={{ mt: 3 }}
-                        error={!!errors.comment}
-                        helperText={errors.comment?.message}
-                    />
-                    )}
-                />
+                <TextInput label='Comment (optional)' control = {control} name='comment'  sx={{ mt: 3 }} multiline rows={3} />
             </Box>
         </DialogContent>
 
         <DialogActions>
             <Button onClick={onClose}>Cancel</Button>
             <Button
-            type="submit"
-            variant="contained"
-            color="success"
-            disabled={createReview.isPending}
-            >
-            Submit
+                type="submit"
+                variant="contained"
+                color="success"
+                disabled={createReview.isPending}
+                >
+                    Submit
             </Button>
         </DialogActions>
         </form>

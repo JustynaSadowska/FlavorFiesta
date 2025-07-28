@@ -22,7 +22,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new CreateReview.Command { ReviewDto = reviewDto }));
         }
-        [HttpPost("{id}")]
+        [HttpPut("{id}")]
         [Authorize(Policy = "IsReviewAuthor")]
         public async Task<ActionResult<string>> EditRecipe(string id, [FromBody] EditReviewDto review)
         {
