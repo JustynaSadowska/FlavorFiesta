@@ -23,7 +23,7 @@ import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import ReviewSection from "../../reviews/ReviewSection";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DeleteDialog from "../../../app/shared/components/DeleteDialog";
 
 export const StyledBox = styled(Box)({
@@ -34,12 +34,16 @@ export const StyledBox = styled(Box)({
   mb:-2
 })
 
-
 export default function RecipeDetails() {
   const { id } = useParams();
   const { recipe, isLoadingRecipe } = useRecipes(id);
   const { deleteRecipe } = useRecipes();
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const reviewSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToReviews = () => {
+    reviewSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
 
   if (isLoadingRecipe) return <Typography>Loading...</Typography>;
@@ -124,21 +128,24 @@ export default function RecipeDetails() {
                 precision={0.5}
                 readOnly
                 size="medium" />
-              {recipe.reviewCount > 0 ? (
-                <Link
-                  to={{
-                    pathname: "/some/path",
-                  }}
-                  style={{ color: "inherit", fontSize: "0.925rem" }}
-                >
-                  <span style={{ fontWeight: "bold" }}>{recipe.averageRating.toFixed(1)}</span>{" "}
-                  ({recipe.reviewCount})
-                </Link>
-              ) : (
-                <Typography style={{ fontSize: "0.875rem", color: "#888" }}>
-                  No reviews yet
-                </Typography>
-              )}
+                {recipe.reviewCount > 0 ? (
+                   <Typography
+                      onClick={scrollToReviews}
+                      sx={{
+                        cursor: "pointer",
+                        fontSize: "0.925rem",
+                        textDecoration: "underline",
+                        color: "inherit",
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold" }}>{recipe.averageRating.toFixed(1)}</span>{" "}
+                          ({recipe.reviewCount})                  
+                          </Typography>
+                ) : (
+                  <Typography style={{ fontSize: "0.875rem", color: "#888" }}>
+                    No reviews yet
+                  </Typography>
+                )}
             </>
             {recipe.tags && recipe.tags.length > 0 && (
               <Box ml={3}>
@@ -267,14 +274,14 @@ export default function RecipeDetails() {
               </Typography>
             )}
           </Box>
-
-
         </Box>
         <Box>
         </Box>
       </CardContent>
     </Card>
-    <ReviewSection reviews={recipe.reviews} />
+    <div ref={reviewSectionRef}>
+      <ReviewSection reviews={recipe.reviews} />
+    </div>
     <DeleteDialog
       open={isDeleteDialogOpen}
       setOpen={setDeleteDialogOpen}
