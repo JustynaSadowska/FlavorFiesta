@@ -18,6 +18,10 @@ export default function IngredientsSection({
     return (quantity * selectedServings) / baseServings;
   };
 
+   const sortedIngredients = [...ingredients].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+
   return (
     <Box mb={5} maxWidth={430} sx={{ border: "1px solid #ccc", borderRadius: 2, p: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2} mb={2}>
@@ -40,16 +44,16 @@ export default function IngredientsSection({
         </Box>
       </Box>
 
-      {ingredients && ingredients.length > 0 ? (
+      {sortedIngredients.length > 0 ? (
         <Box display="flex" flexDirection="column" gap={1}>
-          {ingredients.map((ingredient, index) => (
+          { sortedIngredients.map((ingredient, index) => (
             <Box
               key={index}
               display="flex"
               justifyContent="space-between"
               alignItems="center"
               py={1}
-              sx={{ borderBottom: index !== ingredients.length - 1 ? "1px solid rgb(205, 199, 199)" : "none" }}
+              sx={{ borderBottom: index !== sortedIngredients.length - 1 ? "1px solid rgb(205, 199, 199)" : "none" }}
             >
               <Typography variant="body1">{ingredient.name}</Typography>
               <Typography variant="body1" fontWeight="medium">
