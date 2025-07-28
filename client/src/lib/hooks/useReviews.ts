@@ -12,7 +12,7 @@ export const useReviews = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["reviews"],
+        queryKey: ["recipes"],
       });
     },
   });
@@ -23,7 +23,7 @@ export const useReviews = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["reviews"],
+        queryKey: ["recipes"],
       });
     },
   });
@@ -34,7 +34,7 @@ export const useReviews = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["reviews"],
+        queryKey: ["recipes"],
       });
     },
   });
