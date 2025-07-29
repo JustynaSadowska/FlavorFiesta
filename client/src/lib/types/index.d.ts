@@ -43,7 +43,7 @@ type User = {
 
 type Step = {
   id?: string;
-  order?: number;
+  order: number;
   description: string;
 };
 

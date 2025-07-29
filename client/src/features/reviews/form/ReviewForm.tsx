@@ -29,7 +29,7 @@ export default function ReviewForm({ onClose, review }: Props) {
         control,
         handleSubmit,
         reset,
-        formState: { errors },
+        formState: { errors, isDirty, isValid },
     } = useForm<ReviewSchema>({
         mode: "onTouched",
         resolver: zodResolver(reviewsSchema),
@@ -104,7 +104,7 @@ export default function ReviewForm({ onClose, review }: Props) {
                 type="submit"
                 variant="contained"
                 color="success"
-                disabled={createReview.isPending}
+                disabled={!isDirty || !isValid || createReview.isPending || updateReview.isPending}
                 >
                     Submit
             </Button>

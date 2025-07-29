@@ -17,7 +17,7 @@ export default function RecipeForm() {
    const {id} = useParams();
    const {updateRecipe, createRecipe, recipe, isLoadingRecipe, tags, units} = useRecipes(id);
 
-  const {register, handleSubmit, reset, control, formState: {errors}} = useForm<RecipeSchema>({
+  const {register, handleSubmit, reset, control, formState: {errors, isValid, isDirty}} = useForm<RecipeSchema>({
     mode: 'onTouched',
     resolver: zodResolver(recipeSchema),
    defaultValues: {
@@ -53,13 +53,12 @@ export default function RecipeForm() {
       name: "ingredients"
     });
       
-useEffect(() => {
-  if (recipe) {
-    const sortedSteps = [...recipe.steps].sort((a, b) => a.order - b.order);
-    reset({ ...recipe, steps: sortedSteps });
-  }
-}, [recipe, reset]);
-
+    useEffect(() => {
+      if (recipe) {
+        const sortedSteps = [...recipe.steps].sort((a, b) => a.order - b.order);
+        reset({ ...recipe, steps: sortedSteps });
+      }
+    }, [recipe, reset]);
 
       const onSubmit = async (data: RecipeSchema) => {
         const dto: CreateUpdateRecipe = { 
@@ -78,8 +77,6 @@ useEffect(() => {
           allergensIds: data.allergens?.map(x => x.id),
           description: data?.description,
         }
-              console.log("przedsubmitem:")
-      console.log(dto)
 
         try {
           if (recipe) {
@@ -109,61 +106,61 @@ useEffect(() => {
           <TextInput label='Title' control = {control} name='title' sx={{maxWidth: 400}} />
           <Box display='flex'gap={3} justifyContent="flex-end" alignItems="flex-end" >
             <TextInput
-            label="Preparation time"        
-            control = {control}
-            name="preparationTime"
-            type = "number"
-            sx={{ width: 200 }}
-            onWheel={(e) => (e.target as HTMLElement).blur()}
-            slotProps={{
-              input: {
-                endAdornment: <InputAdornment position="end">min</InputAdornment>,
-              },
-            }}
-          />
-          <Controller
-            control={control}
-            name="servings"
-            render={({ field: { onChange, value } }) => (
-              <Autocomplete
-                options={servingsOptions}
-                getOptionLabel={(option) => option.label}
-                value={servingsOptions.find(opt => opt.value === value)}
-                onChange={(_, data) => onChange(data?.value || "")}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Servings"
-                    error={!!errors.servings}
-                    helperText={errors.servings?.message}
-                  />
-                )}
-                sx={{ width: 200 }}
-                disableClearable
-              />
-            )}
-          />          
-          <Controller
-            control={control}
-            name="difficulty"
-            render={({ field: { onChange, value } }) => (
-              <Autocomplete
-                options={difficultyOptions}
-                getOptionLabel={(option) => option.label}
-                value={difficultyOptions.find(opt => opt.value === value) || null}
-                onChange={(_, data) => onChange(data?.value || "")}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Difficulty"
-                    error={!!errors.difficulty}
-                    helperText={errors.difficulty?.message}
-                  />
-                )}
-                sx={{ width: 200 }}
-              />
-            )}
-          />
+              label="Preparation time"        
+              control = {control}
+              name="preparationTime"
+              type = "number"
+              sx={{ width: 200 }}
+              onWheel={(e) => (e.target as HTMLElement).blur()}
+              slotProps={{
+                input: {
+                  endAdornment: <InputAdornment position="end">min</InputAdornment>,
+                },
+              }}
+            />
+            <Controller
+              control={control}
+              name="servings"
+              render={({ field: { onChange, value } }) => (
+                <Autocomplete
+                  options={servingsOptions}
+                  getOptionLabel={(option) => option.label}
+                  value={servingsOptions.find(opt => opt.value === value)}
+                  onChange={(_, data) => onChange(data?.value || "")}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Servings"
+                      error={!!errors.servings}
+                      helperText={errors.servings?.message}
+                    />
+                  )}
+                  sx={{ width: 200 }}
+                  disableClearable
+                />
+              )}
+            />          
+            <Controller
+              control={control}
+              name="difficulty"
+              render={({ field: { onChange, value } }) => (
+                <Autocomplete
+                  options={difficultyOptions}
+                  getOptionLabel={(option) => option.label}
+                  value={difficultyOptions.find(opt => opt.value === value) || null}
+                  onChange={(_, data) => onChange(data?.value || "")}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Difficulty"
+                      error={!!errors.difficulty}
+                      helperText={errors.difficulty?.message}
+                    />
+                  )}
+                  sx={{ width: 200 }}
+                />
+              )}
+            />
             <Controller
               name="isVisible"
               control={control}
@@ -337,7 +334,7 @@ useEffect(() => {
             ) : (
                 <Button onClick={() => navigate('/recipes')} color='inherit'>Cancel</Button>
             )}
-            <Button type="submit" color='success' variant="contained" disabled={updateRecipe.isPending || createRecipe.isPending}>Submit</Button>
+            <Button type="submit" color='success' variant="contained" disabled={updateRecipe.isPending || createRecipe.isPending || !isDirty || !isValid }>Submit</Button>
           </Box>
       </Box>
    </Paper>
