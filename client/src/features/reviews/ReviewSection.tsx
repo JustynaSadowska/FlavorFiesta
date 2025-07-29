@@ -45,7 +45,7 @@ export default function ReviewSection({ reviews }: Props) {
                             }}
                             onClick={() => setOpen(true)}
                         >
-                            Create Review
+                            Add Review
                         </Button>
                     </Box>
                 )}

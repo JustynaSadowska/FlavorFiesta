@@ -17,7 +17,6 @@ import IngredientsSection from "./IngredientsSection";
 import { formatPreparationTime } from "../../../lib/util/timeFormatter";
 import { difficultyOptions } from "../../../lib/util/constants";
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
@@ -27,6 +26,7 @@ import { useState, useRef } from "react";
 import DeleteDialog from "../../../app/shared/components/DeleteDialog";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 export const StyledBox = styled(Box)({
@@ -106,7 +106,7 @@ export default function RecipeDetails() {
                 onClick={() => setDeleteDialogOpen(true)}
                 aria-label="delete"
               >
-                <DeleteOutlinedIcon />
+                <DeleteIcon />
               </IconButton>
             </StyledBox>
           ) : (

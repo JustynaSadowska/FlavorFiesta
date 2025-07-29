@@ -11,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { formatDate } from "../../../lib/util/util";
 import { useReviews } from "../../../lib/hooks/useReviews";
 import DeleteDialog from "../../../app/shared/components/DeleteDialog";
@@ -19,6 +18,8 @@ import { useState } from "react";
 import ReviewForm from "../form/ReviewForm";
 import { useParams } from "react-router";
 //import ReviewForm from "../form/ReviewForm";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 type Props = {
   review: Review;
 };
@@ -54,7 +55,7 @@ export default function ReviewCard({ review }: Props) {
                 <IconButton 
                   onClick={() => setDeleteDialogOpen(true)}
                   aria-label="delete">
-                  <DeleteOutlinedIcon />
+                  <DeleteIcon />
                 </IconButton>
               </>
             )}
