@@ -53,9 +53,12 @@ export default function RecipeForm() {
       name: "ingredients"
     });
       
-    useEffect(() => {
-      if (recipe) reset(recipe);
-    }, [recipe, reset]);
+useEffect(() => {
+  if (recipe) {
+    const sortedSteps = [...recipe.steps].sort((a, b) => a.order - b.order);
+    reset({ ...recipe, steps: sortedSteps });
+  }
+}, [recipe, reset]);
 
 
       const onSubmit = async (data: RecipeSchema) => {
@@ -75,6 +78,8 @@ export default function RecipeForm() {
           allergensIds: data.allergens?.map(x => x.id),
           description: data?.description,
         }
+              console.log("przedsubmitem:")
+      console.log(dto)
 
         try {
           if (recipe) {
