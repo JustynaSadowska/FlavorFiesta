@@ -25,6 +25,9 @@ import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import ReviewSection from "../../reviews/ReviewSection";
 import { useState, useRef } from "react";
 import DeleteDialog from "../../../app/shared/components/DeleteDialog";
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 
 export const StyledBox = styled(Box)({
   display: "flex", 
@@ -36,10 +39,11 @@ export const StyledBox = styled(Box)({
 
 export default function RecipeDetails() {
   const { id } = useParams();
-  const { recipe, isLoadingRecipe } = useRecipes(id);
+  const { recipe, isLoadingRecipe, updateVisibility } = useRecipes(id);
   const { deleteRecipe } = useRecipes();
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const reviewSectionRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(recipe?.isVisible);
 
   const scrollToReviews = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -82,6 +86,19 @@ export default function RecipeDetails() {
 
           {recipe.isAuthor ? (
             <StyledBox>
+              <IconButton
+                onClick={() => {
+                  updateVisibility.mutate(recipe.id);
+                  setIsVisible((prev) => !prev); 
+                }}
+                aria-label="toggle visibility"
+              >
+                {isVisible ? (
+                  <VisibilityIcon />
+                ) : (
+                  <VisibilityOffIcon/>
+                )}
+              </IconButton>
               <IconButton component={Link} to={`/manage/${recipe.id}`} aria-label="edit">
                 <EditIcon />
               </IconButton>
@@ -262,7 +279,7 @@ export default function RecipeDetails() {
               <Box component="ol" sx={{ pl: 3, m: 0, display: "flex", flexDirection: "column", gap: 1 }}>
                {recipe.steps
                 .slice()
-                .sort((a, b) => (a.order ?? Number.MAX_SAFE_INTEGER) - (b.order ?? Number.MAX_SAFE_INTEGER))
+                .sort((a, b) => (a.order) - (b.order))
                 .map((step, i) => (
                   <li key={i} style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
                     <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
