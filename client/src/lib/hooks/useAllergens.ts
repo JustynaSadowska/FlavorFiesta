@@ -8,6 +8,11 @@ export const useAllergens = () => {
     queryFn: () => agent.get<TagAllergen[]>("/allergens").then(res => res.data),
   });
 
-  return { allergens};
+  const { data: userAllergens = [], isLoading} = useQuery({
+    queryKey: ["userAllergens"],
+    queryFn: () => agent.get<TagAllergen[]>("/allergens/user").then(res => res.data),
+  });
+    
+  return { allergens, userAllergens, isLoading};
 };
 
