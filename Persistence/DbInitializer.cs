@@ -634,21 +634,21 @@ public class DbInitializer
 
         context.ShoppingListItems.AddRange(shoppingListItems);
 
-        // var followers = new List<UserFollowing>
-        //     {
-        //         new()
-        //         {
-        //             ObserverId = users[0].Id,
-        //             TargetId = users[1].Id,
-        //         },
-        //         new()
-        //         {
-        //             ObserverId = users[2].Id,
-        //             TargetId = users[1].Id,
-        //         }
-        //     };
+        var followers = new List<UserFollowing>
+            {
+                new()
+                {
+                    ObserverId = users[0].Id,
+                    TargetId = users[1].Id,
+                },
+                new()
+                {
+                    ObserverId = users[2].Id,
+                    TargetId = users[1].Id,
+                }
+            };
 
-        // context.UserFollowings.AddRange(followers);
+        context.UserFollowings.AddRange(followers);
 
         // var favorites = new List<UserFavoriteRecipe>
         //     {

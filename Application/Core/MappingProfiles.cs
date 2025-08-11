@@ -14,6 +14,7 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
+        string? currentUserId = null;
         CreateMap<Recipe, Recipe>();
         CreateMap<CreateRecipeDto, Recipe>();
         CreateMap<EditRecipeDto, Recipe>();
@@ -26,8 +27,10 @@ public class MappingProfiles : Profile
         CreateMap<User, UserProfile>()
             .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
             .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
-            .ForMember(d => d.Id, o => o.MapFrom(s => s.Id));
-
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+            .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
+            .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
+            .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(x=> x.ObserverId == currentUserId)));
         CreateMap<Step, StepDto>();
         CreateMap<Tag, TagDto>();
         CreateMap<Allergen, AllergenDto>();

@@ -17,7 +17,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
     public required DbSet<ShoppingListItem> ShoppingListItems { get; set; }
     public required DbSet<Tag> Tags { get; set; }
     public required DbSet<Unit> Units { get; set; }
-    //public required DbSet<UserFollowing> UserFollowings { get; set; }
+    public required DbSet<UserFollowing> UserFollowings { get; set; }
    // public required DbSet<Photo> Photos { get; set; }
    // public DbSet<UserFavoriteRecipe> UserFavoriteRecipes { get; set; }
 
@@ -95,20 +95,20 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
             .WithMany(u => u.Allergens)
             .UsingEntity("UserAllergen");
         
-        // modelBuilder.Entity<UserFollowing>(x => 
-        // {
-        //     x.HasKey(k => new {k.ObserverId, k.TargetId});
+        modelBuilder.Entity<UserFollowing>(x => 
+        {
+            x.HasKey(k => new {k.ObserverId, k.TargetId});
 
-        //     x.HasOne(o => o.Observer)
-        //         .WithMany(f => f.Followings)
-        //         .HasForeignKey(o => o.ObserverId)
-        //         .OnDelete(DeleteBehavior.Cascade);
+            x.HasOne(o => o.Observer)
+                .WithMany(f => f.Followings)
+                .HasForeignKey(o => o.ObserverId)
+                .OnDelete(DeleteBehavior.Cascade);
             
-        //     x.HasOne(o => o.Target)
-        //         .WithMany(f => f.Followers)
-        //         .HasForeignKey(o => o.TargetId)
-        //         .OnDelete(DeleteBehavior.NoAction);
-        // });
+            x.HasOne(o => o.Target)
+                .WithMany(f => f.Followers)
+                .HasForeignKey(o => o.TargetId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
 
         // modelBuilder.Entity<Photo>()
         //     .HasOne(p => p.Recipe)

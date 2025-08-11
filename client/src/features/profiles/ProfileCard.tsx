@@ -6,7 +6,6 @@ type Props = {
     profile: Profile
 }
 export default function ProfileCard({profile} : Props) {
-    const following = false;
   return (
   <Link to={`/profiles/${profile.id}`} style={{textDecoration:'none'}}>
         <Card
@@ -27,14 +26,14 @@ export default function ProfileCard({profile} : Props) {
                     <Box display='flex' alignItems='center' gap={1}>
                         <Typography variant="h5">{profile.firstName}</Typography>
                         <Typography variant="h5">{profile.lastName}</Typography>
-                        {following && <Chip size="small" label='Following' 
+                        {profile.following && <Chip size="small" label='Following' 
                             color="secondary" variant="outlined" />}
                     </Box>
                 </CardContent>
                 <Divider sx={{mb: 2}} />
                 <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'start'}}>
                     <Person />
-                    <Typography sx={{ml: 1}}>20 Followers</Typography>
+                    <Typography sx={{ml: 1}}>{profile.followersCount} Followers</Typography>
                 </Box>
             </Card>
    </Link>

@@ -73,7 +73,10 @@ type TagAllergen = {
 type Profile = {
   id: string;
   firstName: string;
-  lastName: string
+  lastName: string;
+  followingCount?: number;
+  followersCount?: number;
+  following?: boolean;
  // bio?: string
 }
 

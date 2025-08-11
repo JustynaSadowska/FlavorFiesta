@@ -5,7 +5,7 @@
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class StepOrderAdded : Migration
+    public partial class FollowersAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,9 +15,6 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserFavoriteRecipes");
-
-            migrationBuilder.DropTable(
-                name: "UserFollowings");
 
             migrationBuilder.AddColumn<int>(
                 name: "Order",
@@ -125,29 +122,6 @@ namespace Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserFollowings",
-                columns: table => new
-                {
-                    ObserverId = table.Column<string>(type: "TEXT", nullable: false),
-                    TargetId = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserFollowings", x => new { x.ObserverId, x.TargetId });
-                    table.ForeignKey(
-                        name: "FK_UserFollowings_AspNetUsers_ObserverId",
-                        column: x => x.ObserverId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserFollowings_AspNetUsers_TargetId",
-                        column: x => x.TargetId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_RecipeId",
                 table: "Photos",
@@ -157,11 +131,6 @@ namespace Persistence.Migrations
                 name: "IX_UserFavoriteRecipes_UserId",
                 table: "UserFavoriteRecipes",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserFollowings_TargetId",
-                table: "UserFollowings",
-                column: "TargetId");
         }
     }
 }

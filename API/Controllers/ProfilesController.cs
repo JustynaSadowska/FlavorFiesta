@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Profiles.Commands;
 using Application.Profiles.DTOs;
 using Application.Profiles.Queries;
 using Application.Recipes.DTOs;
@@ -27,7 +28,20 @@ namespace API.Controllers
         [HttpGet("{userId}")]//zwraca userprofiel=> id, firstname i lastname, przy wiekszej ilosci danych stworzyc nowe dto do alergenow itp
         public async Task<ActionResult<UserProfile>> GetUserDetails(string userId)
         {
-            return HandleResult( await Mediator.Send(new GetUserDetails.Query { UserId = userId }));
+            return HandleResult(await Mediator.Send(new GetUserDetails.Query { UserId = userId }));
         }
+
+        [HttpPost("{userId}/follow")]
+        public async Task<ActionResult> FollowToggle(string userId)
+        {
+            return HandleResult(await Mediator.Send(new FollowToggle.Command { TargetUserId = userId }));
+        }
+
+        [HttpGet("{userId}/follow-list")]
+        public async Task<ActionResult> GetFollowins(string userId, string predicate)
+        {
+            return HandleResult(await Mediator.Send(new GetFollowing.Query { UserId = userId, Predicate = predicate }));
+        }
+
     }
 }
