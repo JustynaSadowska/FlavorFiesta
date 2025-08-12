@@ -42,23 +42,29 @@ export const useProfile = (id?: string, predicate?: string) => {
   });
 
   const updateFollowing = useMutation({
-        mutationFn: async () => {
-            await agent.post(`/profiles/${id}/follow`)
-        },
-        onSuccess: () => {
-            queryClient.setQueryData(['profile', id], (profile: Profile) => {
-                queryClient.invalidateQueries({queryKey: ['followings', id, 'followers']})
-                if (!profile || profile.followersCount === undefined) return profile;
-                return {
-                    ...profile,
-                    following: !profile.following,
-                    followersCount: profile.following 
-                        ? profile.followersCount - 1 
-                        : profile.followersCount + 1
-                }
-            })
-        }
+    mutationFn: async (targetId: string) => {
+      await agent.post(`/profiles/${targetId}/follow`);
+    },
+    onSuccess: (_, targetId) => {
+      queryClient.invalidateQueries({ queryKey: ['profile', id] });
+
+      queryClient.setQueryData(['profile', targetId], (profile: Profile) => {
+        if (!profile || profile.followersCount === undefined) return profile;
+        return {
+          ...profile,
+          following: !profile.following,
+          followersCount: profile.following
+            ? profile.followersCount - 1
+            : profile.followersCount + 1
+        };
     });
+
+    queryClient.invalidateQueries({ queryKey: ['followings', id] });
+    queryClient.invalidateQueries({ queryKey: ['followings', targetId] });
+  },
+});
+
+
 
      const isCurrentUser = useMemo(() => {
         return id === queryClient.getQueryData<User>(['user'])?.id

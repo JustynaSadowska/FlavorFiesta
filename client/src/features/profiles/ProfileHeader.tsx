@@ -66,7 +66,7 @@ export default function ProfileHeader() {
                             <Divider sx={{ width: "100%" }} />
                             {!isCurrentUser && (
                                 <Button
-                                    onClick={() => updateFollowing.mutate()}
+                                    onClick={() => updateFollowing.mutate(profile.id)}
                                     disabled={updateFollowing.isPending}
                                     fullWidth
                                     variant="outlined"
