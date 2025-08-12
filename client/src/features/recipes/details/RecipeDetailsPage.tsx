@@ -22,7 +22,7 @@ import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import ReviewSection from "../../reviews/ReviewSection";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DeleteDialog from "../../../app/shared/components/DeleteDialog";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -49,11 +49,15 @@ export default function RecipeDetails() {
     reviewSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-
+  useEffect(() => {
+      if (typeof recipe?.isVisible === "boolean") {
+        setIsVisible(recipe.isVisible);
+      }
+    }, [recipe?.isVisible]);
+    
   if (isLoadingRecipe) return <Typography>Loading...</Typography>;
 
   if (!recipe) return <Typography>Recipe not found</Typography>;
-
   return (
     <><Card sx={{ maxWidth: 1200, margin: "auto", mt: 4, borderRadius: 3, p: 2, position: "relative" }}>
       <Box
