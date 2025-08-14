@@ -22,12 +22,11 @@ namespace API.Controllers
            return await Mediator.Send(new GetUserAllergens.Query());
         }
 
-        // [HttpPut]
-        // public async Task<ActionResult<List<AllergenDto>>> AddAllergens([FromBody] AddAllergens.Command command)
-        // {
-        //     return await HandleResult(Mediator.Send(command));
-        // }
-
+        [HttpPut]
+        public async Task<ActionResult<List<AllergenDto>>> UpdateUserAllergens([FromBody] List<string> allergenIds)
+        {
+            return HandleResult(await Mediator.Send(new UpdateUserAllergens.Command { AllergenIds = allergenIds }));
+        }
 
     }
 }

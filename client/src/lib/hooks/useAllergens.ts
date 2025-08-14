@@ -1,7 +1,8 @@
-import { useQuery} from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient} from "@tanstack/react-query"
 import agent from "../api/agent";
 
 export const useAllergens = () => {
+  const queryClient = useQueryClient();
 
   const { data: allergens = []} = useQuery({
     queryKey: ["allergens"],
@@ -12,7 +13,18 @@ export const useAllergens = () => {
     queryKey: ["userAllergens"],
     queryFn: () => agent.get<TagAllergen[]>("/allergens/user").then(res => res.data),
   });
+
+  const updateUserAllergens = useMutation({
+    mutationFn: async (allergenIds : string[]) => {
+      await agent.put(`/allergens`, allergenIds);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["userAllergens"],
+      });
+    },
+  })
     
-  return { allergens, userAllergens, isLoading};
+  return { allergens, userAllergens, isLoading, updateUserAllergens};
 };
 

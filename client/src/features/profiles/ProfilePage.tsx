@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material'
 import RecipeList from '../recipes/dashboard/RecipeList'
-import AllergensSection from './AllergensSection'
 import ProfileHeader from './ProfileHeader'
 import { useParams } from 'react-router';
 import { useProfile } from '../../lib/hooks/useProfile';
@@ -14,7 +13,6 @@ export default function ProfilePage() {
   return (
     <div>
       <ProfileHeader/>
-      <AllergensSection/>
       <RecipeList/>
     </div>
   )

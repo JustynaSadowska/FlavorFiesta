@@ -14,32 +14,45 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useProfile } from "../../lib/hooks/useProfile";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
 import ProfileFollowings from "./ProfileFollowings";
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function ProfileHeader() {
     const { id } = useParams();
     const { isCurrentUser, profile, updateFollowing } = useProfile(id);
     const [openDialog, setOpenDialog] = useState<null | "followers" | "followings">(null);
+    const navigate = useNavigate();
+
 
     if (!profile) return null;
 
     return (
         <>
-            <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 3,  maxWidth: 1250, margin: "auto", position: "relative"}}>
                 <Grid container spacing={2}>
                     <Grid item xs={8}>
                         <Stack direction="row" spacing={3} alignItems="center">
-                            <Avatar
-                                // src={profile.imageUrl}
-                                // alt={`${profile.firstName} ${profile.lastName}`}
-                                sx={{ width: 150, height: 150 }}
-                            />
-                            <Box display="flex" flexDirection="column" gap={2}>
-                                <Typography variant="h4">
-                                    {profile.firstName} {profile.lastName}
-                                </Typography>
+                            <Avatar sx={{ width: 150, height: 150 }} />
+                            <Box display="flex" flexDirection="column" gap={1}>
+                                <Box display="flex" alignItems="flex-start" gap={1}>
+                                    <Typography variant="h4">
+                                        {profile.firstName} {profile.lastName}
+                                    </Typography>
+                                    {isCurrentUser && (
+                                        <IconButton
+                                            aria-label="settings"
+                                            onClick={() => navigate(`/profiles/${id}/settings`)}
+                                            sx={{
+                                                transform: "translateY(-20%)",
+                                                padding: "4px"
+                                            }}
+                                        >
+                                            <EditIcon  />
+                                        </IconButton>
+                                    )}
+                                </Box>
                             </Box>
                         </Stack>
                     </Grid>

@@ -20,7 +20,8 @@ export default function RecipeList() {
     <Box sx={{display: "flex",
         flexWrap: "wrap",           
         gap: 3,
-        justifyContent: "center"
+        justifyContent: "center",
+        mt:3
         }}>
         {dataToShow.map(recipe => (
             <RecipeCard key={recipe.id} 
