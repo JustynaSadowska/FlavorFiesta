@@ -9,18 +9,19 @@ import {
     InputAdornment,
     ListItem,
     ListItemAvatar,
-    Avatar,
     ListItemText,
     Button,
 } from "@mui/material";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { useQueryClient } from "@tanstack/react-query";
+import AvatarPopover from "../../app/shared/components/AvatarPopover";
 
 type Props = {
     type: "followers" | "followings";
+    onNavigate?: () => void; 
 };
 
-export default function ProfileFollowings({ type }: Props) {
+export default function ProfileFollowings({ type, onNavigate }: Props) {
     const { id } = useParams();
     const { followings, loadingFollowings, updateFollowing } = useProfile(id, type);
     const [search, setSearch] = React.useState("");
@@ -59,9 +60,19 @@ export default function ProfileFollowings({ type }: Props) {
                         return (
                             <ListItem key={p.id}>
                                 <ListItemAvatar>
-                                    <Avatar alt={`${p.firstName} ${p.lastName ?? ""}`} src="" />
+                                    {/* <Avatar alt={`${p.firstName} ${p.lastName ?? ""}`} src="" /> */}
+                                    <AvatarPopover
+                                                      profile={{
+                                                        id: p.id,
+                                                        firstName: p.firstName,
+                                                        lastName: p.lastName,
+                                                      }}
+                                                      avatarProps={{ sx: { width: 45, height: 45 } }}
+                                                      showName={false}
+                                                      onNavigate={onNavigate}
+                                                       />
                                 </ListItemAvatar>
-                                <ListItemText
+                                <ListItemText sx={{mt:2}}
                                     primary={`${p.firstName} ${p.lastName ?? ""}`}
                                 />
                                 {!isSelf && (

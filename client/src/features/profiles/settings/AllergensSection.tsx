@@ -53,7 +53,7 @@ export default function AllergensSection() {
   return (
     <Paper sx={{ p: 3, borderRadius: 3, mt: 4, maxWidth: 750 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h6">Your allergens</Typography>
+        <Typography variant="h6"  fontWeight="bold" >Your allergens</Typography>
         <IconButton size="small" onClick={handleEditClick}>
           <EditIcon />
         </IconButton>

@@ -115,7 +115,7 @@ export default function ProfileHeader() {
                     </IconButton>
                 </DialogTitle>
                 <DialogContent dividers>
-                    {openDialog && <ProfileFollowings type={openDialog} />}
+                    {openDialog && <ProfileFollowings type={openDialog} onNavigate={() => setOpenDialog(null)}/>}
                 </DialogContent>
             </Dialog>)}
         </>
