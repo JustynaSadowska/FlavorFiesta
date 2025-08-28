@@ -65,4 +65,17 @@ public class RecipesController : BaseApiController
    {
       return await Mediator.Send(new GetUnits.Query());
    }
+   [HttpPost("{id}/favorites")]
+   public async Task<ActionResult> AddToFavorites(string id)
+   {
+      return HandleResult(await Mediator.Send(new AddToFavorites.Command { Id = id }));
+   }
+
+   [HttpDelete("{id}/favorites")]
+   public async Task<ActionResult> RemoveFromFavorites(string id)
+   {
+      return HandleResult(await Mediator.Send(new RemoveFromFavorites.Command { Id = id }));
+   }
+
+
 }
