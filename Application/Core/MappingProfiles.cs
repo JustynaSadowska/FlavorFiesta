@@ -44,6 +44,6 @@ public class MappingProfiles : Profile
         CreateMap<CreateReviewDto, Review>();
         CreateMap<EditReviewDto, Review>();
         CreateMap<ShoppingList, ShoppingListDto>();
-
+        CreateMap<ShoppingListItem, ShoppingListItemDto>();
     }
 }
