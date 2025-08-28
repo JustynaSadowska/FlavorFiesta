@@ -34,7 +34,18 @@ export default function ProfilePage() {
           <RecipeList recipes={userRecipes} isLoading={isLoading}/>
         )}
         {tab === 1 && (
-          <RecipeList recipes={favoriteRecipes} isLoading={isFavoriteLoading} />
+          <>
+            {(!favoriteRecipes || favoriteRecipes.length === 0) ? (
+              <Box sx={{ textAlign: "center", mt: 5, ml: -6}}>
+                <FavoriteIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
+                <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
+                  You don’t have any favorite recipes yet.
+                </Typography>
+              </Box>
+            ) : (
+              <RecipeList recipes={favoriteRecipes} isLoading={isFavoriteLoading} />
+            )}
+          </>        
         )}
       </Box>
     </div>

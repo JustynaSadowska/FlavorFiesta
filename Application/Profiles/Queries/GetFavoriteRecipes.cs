@@ -15,7 +15,7 @@ namespace Application.Profiles.Queries
 {
     public class GetFavoriteRecipes
     {
-        public class Query : IRequest<Result<List<RecipeDto>>>{}
+        public class Query : IRequest<Result<List<RecipeDto>>> { }
 
         public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor) : IRequestHandler<Query, Result<List<RecipeDto>>>
         {
@@ -26,6 +26,7 @@ namespace Application.Profiles.Queries
                 var recipes = await context.UserFavoriteRecipes
                     .Where(f => f.UserId == currentUser.Id)
                     .Select(f => f.Recipe)
+                    .Where(r => !r.IsDeleted && r.IsVisible)
                     .ProjectTo<RecipeDto>(mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
 
