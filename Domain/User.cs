@@ -17,6 +17,6 @@ namespace Domain
         public ICollection<Allergen>? Allergens { get; set; } = [];
         public ICollection<UserFollowing> Followings { get; set; } = [];
         public ICollection<UserFollowing> Followers { get; set; } = [];
-        //public ICollection<UserFavoriteRecipe>? FavoriteRecipes { get; set; } = [];
+        public ICollection<UserFavoriteRecipe>? FavoriteRecipes { get; set; } = [];
     }
 }

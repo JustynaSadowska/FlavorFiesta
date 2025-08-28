@@ -30,7 +30,9 @@ export const useProfile = (id?: string, predicate?: string) => {
     },
   });
 
-  const { data: followings, isLoading: loadingFollowings } = useQuery<Profile[]>({
+  const { data: followings, isLoading: loadingFollowings } = useQuery<
+    Profile[]
+  >({
     queryKey: ["followings", id, predicate],
     queryFn: async () => {
       const response = await agent.get<Profile[]>(
@@ -46,29 +48,34 @@ export const useProfile = (id?: string, predicate?: string) => {
       await agent.post(`/profiles/${targetId}/follow`);
     },
     onSuccess: (_, targetId) => {
-      queryClient.invalidateQueries({ queryKey: ['profile', id] });
+      queryClient.invalidateQueries({ queryKey: ["profile", id] });
 
-      queryClient.setQueryData(['profile', targetId], (profile: Profile) => {
+      queryClient.setQueryData(["profile", targetId], (profile: Profile) => {
         if (!profile || profile.followersCount === undefined) return profile;
         return {
           ...profile,
           following: !profile.following,
           followersCount: profile.following
             ? profile.followersCount - 1
-            : profile.followersCount + 1
+            : profile.followersCount + 1,
         };
-    });
+      });
 
-    queryClient.invalidateQueries({ queryKey: ['followings', id] });
-    queryClient.invalidateQueries({ queryKey: ['followings', targetId] });
-  },
-});
+      queryClient.invalidateQueries({ queryKey: ["followings", id] });
+      queryClient.invalidateQueries({ queryKey: ["followings", targetId] });
+    },
+  });
+  const { data: favoriteRecipes, isLoading: isFavoriteLoading } = useQuery({
+    queryKey: ["profile", "favorites"],
+    queryFn: async () => {
+      const response = await agent.get<Recipe[]>(`/profiles/favorites`);
+      return response.data;
+    },
+  });
 
-
-
-     const isCurrentUser = useMemo(() => {
-        return id === queryClient.getQueryData<User>(['user'])?.id
-    }, [id, queryClient])
+  const isCurrentUser = useMemo(() => {
+    return id === queryClient.getQueryData<User>(["user"])?.id;
+  }, [id, queryClient]);
 
   return {
     userRecipes,
@@ -80,6 +87,8 @@ export const useProfile = (id?: string, predicate?: string) => {
     followings,
     loadingFollowings,
     updateFollowing,
-    isCurrentUser
+    isCurrentUser,
+    favoriteRecipes,
+    isFavoriteLoading,
   };
 };

@@ -24,5 +24,5 @@ public class Recipe
     public ICollection<Tag> Tags { get; set; } = [];
     public ICollection<Allergen>? Allergens { get; set; } = [];
     //public ICollection<Photo> Photos { get; set; } = [];
-    // public ICollection<UserFavoriteRecipe>? FavoritedByUsers { get; set; } = [];
+    public ICollection<UserFavoriteRecipe>? UsersWhoFavorited { get; set; } = [];
 }

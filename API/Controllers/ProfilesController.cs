@@ -38,10 +38,15 @@ namespace API.Controllers
         }
 
         [HttpGet("{userId}/follow-list")]
-        public async Task<ActionResult> GetFollowins(string userId, string predicate)
+        public async Task<ActionResult> GetFollowings(string userId, string predicate)
         {
             return HandleResult(await Mediator.Send(new GetFollowing.Query { UserId = userId, Predicate = predicate }));
         }
 
+        [HttpGet("favorites")]
+        public async Task<ActionResult> GetUserFavoriteRecipes()
+        {
+            return HandleResult(await Mediator.Send(new GetFavoriteRecipes.Query {}));
+        }
     }
 }

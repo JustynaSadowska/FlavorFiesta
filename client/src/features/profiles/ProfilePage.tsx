@@ -9,7 +9,7 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 export default function ProfilePage() {
   const {id} = useParams();
-  const {profile, loadingProfile, isCurrentUser} = useProfile(id);
+  const {profile, loadingProfile, isCurrentUser, userRecipes, favoriteRecipes, isLoading, isFavoriteLoading} = useProfile(id);
   const [tab, setTab] = useState(0)
 
   if (loadingProfile) return <Typography>Loading profile...</Typography>
@@ -31,10 +31,10 @@ export default function ProfilePage() {
 
       <Box sx={{ mt: 3 }}>
         {tab === 0 && (
-          <RecipeList />
+          <RecipeList recipes={userRecipes} isLoading={isLoading}/>
         )}
         {tab === 1 && (
-          <Typography> ulubione</Typography>
+          <RecipeList recipes={favoriteRecipes} isLoading={isFavoriteLoading} />
         )}
       </Box>
     </div>

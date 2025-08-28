@@ -19,7 +19,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
     public required DbSet<Unit> Units { get; set; }
     public required DbSet<UserFollowing> UserFollowings { get; set; }
    // public required DbSet<Photo> Photos { get; set; }
-   // public DbSet<UserFavoriteRecipe> UserFavoriteRecipes { get; set; }
+    public DbSet<UserFavoriteRecipe> UserFavoriteRecipes { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -116,21 +116,19 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
         //     .HasForeignKey(p => p.RecipeId)
         //     .IsRequired();
         
-        //  modelBuilder.Entity<UserFavoriteRecipe>(x => 
-        //  {
-        //     x.HasKey(k => new{k.RecipeId, k.UserId});
+         modelBuilder.Entity<UserFavoriteRecipe>(x => 
+         {
+            x.HasKey(k => new{ k.UserId, k.RecipeId});
 
-        //     x.HasOne(uf => uf.User)
-        //         .WithMany(u => u.FavoriteRecipes)
-        //         .HasForeignKey(uf => uf.UserId)
-        //         .IsRequired(false)
-        //         .OnDelete(DeleteBehavior.Cascade);
+            x.HasOne(uf => uf.User)
+                .WithMany(u => u.FavoriteRecipes)
+                .HasForeignKey(uf => uf.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             
-        //     x.HasOne(uf => uf.Recipe)
-        //         .WithMany(r => r.FavoritedByUsers)
-        //         .HasForeignKey(uf => uf.RecipeId)
-        //         .IsRequired(false)
-        //         .OnDelete(DeleteBehavior.Cascade);;
-        //  });
+            x.HasOne(uf => uf.Recipe)
+                .WithMany(r => r.UsersWhoFavorited)
+                .HasForeignKey(uf => uf.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);;
+         });
     }
 }

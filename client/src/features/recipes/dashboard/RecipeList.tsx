@@ -1,20 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import RecipeCard from "./RecipeCard";
-import { useRecipes } from "../../../lib/hooks/useRecipes";
-import { useProfile } from "../../../lib/hooks/useProfile";
-import { useLocation, useParams } from "react-router";
+type Props = {
+  recipes?: Recipe[];     
+  isLoading?: boolean;};
 
+export default function RecipeList({ recipes, isLoading }: Props) {
 
-export default function RecipeList() {
-  const {id} = useParams();
-  const {recipes, isLoading} = useRecipes();
-  const {userRecipes} = useProfile(id);
-  const location = useLocation();
-  const isRecipePage = location.pathname =='/recipes'
-  const dataToShow = isRecipePage ? recipes : userRecipes;
-  
   if(isLoading) return <Typography>Loading...</Typography>
-  if(!dataToShow || dataToShow.length === 0) return <Typography>No recipes found</Typography>
+  if (!recipes || recipes.length === 0) return <Typography>No recipes found</Typography>;
 
   return (
     <Box sx={{display: "flex",
@@ -23,10 +16,8 @@ export default function RecipeList() {
         justifyContent: "center",
         mt:3
         }}>
-        {dataToShow.map(recipe => (
-            <RecipeCard key={recipe.id} 
-              recipe ={recipe} 
-              />
+       {recipes.map((recipe) => (
+        <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
     </Box>
     
