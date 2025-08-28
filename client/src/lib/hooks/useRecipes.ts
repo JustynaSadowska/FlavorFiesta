@@ -100,6 +100,26 @@ export const useRecipes = (id?: string) => {
     queryFn: () => agent.get<Unit[]>("/recipes/units").then((res) => res.data),
   });
 
+  const addToFavorite = useMutation({
+    mutationFn: async (recipeId: string) => {
+      await agent.post(`/recipes/${recipeId}/favorites`);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["recipes", id] });
+      await queryClient.invalidateQueries({ queryKey: ["profile", "favorites"] });
+    },
+  });
+
+  const removeFromFavorite = useMutation({
+    mutationFn: async (recipeId: string) => {
+      await agent.delete(`/recipes/${recipeId}/favorites`);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["recipes", id] });
+      await queryClient.invalidateQueries({ queryKey: ["profile", "favorites"] });
+    },
+  });
+
   return {
     recipes,
     isLoading,
@@ -111,5 +131,7 @@ export const useRecipes = (id?: string) => {
     updateVisibility,
     tags,
     units,
+    addToFavorite,
+    removeFromFavorite
   };
 };

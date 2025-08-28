@@ -27,6 +27,8 @@ import DeleteDialog from "../../../app/shared/components/DeleteDialog";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useProfile } from "../../../lib/hooks/useProfile";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 
 export const StyledBox = styled(Box)({
@@ -39,11 +41,14 @@ export const StyledBox = styled(Box)({
 
 export default function RecipeDetails() {
   const { id } = useParams();
-  const { recipe, isLoadingRecipe, updateVisibility } = useRecipes(id);
+  const { recipe, isLoadingRecipe, updateVisibility, addToFavorite, removeFromFavorite } = useRecipes(id);
   const { deleteRecipe } = useRecipes();
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(recipe?.isVisible);
+  const { favoriteRecipes } = useProfile();
+  const isFavorite = favoriteRecipes?.some(fav => fav.id === recipe?.id) ?? false;
+
 
   const scrollToReviews = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -115,13 +120,23 @@ export default function RecipeDetails() {
             </StyledBox>
           ) : (
             <StyledBox>
-              <IconButton
-                aria-label="add to favorites"
-                onClick={() => {
-                } }
+              {isFavorite ? (
+                <IconButton
+                aria-label="remove from favorites"
+                onClick={() => removeFromFavorite.mutate(recipe.id)}
+                color={"error"} 
               >
-                <FavoriteBorderIcon />
+               <FavoriteIcon />
               </IconButton>
+              ): ( <IconButton
+                aria-label="add to favorites"
+                onClick={() => addToFavorite.mutate(recipe.id)}
+                color={"default"} 
+              >
+              <FavoriteBorderIcon />
+              </IconButton>
+              )}
+              
             </StyledBox>
           )}
           <Typography
