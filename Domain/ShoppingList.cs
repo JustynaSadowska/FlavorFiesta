@@ -11,6 +11,7 @@ namespace Domain
         public required string UserId { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; }
+        public required string Title { get; set; }
 
         public User User { get; set; } = null!;
         public ICollection<ShoppingListItem> ShoppingListItems { get; set; } = [];

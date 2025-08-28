@@ -32,5 +32,4 @@ public class RecipeDto
     public required ICollection<TagDto> Tags { get; set; }
     public ICollection<AllergenDto>? Allergens { get; set; } = [];
     //public ICollection<Photo> Photos { get; set; } = [];
-    //public ICollection<UserFavoriteRecipe> FavoritedByUsers { get; set; } = [];
 }

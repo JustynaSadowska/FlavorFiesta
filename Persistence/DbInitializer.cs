@@ -584,15 +584,15 @@ public class DbInitializer
             {
                 UserId = users[0].Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-10),
-                IsDeleted = false
-
+                IsDeleted = false,
+                Title = "lista1"
             },
             new()
             {
                 UserId = users[1].Id,
                 CreatedAt = DateTime.UtcNow.AddDays(-100),
-                IsDeleted = false
-
+                IsDeleted = false,
+                Title = "lista2"
             }
         };
 

@@ -4,6 +4,7 @@ using Application.Ingredients.DTOs;
 using Application.Profiles.DTOs;
 using Application.Recipes.DTOs;
 using Application.Reviews.DTOs;
+using Application.ShoppingLists.DTOs;
 using Application.Steps.DTOs;
 using AutoMapper;
 using Domain;
@@ -30,7 +31,7 @@ public class MappingProfiles : Profile
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
             .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
             .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
-            .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(x=> x.ObserverId == currentUserId)));
+            .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(x => x.ObserverId == currentUserId)));
         CreateMap<Step, StepDto>();
         CreateMap<Tag, TagDto>();
         CreateMap<Allergen, AllergenDto>();
@@ -42,6 +43,7 @@ public class MappingProfiles : Profile
             .ForMember(d => d.ReviewAuthor, o => o.MapFrom(s => s.User));
         CreateMap<CreateReviewDto, Review>();
         CreateMap<EditReviewDto, Review>();
+        CreateMap<ShoppingList, ShoppingListDto>();
 
     }
 }

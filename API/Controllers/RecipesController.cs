@@ -48,6 +48,7 @@ public class RecipesController : BaseApiController
       return HandleResult(await Mediator.Send(new DeleteRecipe.Command { Id = id }));
    }
 
+   [Authorize(Policy = "IsRecipeAuthor")]
    [HttpPost("{id}/visibility")]
    public async Task<ActionResult> UpdateVisibility(string id)
    {
@@ -76,6 +77,4 @@ public class RecipesController : BaseApiController
    {
       return HandleResult(await Mediator.Send(new RemoveFromFavorites.Command { Id = id }));
    }
-
-
 }
