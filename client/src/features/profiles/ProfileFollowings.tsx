@@ -62,15 +62,15 @@ export default function ProfileFollowings({ type, onNavigate }: Props) {
                                 <ListItemAvatar>
                                     {/* <Avatar alt={`${p.firstName} ${p.lastName ?? ""}`} src="" /> */}
                                     <AvatarPopover
-                                                      profile={{
-                                                        id: p.id,
-                                                        firstName: p.firstName,
-                                                        lastName: p.lastName,
-                                                      }}
-                                                      avatarProps={{ sx: { width: 45, height: 45 } }}
-                                                      showName={false}
-                                                      onNavigate={onNavigate}
-                                                       />
+                                        profile={{
+                                        id: p.id,
+                                        firstName: p.firstName,
+                                        lastName: p.lastName,
+                                        }}
+                                        avatarProps={{ sx: { width: 45, height: 45 } }}
+                                        showName={false}
+                                        onNavigate={onNavigate}
+                                        />
                                 </ListItemAvatar>
                                 <ListItemText sx={{mt:2}}
                                     primary={`${p.firstName} ${p.lastName ?? ""}`}
