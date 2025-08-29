@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.ShoppingLists.Commands;
 using Application.ShoppingLists.DTOs;
 using Application.ShoppingLists.Queries;
 using Microsoft.AspNetCore.Mvc;
@@ -15,5 +16,31 @@ namespace API.Controllers
         {
             return await Mediator.Send(new GetShoppingLists.Query());
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ShoppingListDto>> GetShoppingListDetails(string id)
+        {
+            return HandleResult(await Mediator.Send(new GetShoppingListDetails.Query { Id = id }));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<string>> CreateShoppingList(CreateShoppingListDto shoppingListDto)
+        {
+            return HandleResult(await Mediator.Send(new CreateShoppingList.Command { ShoppingListDto = shoppingListDto }));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteShoppingList(string id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteShoppingList.Command { Id = id }));
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<ActionResult> EditRecipe(string id, [FromBody] EditShoppingListDto shoppingList)
+        {
+            shoppingList.Id = id;
+            return HandleResult(await Mediator.Send(new EditShoppingList.Command { ShoppingListDto = shoppingList }));
+        }
+        
     }
 }

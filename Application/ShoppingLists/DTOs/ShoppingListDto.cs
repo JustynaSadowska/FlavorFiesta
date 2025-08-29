@@ -15,6 +15,5 @@ namespace Application.ShoppingLists.DTOs
 
         public UserProfile User { get; set; } = null!;
         public ICollection<ShoppingListItemDto> ShoppingListItems { get; set; } = [];
-
     }
 }
