@@ -5,7 +5,7 @@ interface Props<T extends { id: string }> {
   open: boolean;
   setOpen: (state: boolean) => void;
   item: T;
-  itemType: "recipe" | "review";
+  itemType: "recipe" | "review" | "shopping list";
   deleteAction: (id: string) => Promise<void>;
   redirectAfterDelete?: string;
 }

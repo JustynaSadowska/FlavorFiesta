@@ -7,7 +7,6 @@ export const useReviews = () => {
   const createReview = useMutation({
     mutationFn: async (review: CreateUpdateReview) => {
       const response = await agent.post("/reviews", review);
-      console.log(response.data);
       return response.data;
     },
     onSuccess: async () => {

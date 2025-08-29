@@ -95,3 +95,28 @@ type CreateUpdateReview = {
   rating: number;
   recipeId: string;
 }
+
+type ShoppingList = {
+  id: string;
+  title : string;
+  createdAt: string;
+  shoppingListItems: ShoppingListItem[];
+}
+
+type CreateUpdateShoppingList = {
+  id?: string;
+  title : string;
+  shoppingListItems: CreateUpdateShoppingListItem[];
+}
+
+type ShoppingListItem = {
+  id: string;
+  name: string;
+  quantity: decimal;
+  unit: Unit;
+}
+type CreateUpdateShoppingListItem = {
+  name: string;
+  quantity: decimal;
+  unitId: string;
+};

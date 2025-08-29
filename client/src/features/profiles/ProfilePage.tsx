@@ -7,6 +7,7 @@ import { useState } from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingListDashboard from '../shoppinglists/dashboard/ShoppingListDashboard';
 export default function ProfilePage() {
   const {id} = useParams();
   const {profile, loadingProfile, isCurrentUser, userRecipes, favoriteRecipes, isLoading, isFavoriteLoading} = useProfile(id);
@@ -46,6 +47,9 @@ export default function ProfilePage() {
               <RecipeList recipes={favoriteRecipes} isLoading={isFavoriteLoading} />
             )}
           </>        
+        )}
+         {tab === 2 && (
+          <ShoppingListDashboard/>
         )}
       </Box>
     </div>

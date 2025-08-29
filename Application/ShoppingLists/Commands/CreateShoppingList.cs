@@ -28,6 +28,7 @@ namespace Application.ShoppingLists.Commands
             var shoppingList = mapper.Map<ShoppingList>(request.ShoppingListDto);
 
             shoppingList.UserId = user.Id;
+            shoppingList.User = user;
             shoppingList.CreatedAt = DateTime.UtcNow;
 
             var shoppingListItems = mapper.Map<List<ShoppingListItem>>(request.ShoppingListDto.ShoppingListItems);
