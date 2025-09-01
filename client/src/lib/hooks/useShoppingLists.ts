@@ -29,17 +29,17 @@ export const useShoppingLists = (id? : string) => {
     },
   });
 
-  //  const createShoppingList = useMutation({
-  //   mutationFn: async (shoppingList: CreateUpdateShoppingList) => {
-  //     const response = await agent.post("/shoppingLists", shoppingList);
-  //     return response.data;
-  //   },
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries({
-  //       queryKey: ["shoppingLists"],
-  //     });
-  //   },
-  // });
+   const createShoppingList = useMutation({
+    mutationFn: async (shoppingList: CreateUpdateShoppingList) => {
+      const response = await agent.post("/shoppingLists", shoppingList);
+      return response.data;
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["shoppingLists"],
+      });
+    },
+  });
 
   const deleteShoppingList = useMutation({
     mutationFn: async (id: string) => {
@@ -52,23 +52,23 @@ export const useShoppingLists = (id? : string) => {
     },
   });
 
-  // const updateShoppingList = useMutation({
-  //   mutationFn: async (shoppingList: CreateUpdateShoppingList) => {
-  //     await agent.put(`/shoppingLists/${shoppingList.id}`, shoppingList);
-  //   },
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries({
-  //       queryKey: ["shoppingLists"],
-  //     });
-  //   },
-  // });
+  const updateShoppingList = useMutation({
+    mutationFn: async (shoppingList: CreateUpdateShoppingList) => {
+      await agent.put(`/shoppingLists/${shoppingList.id}`, shoppingList);
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ["shoppingLists"],
+      });
+    },
+  });
  
 
   return {
     shoppingLists,
-    //createShoppingList,
+    createShoppingList,
     deleteShoppingList,
-    //updateShoppingList,
+    updateShoppingList,
     isLoading,
     isLoadingShoppingList, 
     shoppingList,
