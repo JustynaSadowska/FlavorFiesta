@@ -9,6 +9,6 @@ namespace Application.ShoppingLists.DTOs
     {
         public string Id { get; set; } = "";
         public required string Title { get; set; } = "";
-        public List<CreateShoppingListItemDto> ShoppingListItems { get; set; } = [];
+        public List<EditShoppingListItemDto> ShoppingListItems { get; set; } = [];
     }
 }

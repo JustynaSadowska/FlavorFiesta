@@ -19,15 +19,11 @@ export default function ShoppingListCard({ shoppingList }: Props) {
   const [open, setOpen] = useState(false);
   const [isFormOpen, setFormOpen] = useState(false);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const { deleteShoppingList, checkedToggle, shoppingList: freshShoppingList, isLoadingShoppingList } = useShoppingLists(shoppingList.id);
+  const { deleteShoppingList, checkedToggle, isLoadingShoppingList } = useShoppingLists(shoppingList.id);
 
   const handleToggle = (itemId: string) => {
     checkedToggle.mutate({ listId: shoppingList.id, itemId });
   };
-
-  const checkedIds = freshShoppingList?.shoppingListItems
-    .filter(item => item.isChecked)
-    .map(item => item.id) || [];
 
   return (
     <>
@@ -54,7 +50,7 @@ export default function ShoppingListCard({ shoppingList }: Props) {
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
-                    checked={checkedIds.includes(item.id)}
+                    checked={item.isChecked}
                     tabIndex={-1}
                     disableRipple
                     onClick={() => handleToggle(item.id)}
@@ -110,7 +106,7 @@ export default function ShoppingListCard({ shoppingList }: Props) {
                   <ListItemIcon>
                     <Checkbox
                       edge="start"
-                      checked={checkedIds.includes(item.id)}
+                      checked={item.isChecked}
                       tabIndex={-1}
                       disableRipple
                       onClick={() => handleToggle(item.id)}

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Dialog, DialogTitle, DialogContent, Box, TextField, Button, IconButton, Stack, Typography, Autocomplete, CircularProgress } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, Box, TextField, Button, IconButton, Stack, Typography, Autocomplete, CircularProgress, Checkbox } from "@mui/material";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -27,6 +27,7 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
             name: '',
             quantity: 0,
             unit: { displayName: '', id: '' },
+            isChecked: false
         },
         ],
         },
@@ -46,6 +47,7 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
             name: item.name,
             quantity: item.quantity,
             unit: item.unit,
+            isChecked: item.isChecked,
             })),
         });
         } else {
@@ -56,6 +58,7 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
                 name: "",
                 quantity: 0,
                 unit: { id: "", displayName: "" },
+                isChecked: false
             },
             ],
         });
@@ -65,31 +68,34 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
 
 
     const onSubmit = (data: ShoppingListsSchema) => {
-        const dto: CreateUpdateShoppingList = { 
-            id: shoppingList ? shoppingList.id : undefined,
+        if(shoppingList)
+        {
+            const dto: UpdateShoppingList = { 
+            id: shoppingList.id,
+            title: data.title,
+            shoppingListItems: data.shoppingListItems.map(x => ({ name: x.name, quantity: x.quantity , unitId: x.unit.id, isChecked: x.isChecked || false})),
+            }
+            updateShoppingList.mutate(dto, {
+                onSuccess: () => setOpen(false),
+            });
+        }
+        else
+        {
+        const dto: CreateShoppingList = { 
             title: data.title,
             shoppingListItems: data.shoppingListItems.map(x => ({ name: x.name, quantity: x.quantity , unitId: x.unit.id})),
             }
-        try {
-            if (shoppingList) {
-                updateShoppingList.mutate(dto, {
-                    onSuccess: () => setOpen(false),
-                });
-            } else {
-                createShoppingList.mutate(dto, {
+            createShoppingList.mutate(dto, {
                 onSuccess: () => setOpen(false),
                 });
-            }
-            } catch (error) {
-            console.log(error);
-            }
+        }
 
     };
-
+    const isEdit = !!shoppingListId;
     return (
         <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>
-            {shoppingListId ? "Edit Shopping List" : "Create Shopping List"}
+            {isEdit ? "Edit Shopping List" : "Create Shopping List"}
         </DialogTitle>
         <DialogContent dividers>
             {isLoadingShoppingList ? (
@@ -111,17 +117,26 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
                     />
                 )}
                 />
-                <Typography variant="subtitle1" fontWeight="bold" mt={2}>Items</Typography>
+                <Typography variant="subtitle1" fontWeight="bold"  mt={2}>Items</Typography>
                 <Stack spacing={1}>
                 {fields.map((field, index) => (
                     <Box key={field.id} display="flex" gap={1} alignItems="center">
+                        {isEdit && (
+                            <Controller
+                                control={control}
+                                name={`shoppingListItems.${index}.isChecked`}
+                                render={({ field }) => (
+                                    <Checkbox  sx={{ml:-1}} {...field} checked={field.value} size="small" />
+                                )}
+                            />
+                        )}
                         <TextInput
                             control={control}
                             name={`shoppingListItems.${index}.name`}
                             label="Name"
                             fullWidth
                             size="small"
-                            sx={{minWidth:130}}
+                            sx={{minWidth:140}}
                         />
                         <TextInput
                             control={control}
@@ -154,17 +169,18 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
                                 helperText={errors.shoppingListItems?.[index]?.unit?.message}
                                 />
                             )}
-                            sx={{ minWidth: 120 }}
+                            sx={{ minWidth: 100 }}
                             />
                         )}
                         />
-                    <IconButton color="error" onClick={() => remove(index)}>
+                       
+                    <IconButton sx={{ml:1}} color="error" onClick={() => remove(index)}>
                     <DeleteOutlinedIcon />
                     </IconButton>
                 </Box>
             ))}
 
-                <Button startIcon={<AddIcon />} onClick={() => append({ name: "", quantity: 1, unit: { id: "", displayName: "" } })}>
+                <Button startIcon={<AddIcon />} onClick={() => append({ name: "", quantity: 0, unit: { id: "", displayName: "" } })}>
                     Add Item
                 </Button>
                 </Stack>

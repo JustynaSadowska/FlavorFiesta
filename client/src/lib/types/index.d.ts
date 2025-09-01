@@ -103,10 +103,9 @@ type ShoppingList = {
   shoppingListItems: ShoppingListItem[];
 }
 
-type CreateUpdateShoppingList = {
-  id?: string;
+type CreateShoppingList = {
   title : string;
-  shoppingListItems: CreateUpdateShoppingListItem[];
+  shoppingListItems: CreateShoppingListItem[];
 }
 
 type ShoppingListItem = {
@@ -116,8 +115,19 @@ type ShoppingListItem = {
   unit: Unit;
   isChecked: boolean;
 }
-type CreateUpdateShoppingListItem = {
+type CreateShoppingListItem = {
   name: string;
   quantity: decimal;
   unitId: string;
+};
+type UpdateShoppingList = {
+  id: string;
+  title : string;
+  shoppingListItems: UpdateShoppingListItem[];
+}
+type UpdateShoppingListItem = {
+  name: string;
+  quantity: decimal;
+  unitId: string;
+  isChecked: boolean;
 };

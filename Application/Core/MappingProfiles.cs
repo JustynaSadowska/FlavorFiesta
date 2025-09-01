@@ -48,5 +48,6 @@ public class MappingProfiles : Profile
         CreateMap<CreateShoppingListDto, ShoppingList>();
         CreateMap<CreateShoppingListItemDto, ShoppingListItem>();
         CreateMap<EditShoppingListDto, ShoppingList>();
+        CreateMap<EditShoppingListItemDto, ShoppingListItem>();
     }
 }

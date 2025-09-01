@@ -17,6 +17,7 @@ export const shoppingListsSchema = z.object({
           id: requiredString("Unit ID"),
           displayName: requiredString("Unit name"),
         }),
+        isChecked: z.boolean().optional(),
       })
     )
     .min(1, { message: "At least one item is required" }),

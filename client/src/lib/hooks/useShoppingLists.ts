@@ -24,13 +24,13 @@ export const useShoppingLists = (id? : string) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["shoppingList", id],
+        queryKey: ["shoppingLists"],
       });
     },
   });
 
    const createShoppingList = useMutation({
-    mutationFn: async (shoppingList: CreateUpdateShoppingList) => {
+    mutationFn: async (shoppingList: CreateShoppingList) => {
       const response = await agent.post("/shoppingLists", shoppingList);
       return response.data;
     },
@@ -53,7 +53,7 @@ export const useShoppingLists = (id? : string) => {
   });
 
   const updateShoppingList = useMutation({
-    mutationFn: async (shoppingList: CreateUpdateShoppingList) => {
+    mutationFn: async (shoppingList: UpdateShoppingList) => {
       await agent.put(`/shoppingLists/${shoppingList.id}`, shoppingList);
     },
     onSuccess: async () => {
