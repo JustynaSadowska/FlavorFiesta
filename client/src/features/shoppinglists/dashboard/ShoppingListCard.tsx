@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { 
   Card, CardContent, Typography, List, ListItem, 
   ListItemIcon, ListItemText, Checkbox, Dialog, 

@@ -2,24 +2,29 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
 export default class ShoppingListStore {
-  checkedItems: Record<string, string[]> = {}; 
+checkedItems: Record<string, string[]> = {};
 
-  constructor() {
-    makeAutoObservable(this);
-  }
+constructor() {
+  makeAutoObservable(this);
+  this.loadFromLocalStorage();
+}
 
-  setCheckedItems(listId: string, items: string[]) {
-    this.checkedItems[listId] = items;
-  }
+toggleItem(listId: string, itemId: string) {
+  if (!this.checkedItems[listId]) this.checkedItems[listId] = [];
+  const idx = this.checkedItems[listId].indexOf(itemId);
+  if (idx === -1) this.checkedItems[listId].push(itemId);
+  else this.checkedItems[listId].splice(idx, 1);
+  this.saveToLocalStorage();
+}
 
-  toggleItem(listId: string, itemId: string) {
-    const items = this.checkedItems[listId] || [];
-    if (items.includes(itemId)) {
-      this.checkedItems[listId] = items.filter(id => id !== itemId);
-    } else {
-      this.checkedItems[listId] = [...items, itemId];
-    }
-  }
+saveToLocalStorage() {
+  localStorage.setItem('shoppingListsChecked', JSON.stringify(this.checkedItems));
+}
+
+loadFromLocalStorage() {
+  const data = localStorage.getItem('shoppingListsChecked');
+  if (data) this.checkedItems = JSON.parse(data);
+}
 
   async fetchCheckedItems(listId: string) {
     const response = await fetch(`/api/shopping-lists/${listId}/checked-items`);
