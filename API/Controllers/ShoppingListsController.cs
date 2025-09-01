@@ -34,13 +34,20 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new DeleteShoppingList.Command { Id = id }));
         }
-        
+
         [HttpPut("{id}")]
         public async Task<ActionResult> EditRecipe(string id, [FromBody] EditShoppingListDto shoppingList)
         {
             shoppingList.Id = id;
             return HandleResult(await Mediator.Send(new EditShoppingList.Command { ShoppingListDto = shoppingList }));
         }
+        
+        [HttpPost("{listId}/items/{itemId}/toggle")]
+        public async Task<ActionResult> CheckedToggle(string listId, string itemId)
+        {
+            return HandleResult(await Mediator.Send(new CheckedToggle.Command { ListId = listId, ItemId = itemId }));
+        }
+
         
     }
 }

@@ -114,6 +114,7 @@ type ShoppingListItem = {
   name: string;
   quantity: decimal;
   unit: Unit;
+  isChecked: boolean;
 }
 type CreateUpdateShoppingListItem = {
   name: string;

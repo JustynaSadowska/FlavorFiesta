@@ -1,5 +1,4 @@
-import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { 
   Card, CardContent, Typography, List, ListItem, 
   ListItemIcon, ListItemText, Checkbox, Dialog, 
@@ -8,28 +7,23 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteDialog from '../../../app/shared/components/DeleteDialog';
-import ShoppingListStore from "../../../lib/stores/shoppingListStore";
 import { formatDate } from "../../../lib/util/util";
 import { useShoppingLists } from "../../../lib/hooks/useShoppingLists";
 
 type Props = { shoppingList: ShoppingList };
 
-const store = new ShoppingListStore();
-
-const ShoppingListCard = observer(({ shoppingList }: Props) => {
+export default function ShoppingListCard({ shoppingList }: Props) {
   const [open, setOpen] = useState(false);
-  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);  const {deleteShoppingList} = useShoppingLists();
-
-  useEffect(() => {
-    store.fetchCheckedItems(shoppingList.id);
-  }, [shoppingList.id]);
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const { deleteShoppingList, checkedToggle, shoppingList: freshShoppingList, isLoadingShoppingList } = useShoppingLists(shoppingList.id);
 
   const handleToggle = (itemId: string) => {
-    store.toggleItem(shoppingList.id, itemId);
-    store.saveCheckedItems(shoppingList.id);
+    checkedToggle.mutate({ listId: shoppingList.id, itemId });
   };
 
-  const checked = store.checkedItems[shoppingList.id] || [];
+  const checkedIds = freshShoppingList?.shoppingListItems
+    .filter(item => item.isChecked)
+    .map(item => item.id) || [];
 
   return (
     <>
@@ -54,7 +48,7 @@ const ShoppingListCard = observer(({ shoppingList }: Props) => {
                 <ListItemIcon>
                   <Checkbox
                     edge="start"
-                    checked={checked.includes(item.id)}
+                    checked={checkedIds.includes(item.id)}
                     tabIndex={-1}
                     disableRipple
                     onClick={() => handleToggle(item.id)}
@@ -82,22 +76,26 @@ const ShoppingListCard = observer(({ shoppingList }: Props) => {
           </Box>
        </DialogTitle>
         <DialogContent dividers sx={{ maxHeight: 400 }}>
-          <List>
-            {shoppingList.shoppingListItems.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={checked.includes(item.id)}
-                    tabIndex={-1}
-                    disableRipple
-                    onClick={() => handleToggle(item.id)}
-                  />
-                </ListItemIcon>
-                <ListItemText primary={`${item.name} – ${item.quantity} ${item.unit.displayName}`} />
-              </ListItem>
-            ))}
-          </List>
+          {isLoadingShoppingList ? (
+            <Typography>Loading...</Typography>
+          ) : (
+            <List>
+              {freshShoppingList?.shoppingListItems.map((item) => (
+                <ListItem key={item.id} disablePadding>
+                  <ListItemIcon>
+                    <Checkbox
+                      edge="start"
+                      checked={checkedIds.includes(item.id)}
+                      tabIndex={-1}
+                      disableRipple
+                      onClick={() => handleToggle(item.id)}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary={`${item.name} – ${item.quantity} ${item.unit.displayName}`} />
+                </ListItem>
+              ))}
+            </List>
+          )}
         </DialogContent>
       </Dialog>
 
@@ -110,5 +108,4 @@ const ShoppingListCard = observer(({ shoppingList }: Props) => {
       />
     </>
   );
-});
-export default ShoppingListCard;
+}

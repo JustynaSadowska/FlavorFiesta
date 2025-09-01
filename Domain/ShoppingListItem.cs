@@ -11,6 +11,7 @@ namespace Domain
         public required string ShoppingListId { get; set; }
         public required string Name { get; set; }
         public required decimal Quantity { get; set; }
+        public bool IsChecked { get; set; }
         public required string UnitId { get; set; }
 
         public ShoppingList ShoppingList { get; set; } = null!;

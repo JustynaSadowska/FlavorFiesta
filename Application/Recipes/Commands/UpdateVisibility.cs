@@ -30,7 +30,7 @@ public class UpdateVisibility
 
             var isAuthor = recipe.UserId == user.Id;
 
-            if (recipe.UserId != user.Id)
+            if (!isAuthor)
                 return Result<Unit>.Failure("You are not authorized to update this recipe", 401);
           
             recipe.IsVisible = !recipe.IsVisible;
