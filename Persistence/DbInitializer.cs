@@ -575,8 +575,16 @@ public class DbInitializer
             new() { RecipeId = recipes[12].Id, Name = "Curry Paste", Quantity = 2, UnitId = units[6].Id },
             new() { RecipeId = recipes[12].Id, Name = "Coconut Milk", Quantity = 400, UnitId = units[3].Id },
         };
+        var orderedIngredients = ingredients
+            .GroupBy(i => i.RecipeId)
+            .SelectMany(g => g.Select((ingredient, index) =>
+            {
+                ingredient.Order = index + 1;
+                return ingredient;
+            }))
+            .ToList();
 
-        context.Ingredients.AddRange(ingredients);
+        context.Ingredients.AddRange(orderedIngredients);
 
         var shoppingLists = new List<ShoppingList>
         {
@@ -631,8 +639,16 @@ public class DbInitializer
                 UnitId = units[6].Id,
             },
         };
+        var orderedItems = shoppingListItems
+            .GroupBy(s => s.ShoppingListId)
+            .SelectMany(g => g.Select((item, index) =>
+            {
+                item.Order = index + 1;
+                return item;
+            }))
+            .ToList();
 
-        context.ShoppingListItems.AddRange(shoppingListItems);
+        context.ShoppingListItems.AddRange(orderedItems);
 
         var followers = new List<UserFollowing>
             {

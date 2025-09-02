@@ -52,12 +52,14 @@ type Ingredient = {
   name: string;
   quantity: decimal;
   unit: Unit;
+  order: number;
 };
 
 type CreateUpdateIngredient = {
   name: string;
   quantity: decimal;
   unitId: string;
+  order: number;
 };
 
 type Unit = {
@@ -114,11 +116,13 @@ type ShoppingListItem = {
   quantity: decimal;
   unit: Unit;
   isChecked: boolean;
+  order: number;
 }
 type CreateShoppingListItem = {
   name: string;
   quantity: decimal;
   unitId: string;
+  order: number;
 };
 type UpdateShoppingList = {
   id: string;

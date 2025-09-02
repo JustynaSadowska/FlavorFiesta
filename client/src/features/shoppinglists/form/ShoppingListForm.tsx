@@ -41,9 +41,10 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
     useEffect(() => {
     if (open) {
         if (shoppingList) {
+             const sortedItems = [...shoppingList.shoppingListItems].sort((a, b) => a.order - b.order);
         reset({
             title: shoppingList.title,
-            shoppingListItems: shoppingList.shoppingListItems.map(item => ({
+            shoppingListItems: sortedItems.map(item => ({
             name: item.name,
             quantity: item.quantity,
             unit: item.unit,
@@ -73,8 +74,14 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
             const dto: UpdateShoppingList = { 
             id: shoppingList.id,
             title: data.title,
-            shoppingListItems: data.shoppingListItems.map(x => ({ name: x.name, quantity: x.quantity , unitId: x.unit.id, isChecked: x.isChecked || false})),
-            }
+            shoppingListItems: data.shoppingListItems.map((item, index) => ({
+                name: item.name,
+                quantity: item.quantity,
+                unitId: item.unit.id,
+                isChecked: item.isChecked || false,
+                order: index + 1, 
+                })),
+            };
             updateShoppingList.mutate(dto, {
                 onSuccess: () => setOpen(false),
             });
@@ -83,7 +90,13 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
         {
         const dto: CreateShoppingList = { 
             title: data.title,
-            shoppingListItems: data.shoppingListItems.map(x => ({ name: x.name, quantity: x.quantity , unitId: x.unit.id})),
+            shoppingListItems: data.shoppingListItems.map((item, index) => ({
+                name: item.name,
+                quantity: item.quantity,
+                unitId: item.unit.id,
+                order: index + 1,   
+              })),
+
             }
             createShoppingList.mutate(dto, {
                 onSuccess: () => setOpen(false),

@@ -18,9 +18,7 @@ export default function IngredientsSection({
     return (quantity * selectedServings) / baseServings;
   };
 
-   const sortedIngredients = [...ingredients].sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
+const sortedIngredients = [...ingredients].sort((a, b) => a.order - b.order);
 
   return (
     <Box mb={5} maxWidth={430} sx={{ border: "1px solid #ccc", borderRadius: 2, p: 2 }}>
@@ -44,27 +42,28 @@ export default function IngredientsSection({
         </Box>
       </Box>
 
-      {sortedIngredients.length > 0 ? (
-        <Box display="flex" flexDirection="column" gap={1}>
-          { sortedIngredients.map((ingredient, index) => (
-            <Box
-              key={index}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              py={1}
-              sx={{ borderBottom: index !== sortedIngredients.length - 1 ? "1px solid rgb(205, 199, 199)" : "none" }}
-            >
-              <Typography variant="body1">{ingredient.name}</Typography>
-              <Typography variant="body1" fontWeight="medium">
-                {getScaledQuantity(ingredient.quantity).toFixed(2)} {ingredient.unit.displayName}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      ) : (
-        <Typography variant="body2" color="text.secondary">No ingredients provided.</Typography>
-      )}
+    {sortedIngredients.map((ingredient, index) => (
+      <Box
+        key={ingredient.id ?? index}
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        py={1}
+        sx={{
+          borderBottom:
+            index !== sortedIngredients.length - 1
+              ? "1px solid rgb(205, 199, 199)"
+              : "none",
+        }}
+      >
+        <Typography variant="body1">{ingredient.name}</Typography>
+        <Typography variant="body1" fontWeight="medium">
+          {getScaledQuantity(ingredient.quantity).toFixed(2)}{" "}
+          {ingredient.unit.displayName}
+        </Typography>
+      </Box>
+    ))}
+
 
       <Box display="flex" justifyContent="center" mt={2}>
         <Button

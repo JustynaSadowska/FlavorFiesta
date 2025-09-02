@@ -11,5 +11,6 @@ namespace Application.ShoppingLists.DTOs
         public required decimal Quantity { get; set; }
         public required string UnitId { get; set; }
         public bool IsChecked { get; set; }
+        public int Order { get; set; }
     }
 }

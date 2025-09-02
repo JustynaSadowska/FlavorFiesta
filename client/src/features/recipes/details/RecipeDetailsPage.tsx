@@ -8,6 +8,7 @@ import {
   IconButton,
   Divider,
   styled,
+  CircularProgress,
 } from "@mui/material";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import { Link, useParams } from "react-router";
@@ -60,8 +61,11 @@ export default function RecipeDetails() {
       }
     }, [recipe?.isVisible]);
     
-  if (isLoadingRecipe) return <Typography>Loading...</Typography>;
-
+  if (isLoadingRecipe) return (
+        <Box display="flex" justifyContent="center" mt={2}>
+          <CircularProgress />
+        </Box>
+  );
   if (!recipe) return <Typography>Recipe not found</Typography>;
   return (
     <><Card sx={{ maxWidth: 1200, margin: "auto", mt: 4, borderRadius: 3, p: 2, position: "relative" }}>

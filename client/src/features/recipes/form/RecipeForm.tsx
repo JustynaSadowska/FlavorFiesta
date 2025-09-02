@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, IconButton, InputAdornment, Paper, Stack, Switch, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, CircularProgress, IconButton, InputAdornment, Paper, Stack, Switch, TextField, Typography } from "@mui/material";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import { useNavigate, useParams } from "react-router";
 import { useAllergens } from "../../../lib/hooks/useAllergens";
@@ -56,7 +56,8 @@ export default function RecipeForm() {
     useEffect(() => {
       if (recipe) {
         const sortedSteps = [...recipe.steps].sort((a, b) => a.order - b.order);
-        reset({ ...recipe, steps: sortedSteps });
+        const sortedIngredients = [...recipe.ingredients].sort((a, b) => a.order - b.order);
+        reset({ ...recipe, steps: sortedSteps, ingredients: sortedIngredients });
       }
     }, [recipe, reset]);
 
@@ -72,7 +73,12 @@ export default function RecipeForm() {
               ...step,
               order: index + 1,
             })),
-          ingredients: data.ingredients.map(x => ({ name: x.name, quantity: x.quantity , unitId: x.unit.id})),
+          ingredients: data.ingredients.map((ingredient, index) => ({
+                name: ingredient.name,
+                quantity: ingredient.quantity,
+                unitId: ingredient.unit.id,
+                order: index + 1,   
+              })),
           tagsIds: data.tags.map(x => x.id),
           allergensIds: data.allergens?.map(x => x.id),
           description: data?.description,
@@ -94,7 +100,12 @@ export default function RecipeForm() {
       };
 
 
-  if(isLoadingRecipe) return <Typography>Loading...</Typography>
+  if(isLoadingRecipe)     
+    return (
+        <Box display="flex" justifyContent="center" mt={2}>
+          <CircularProgress />
+        </Box>
+    )
     
   return (
     <Paper sx={{ borderRadius: 3, padding: 3, maxWidth: 1300, margin: "auto"  }}>

@@ -10,5 +10,6 @@ namespace Application.ShoppingLists.DTOs
         public required string Name { get; set; }
         public required decimal Quantity { get; set; }
         public required string UnitId { get; set; }
+        public int Order { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace Domain
         public required string Name { get; set; }
         public required decimal Quantity { get; set; }
         public required string UnitId { get; set; }
+        public int Order { get; set; } 
 
         public Recipe Recipe { get; set; } = null!;
         public Unit Unit { get; set; } = null!;

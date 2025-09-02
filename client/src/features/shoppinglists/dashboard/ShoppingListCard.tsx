@@ -24,7 +24,10 @@ export default function ShoppingListCard({ shoppingList }: Props) {
   const handleToggle = (itemId: string) => {
     checkedToggle.mutate({ listId: shoppingList.id, itemId });
   };
-
+ 
+  const sortedItems = [...shoppingList.shoppingListItems].sort(
+    (a, b) => a.order - b.order
+  );
   return (
     <>
       <Card elevation={4} sx={{ borderRadius: 3, width: 370, height:300, "&:hover": { transform: "scale(1.03)" }, transition: "transform 0.2s" }}>
@@ -44,8 +47,8 @@ export default function ShoppingListCard({ shoppingList }: Props) {
           </Box>
           <Divider/>
 
-          <List sx={{ width: '100%', bgcolor: 'transparent', p:1 }}>
-            {shoppingList.shoppingListItems.slice(0, 4).map((item) => (
+          <List sx={{ width: "100%", bgcolor: "transparent", p: 1 }}>
+            {sortedItems.slice(0, 4).map((item) => (
               <ListItem key={item.id} disablePadding>
                 <ListItemIcon>
                   <Checkbox
@@ -56,12 +59,23 @@ export default function ShoppingListCard({ shoppingList }: Props) {
                     onClick={() => handleToggle(item.id)}
                   />
                 </ListItemIcon>
-                <ListItemText primary={`${item.name} – ${item.quantity} ${item.unit.displayName}`} />
+                <ListItemText
+                  primary={`${item.name} – ${item.quantity} ${item.unit.displayName}`}
+                />
               </ListItem>
             ))}
-            {shoppingList.shoppingListItems.length > 4 && (
+            {sortedItems.length > 4 && (
               <ListItem disablePadding>
-                <ListItemText primary="…" sx={{ textAlign: 'center', fontSize: '1.5rem', lineHeight: 1, fontStyle: 'italic', color: 'text.secondary' }} />
+                <ListItemText
+                  primary="…"
+                  sx={{
+                    textAlign: "center",
+                    fontSize: "1.5rem",
+                    lineHeight: 1,
+                    fontStyle: "italic",
+                    color: "text.secondary",
+                  }}
+                />
               </ListItem>
             )}
           </List>
