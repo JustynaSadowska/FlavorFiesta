@@ -20,6 +20,10 @@ export default function ShoppingListDashboard() {
   if (!shoppingLists || shoppingLists.length === 0) {
     return <div>Brak list zakupów.</div>;
   }
+
+  const sortedLists = [...shoppingLists].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
   return (
     
     // <Grid2 container spacing={3}>
@@ -36,7 +40,7 @@ export default function ShoppingListDashboard() {
         mt:3,
         mb:5
         }}>
-       {shoppingLists.map((shoppingList) => (
+       {sortedLists.map((shoppingList) => (
         <ShoppingListCard key={shoppingList.id} shoppingList={shoppingList} />
         ))}
         <Box sx={{ '& > :not(style)': { m: 1 } }}>

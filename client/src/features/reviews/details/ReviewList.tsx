@@ -7,10 +7,14 @@ type Props = {
 
 export default function ReviewList({ reviews }: Props) {
   if (!reviews || reviews.length === 0) return null;
+  const sortedReviews = [...reviews].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
 
   return (
     <Stack spacing={2} mt={2}>
-      {reviews.map((review) => (
+      {sortedReviews.map((review) => (
         <ReviewCard key={review.id} review={review} />
       ))}
     </Stack>
