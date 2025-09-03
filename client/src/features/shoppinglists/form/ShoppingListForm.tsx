@@ -12,9 +12,10 @@ type Props = {
   shoppingListId?: string;
   open: boolean;
   setOpen: (open: boolean) => void;
+  initialValues?: CreateShoppingList;
 };
 
-export default function ShoppingListForm({ shoppingListId, open, setOpen }: Props) {
+export default function ShoppingListForm({ shoppingListId, open, setOpen, initialValues}: Props) {
     const { shoppingList, isLoadingShoppingList, updateShoppingList, createShoppingList } = useShoppingLists(shoppingListId);
     const {units} = useRecipes();  
     const { control, handleSubmit, reset, formState: { errors, isDirty, isValid } } = useForm<ShoppingListsSchema>({
@@ -40,32 +41,40 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen }: Prop
 
     useEffect(() => {
     if (open) {
-        if (shoppingList) {
-             const sortedItems = [...shoppingList.shoppingListItems].sort((a, b) => a.order - b.order);
+      if (shoppingList) {
+        const sortedItems = [...shoppingList.shoppingListItems].sort((a, b) => a.order - b.order);
         reset({
-            title: shoppingList.title,
-            shoppingListItems: sortedItems.map(item => ({
+          title: shoppingList.title,
+          shoppingListItems: sortedItems.map((item) => ({
             name: item.name,
             quantity: item.quantity,
             unit: item.unit,
             isChecked: item.isChecked,
-            })),
+          })),
         });
+        } else if (initialValues) {
+            reset({
+                title: initialValues.title ?? "",
+                shoppingListItems: initialValues.shoppingListItems.map((i) => {
+                const fullUnit = units.find((u) => u.id === i.unitId) || { id: i.unitId, displayName: "" };
+                return {
+                    name: i.name,
+                    quantity: i.quantity,
+                    unit: fullUnit,
+                    isChecked: false,
+                };
+                }),
+            });
         } else {
-        reset({
+            reset({
             title: "",
             shoppingListItems: [
-            {
-                name: "",
-                quantity: 0,
-                unit: { id: "", displayName: "" },
-                isChecked: false
-            },
+                { name: "", quantity: 0, unit: { id: "", displayName: "" }, isChecked: false },
             ],
-        });
-        }
+            });
+      }
     }
-    }, [open, shoppingList, reset]);
+  }, [open, shoppingList, reset, initialValues, units]);
 
 
     const onSubmit = (data: ShoppingListsSchema) => {

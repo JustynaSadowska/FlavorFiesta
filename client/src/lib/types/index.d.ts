@@ -59,7 +59,7 @@ type CreateUpdateIngredient = {
   name: string;
   quantity: decimal;
   unitId: string;
-  order: number;
+  order?: number;
 };
 
 type Unit = {

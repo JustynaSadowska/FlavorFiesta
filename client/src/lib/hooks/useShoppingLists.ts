@@ -1,25 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 
-export const useShoppingLists = (id? : string) => {
+export const useShoppingLists = (id?: string) => {
   const queryClient = useQueryClient();
-  
-  const { data: shoppingLists = [], isLoading} = useQuery({
+
+  const { data: shoppingLists = [], isLoading } = useQuery({
     queryKey: ["shoppingLists"],
-    queryFn: () => agent.get<ShoppingList[]>("/shoppingLists").then(res => res.data)
+    queryFn: () =>
+      agent.get<ShoppingList[]>("/shoppingLists").then((res) => res.data),
   });
 
-   const { data: shoppingList, isLoading: isLoadingShoppingList } = useQuery({
+  const { data: shoppingList, isLoading: isLoadingShoppingList } = useQuery({
     queryKey: ["shoppingList", id],
     queryFn: async () => {
       const response = await agent.get<ShoppingList>(`/shoppingLists/${id}`);
       return response.data;
     },
-    enabled: !!id, 
+    enabled: !!id,
   });
 
-   const checkedToggle = useMutation({
-    mutationFn: async ({ listId, itemId }: { listId: string; itemId: string }) => {
+  const checkedToggle = useMutation({
+    mutationFn: async ({
+      listId,
+      itemId,
+    }: {
+      listId: string;
+      itemId: string;
+    }) => {
       await agent.post(`/shoppingLists/${listId}/items/${itemId}/toggle`);
     },
     onSuccess: async () => {
@@ -29,7 +36,7 @@ export const useShoppingLists = (id? : string) => {
     },
   });
 
-   const createShoppingList = useMutation({
+  const createShoppingList = useMutation({
     mutationFn: async (shoppingList: CreateShoppingList) => {
       const response = await agent.post("/shoppingLists", shoppingList);
       return response.data;
@@ -62,7 +69,23 @@ export const useShoppingLists = (id? : string) => {
       });
     },
   });
- 
+
+  const addIngredientsToList = useMutation({
+    mutationFn: async ({
+      listId,
+      ingredients,
+    }: {
+      listId: string;
+      ingredients: CreateUpdateIngredient[];
+    }) => {
+      await agent.post(`/shoppingLists/${listId}/addIngredients`, 
+        ingredients
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["shoppingLists"] });
+    },
+  });
 
   return {
     shoppingLists,
@@ -70,9 +93,9 @@ export const useShoppingLists = (id? : string) => {
     deleteShoppingList,
     updateShoppingList,
     isLoading,
-    isLoadingShoppingList, 
+    isLoadingShoppingList,
     shoppingList,
-    checkedToggle
-     
+    checkedToggle,
+    addIngredientsToList,
   };
 };

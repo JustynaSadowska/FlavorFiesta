@@ -115,7 +115,7 @@ export default function ShoppingListCard({ shoppingList }: Props) {
             </Box>
           ) : (
             <List>
-              {shoppingList?.shoppingListItems.map((item) => (
+              {sortedItems.map((item) => (
                 <ListItem key={item.id} disablePadding>
                   <ListItemIcon>
                     <Checkbox
