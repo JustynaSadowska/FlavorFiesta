@@ -24,7 +24,6 @@ export default function IngredientsSection({
   const sortedIngredients = [...ingredients].sort((a, b) => a.order - b.order);
 
   const handleOpenDialog = () => {
-    // Konwertujemy Ingredient[] → CreateUpdateIngredient[] dopiero przy kliknięciu
     const converted: Ingredient[] = ingredients.map((i, index) => ({
       id: i.id,
       name: i.name,
@@ -77,7 +76,7 @@ export default function IngredientsSection({
           <Button
             variant="outlined"
             startIcon={<AddShoppingCartIcon />}
-            onClick={handleOpenDialog} // tutaj otwieramy dialog i ustawiamy ingredients
+            onClick={handleOpenDialog} 
             sx={{
               borderColor: '#EAC1B1',
               color: 'gray',
@@ -99,7 +98,7 @@ export default function IngredientsSection({
       <AddIngredientsDialog
         open={isDialogOpen}
         setOpen={setDialogOpen}
-        ingredients={dialogIngredients} // dopiero teraz przekazujemy do dialogu
+        ingredients={dialogIngredients} 
       />
     </>
   );

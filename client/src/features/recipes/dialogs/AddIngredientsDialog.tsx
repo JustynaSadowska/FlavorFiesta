@@ -48,9 +48,6 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
       order: index + 1,
     })),
   };
-// console.log("initialCreateListValues")
-// console.log(initialCreateListValues)
-
   return (
     <>
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
