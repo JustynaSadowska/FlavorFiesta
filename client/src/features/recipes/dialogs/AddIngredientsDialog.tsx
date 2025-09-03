@@ -4,12 +4,9 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   CircularProgress,
   Typography,
+  Box,
 } from "@mui/material";
 import { useState } from "react";
 import { useShoppingLists } from "../../../lib/hooks/useShoppingLists";
@@ -34,11 +31,10 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
 
     addIngredientsToList.mutate(
       { listId, ingredients: mappedIngredients },
-      {
-        onSuccess: () => setOpen(false),
-      }
+      { onSuccess: () => setOpen(false) }
     );
   };
+
   const initialCreateListValues: CreateShoppingList = {
     title: "",
     shoppingListItems: ingredients.map((ing, index) => ({
@@ -48,28 +44,51 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
       order: index + 1,
     })),
   };
+
   return (
     <>
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Choose Shopping List</DialogTitle>
+        <DialogTitle>Select Shopping List</DialogTitle>
         <DialogContent dividers>
           {isLoading ? (
-            <CircularProgress />
+            <Box display="flex" justifyContent="center" mt={2}>
+              <CircularProgress />
+            </Box>
           ) : shoppingLists && shoppingLists.length > 0 ? (
-            <List>
+            <Box display="flex" flexDirection="column" gap={2} mt={1}>
               {shoppingLists.map((list) => (
-                <ListItem key={list.id} disablePadding>
-                  <ListItemButton onClick={() => handleSelectList(list.id)}>
-                    <ListItemText primary={list.title} />
-                  </ListItemButton>
-                </ListItem>
+                <Box
+                  key={list.id}
+                  onClick={() => handleSelectList(list.id)}
+                  sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    border: "1px solid #ddd",
+                    cursor: "pointer",
+                    backgroundColor: "#fff",
+                    transition: "all 0.2s",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                    },
+                  }}
+                >
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    {list.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {list.shoppingListItems?.length ?? 0} items
+                  </Typography>
+                </Box>
               ))}
-            </List>
+            </Box>
           ) : (
-            <Typography>No shopping lists found.</Typography>
+            <Typography align="center" color="text.secondary" mt={2}>
+              No shopping lists found.
+            </Typography>
           )}
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "space-between" }}>
+        <DialogActions sx={{ display: "flex", justifyContent: "space-between", mt: 2, mb: 1 }}>
           <Button onClick={() => setOpen(false)} color="inherit">
             Cancel
           </Button>
