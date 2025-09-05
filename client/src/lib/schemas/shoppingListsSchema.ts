@@ -12,7 +12,7 @@ export const shoppingListsSchema = z.object({
         quantity: z
           .number({ required_error: "Quantity must be a number" })
           .positive({ message: "Quantity must be greater than 0" })
-          .min(1, { message: "Quantity is required" }),
+          .min(0, { message: "Quantity is required" }),
         unit: z.object({
           id: requiredString("Unit ID"),
           displayName: requiredString("Unit name"),
@@ -20,7 +20,7 @@ export const shoppingListsSchema = z.object({
         isChecked: z.boolean().optional(),
       })
     )
-    .min(1, { message: "At least one item is required" }),
+    .min(0, { message: "At least one item is required" }),
 });
 
 export type ShoppingListsSchema = z.infer<typeof shoppingListsSchema>;

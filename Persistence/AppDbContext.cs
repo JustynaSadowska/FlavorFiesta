@@ -18,7 +18,7 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
     public required DbSet<Tag> Tags { get; set; }
     public required DbSet<Unit> Units { get; set; }
     public required DbSet<UserFollowing> UserFollowings { get; set; }
-   // public required DbSet<Photo> Photos { get; set; }
+    public required DbSet<Photo> Photos { get; set; }
     public DbSet<UserFavoriteRecipe> UserFavoriteRecipes { get; set; }
 
 
@@ -109,12 +109,6 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
                 .HasForeignKey(o => o.TargetId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
-
-        // modelBuilder.Entity<Photo>()
-        //     .HasOne(p => p.Recipe)
-        //     .WithMany(r => r.Photos)
-        //     .HasForeignKey(p => p.RecipeId)
-        //     .IsRequired();
         
          modelBuilder.Entity<UserFavoriteRecipe>(x => 
          {

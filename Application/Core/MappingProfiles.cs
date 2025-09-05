@@ -26,9 +26,6 @@ public class MappingProfiles : Profile
             .ForMember(d => d.User, o => o.MapFrom(s => s.User));
 
         CreateMap<User, UserProfile>()
-            .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
-            .ForMember(d => d.LastName, o => o.MapFrom(s => s.LastName))
-            .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
             .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
             .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
             .ForMember(d => d.Following, o => o.MapFrom(s => s.Followers.Any(x => x.ObserverId == currentUserId)));

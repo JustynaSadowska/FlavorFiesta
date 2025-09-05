@@ -4,16 +4,18 @@ import { z } from "zod";
 const requiredString = (fieldName: string) =>
   z
     .string({ required_error: `${fieldName} is required` })
-    .min(1, { message: `${fieldName} is required` })
-   ;
+    .min(1, { message: `${fieldName} is required` });
 export const recipeSchema = z.object({
-  title: requiredString("Title").max(20,{ message: `Max 20 characters` }),
-  description: z.string().max(330,{ message: `Max 330 characters` }).optional(),
+  title: requiredString("Title").max(20, { message: `Max 20 characters` }),
+  description: z
+    .string()
+    .max(330, { message: `Max 330 characters` })
+    .optional(),
   servings: z
     .number({ required_error: `Servings are required` })
     .int({ message: "Servings must be an integer" })
     .min(1, { message: "Servings must be at least 1" }),
-    
+
   preparationTime: z
     .number({ required_error: `Preparation time is required` })
     .int({ message: "Preparation time must be an integer" })
@@ -36,9 +38,9 @@ export const recipeSchema = z.object({
       z.object({
         name: requiredString("Ingredient name"),
         quantity: z
-          .number({required_error: "Quantity must be a number" })
+          .number({ required_error: "Quantity must be a number" })
           .positive({ message: "Quantity must be greater than 0" })
-          .min(1, { message: "Quantity is required" }),
+          .min(0, { message: "Quantity is required" }),
         unit: z.object({
           id: requiredString("Unit ID"),
           displayName: requiredString("Unit name"),
@@ -47,9 +49,7 @@ export const recipeSchema = z.object({
     )
     .min(1, { message: "At least one ingredient is required" }),
 
-  tags: z
-    .array(z.any())
-    .min(1, { message: "At least one tag is required" }),
+  tags: z.array(z.any()).min(1, { message: "At least one tag is required" }),
   isVisible: z.boolean(),
   allergens: z.array(z.any()).optional(),
 });

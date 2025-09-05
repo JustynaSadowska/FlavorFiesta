@@ -10,6 +10,7 @@ namespace Domain
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        public string? ImageUrl { get; set; }
 
         public ICollection<Recipe>? Recipes { get; set; } = [];
         public ICollection<Review>? Reviews { get; set; } = [];
@@ -18,5 +19,6 @@ namespace Domain
         public ICollection<UserFollowing> Followings { get; set; } = [];
         public ICollection<UserFollowing> Followers { get; set; } = [];
         public ICollection<UserFavoriteRecipe>? FavoriteRecipes { get; set; } = [];
+        public ICollection<Photo> Photos { get; set; } = [];
     }
 }

@@ -25,7 +25,8 @@ namespace Application.Profiles.Queries
             {
                 var user = await context.Users
                 .ProjectTo<UserProfile>(mapper.ConfigurationProvider, new {currentUserId = userAccessor.GetUserId()})
-                .SingleOrDefaultAsync(x => request.UserId == x.Id, cancellationToken);;
+                .SingleOrDefaultAsync(x => request.UserId == x.Id, cancellationToken);
+                
                 if (user == null) return Result<UserProfile>.Failure("User not found", 404);
 
             return Result<UserProfile>.Success(user);

@@ -7,6 +7,7 @@ using Application.Services;
 using Domain;
 using FluentValidation;
 using Infrastructure;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Connections;
@@ -37,6 +38,7 @@ builder.Services.AddMediatR(x =>
 });
 
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddValidatorsFromAssemblyContaining<CreateRecipeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<EditRecipeValidator>();
@@ -61,11 +63,10 @@ builder.Services.AddAuthorization(opt =>
         policy.Requirements.Add(new IsReviewAuthorRequirement());
     });
 });
-
 builder.Services.AddTransient<IAuthorizationHandler, IsAuthorRequirementHandler>();
 builder.Services.AddTransient<IAuthorizationHandler, IsReviewAuthorRequirementHandler>();
 builder.Services.AddScoped<RatingService>();
-
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 var app = builder.Build();
 

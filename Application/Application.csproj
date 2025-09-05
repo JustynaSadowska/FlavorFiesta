@@ -21,4 +21,9 @@
     <Folder Include="Recipes\Validators\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+
 </Project>

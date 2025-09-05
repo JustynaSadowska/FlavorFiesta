@@ -53,7 +53,8 @@ namespace API.Controllers
                 user.FirstName,
                 user.LastName,
                 user.Email,
-                user.Id
+                user.Id,
+                user.ImageUrl
             });
         }
 

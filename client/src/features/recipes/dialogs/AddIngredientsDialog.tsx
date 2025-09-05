@@ -55,7 +55,7 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
               <CircularProgress />
             </Box>
           ) : shoppingLists && shoppingLists.length > 0 ? (
-            <Box display="flex" flexDirection="column" gap={2} mt={1}>
+            <Box display="flex" flexDirection="column" gap={2} >
               {shoppingLists.map((list) => (
                 <Box
                   key={list.id}
