@@ -1,20 +1,24 @@
-import { Box, Divider, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Divider, Tab, Tabs, Typography, Fab, Zoom } from '@mui/material'
 import RecipeList from '../recipes/dashboard/RecipeList'
 import ProfileHeader from './ProfileHeader'
-import { useParams, useSearchParams } from 'react-router';
+import { useParams, useSearchParams, useNavigate } from 'react-router';
 import { useProfile } from '../../lib/hooks/useProfile';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ShoppingListDashboard from '../shoppinglists/dashboard/ShoppingListDashboard';
+import AddIcon from '@mui/icons-material/Add';
+import ShoppingListForm from '../shoppinglists/form/ShoppingListForm';
 
 const tabMapping = ["recipes", "favorites", "shoppinglists"];
 
 export default function ProfilePage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { profile, loadingProfile, isCurrentUser, userRecipes, favoriteRecipes, isLoading, isFavoriteLoading } = useProfile(id);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isShoppingListFormOpen, setShoppingListFormOpen] = useState(false);
 
   const currentTab = useMemo(() => {
     const tabParam = searchParams.get("tab");
@@ -30,7 +34,7 @@ export default function ProfilePage() {
   if (!profile) return <Typography>Profile not found</Typography>
 
   return (
-    <div>
+    <div style={{ position: "relative", minHeight: "100vh" }}>
       <ProfileHeader/>
       <Box sx={{ mt: 4 }}>
         {isCurrentUser && (
@@ -65,6 +69,30 @@ export default function ProfilePage() {
           <ShoppingListDashboard />
         )}
       </Box>
+
+      {/* FAB tylko dla wybranych zakładek */}
+      <Zoom in={currentTab === 0 || currentTab === 2}>
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{ position: "fixed", bottom: 24, right: 24 }}
+          onClick={() => {
+            if (currentTab === 0) {
+              navigate("/createRecipe");
+            } else if (currentTab === 2) {
+              setShoppingListFormOpen(true);
+            }
+          }}
+        >
+          <AddIcon />
+        </Fab>
+      </Zoom>
+
+      {/* Modal formularza listy zakupów */}
+      <ShoppingListForm
+        open={isShoppingListFormOpen}
+        setOpen={setShoppingListFormOpen}
+      />
     </div>
   )
 }

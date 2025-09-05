@@ -1,14 +1,10 @@
-import { useState } from 'react';
 import { useShoppingLists } from '../../../lib/hooks/useShoppingLists';
-import ShoppingListForm from '../form/ShoppingListForm';
 import ShoppingListCard from './ShoppingListCard';
-import { Box, CircularProgress, Fab } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, CircularProgress } from '@mui/material';
 
 
 export default function ShoppingListDashboard() {
   const { shoppingLists, isLoading } = useShoppingLists();
-  const [isFormOpen, setFormOpen] = useState(false);
 
   if (isLoading) {
       return (
@@ -43,19 +39,6 @@ export default function ShoppingListDashboard() {
        {sortedLists.map((shoppingList) => (
         <ShoppingListCard key={shoppingList.id} shoppingList={shoppingList} />
         ))}
-        <Box sx={{ '& > :not(style)': { m: 1 } }}>
-            <Fab
-              color="primary"
-              aria-label="add"
-              onClick={() => setFormOpen(true)}
-            >
-              <AddIcon />
-            </Fab>
-        </Box>
-        <ShoppingListForm
-          open={isFormOpen}
-          setOpen={setFormOpen}
-        />
     </Box>
   );
 }
