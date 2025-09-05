@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -16,9 +15,10 @@ import { useReviews } from "../../../lib/hooks/useReviews";
 import DeleteDialog from "../../../app/shared/components/DeleteDialog";
 import { useState } from "react";
 import ReviewForm from "../form/ReviewForm";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 //import ReviewForm from "../form/ReviewForm";
 import DeleteIcon from '@mui/icons-material/Delete';
+import AvatarPopover from "../../../app/shared/components/AvatarPopover";
 
 type Props = {
   review: Review;
@@ -34,9 +34,22 @@ export default function ReviewCard({ review }: Props) {
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" mb={1}>
           <Stack direction="row" alignItems="center" spacing={2} mb={1}>
-            <Avatar alt={review.reviewAuthor.firstName} sx={{ width: 40, height: 40 }} />
-            <Box>
-              <Typography fontWeight="bold">
+            <AvatarPopover
+              profile={review.reviewAuthor}
+              avatarProps={{ sx: { width: 40, height: 40, cursor: "pointer" } }}
+              showName={false}
+            />
+            <Box display="flex" flexDirection="column">
+              <Typography
+                component={Link}
+                to={`/profiles/${review.reviewAuthor.id}`}
+                sx={{
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                  color: "inherit",
+                  "&:hover": { textDecoration: "underline" },
+                }}
+              >
                 {review.reviewAuthor.firstName} {review.reviewAuthor.lastName}
               </Typography>
               <Typography variant="body2" color="text.secondary">
