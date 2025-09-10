@@ -138,3 +138,8 @@ type UpdateShoppingListItem = {
   unitId: string;
   isChecked: boolean;
 };
+
+type Photo = {
+  id: string
+  url: string
+}
