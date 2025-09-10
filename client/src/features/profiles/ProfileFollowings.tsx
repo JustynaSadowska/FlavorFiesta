@@ -66,6 +66,7 @@ export default function ProfileFollowings({ type, onNavigate }: Props) {
                                         id: p.id,
                                         firstName: p.firstName,
                                         lastName: p.lastName,
+                                        imageUrl: p.imageUrl
                                         }}
                                         avatarProps={{ sx: { width: 45, height: 45 } }}
                                         showName={false}

@@ -32,6 +32,7 @@ type Recipe = {
   averageRating: number;
   reviewCount: number;
   reviews: Review[];
+  userImageUrl?: string;
 };
 
 type User = {
@@ -39,6 +40,7 @@ type User = {
   email: string;
   firstName: string;
   lastName: string;
+  imageUrl?: string
 };
 
 type Step = {
@@ -76,6 +78,7 @@ type Profile = {
   id: string;
   firstName: string;
   lastName: string;
+  imageUrl?: string
   followingCount?: number;
   followersCount?: number;
   following?: boolean;
@@ -128,7 +131,7 @@ type UpdateShoppingList = {
   id: string;
   title : string;
   shoppingListItems: UpdateShoppingListItem[];
-}
+};
 type UpdateShoppingListItem = {
   name: string;
   quantity: decimal;

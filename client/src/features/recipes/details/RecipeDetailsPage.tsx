@@ -210,6 +210,7 @@ export default function RecipeDetails() {
                     id: recipe.userId,
                     firstName: recipe.authorFirstName,
                     lastName: recipe.authorLastName,
+                    imageUrl: recipe.userImageUrl
                   }}
                   avatarProps={{ sx: { width: 24, height: 24 } }}
                   showName={true} />

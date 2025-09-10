@@ -34,7 +34,7 @@ export default function ProfileHeader() {
                 <Grid container spacing={2}>
                     <Grid item xs={8}>
                         <Stack direction="row" spacing={3} alignItems="center">
-                            <Avatar sx={{ width: 150, height: 150 }} />
+                            <Avatar src={profile.imageUrl} sx={{ width: 150, height: 150 }} />
                             <Box display="flex" flexDirection="column" gap={1}>
                                 <Box display="flex" alignItems="flex-start" gap={1}>
                                     <Typography variant="h4">

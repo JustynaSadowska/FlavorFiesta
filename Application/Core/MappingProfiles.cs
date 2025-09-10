@@ -23,7 +23,8 @@ public class MappingProfiles : Profile
             .ForMember(d => d.AuthorFirstName, o => o.MapFrom(s => s.User.FirstName))
             .ForMember(d => d.AuthorLastName, o => o.MapFrom(s => s.User.LastName))
             .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
-            .ForMember(d => d.User, o => o.MapFrom(s => s.User));
+            .ForMember(d => d.User, o => o.MapFrom(s => s.User))
+            .ForMember(d=>d.UserImageUrl, o=> o.MapFrom(s=>s.User.ImageUrl));
 
         CreateMap<User, UserProfile>()
             .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))

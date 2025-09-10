@@ -1,6 +1,7 @@
 import { useShoppingLists } from '../../../lib/hooks/useShoppingLists';
 import ShoppingListCard from './ShoppingListCard';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 
 export default function ShoppingListDashboard() {
@@ -14,7 +15,12 @@ export default function ShoppingListDashboard() {
       );
     }
   if (!shoppingLists || shoppingLists.length === 0) {
-    return <div>Brak list zakupów.</div>;
+    return <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
+              <ShoppingCartIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
+              <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
+                You don’t have any shopping lists yet.
+              </Typography>
+            </Box>
   }
 
   const sortedLists = [...shoppingLists].sort(

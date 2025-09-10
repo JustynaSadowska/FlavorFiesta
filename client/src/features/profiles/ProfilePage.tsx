@@ -51,7 +51,16 @@ export default function ProfilePage() {
 
       <Box sx={{ mt: 3 }}>
         {currentTab === 0 && (
-          <RecipeList recipes={userRecipes} isLoading={isLoading} />
+          (!userRecipes|| userRecipes.length === 0) ? (
+            <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
+              <RestaurantIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
+              <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
+                You don’t have any recipes yet.
+              </Typography>
+            </Box>
+          ): (
+            <RecipeList recipes={userRecipes} isLoading={isLoading} />
+          )
         )}
         {currentTab === 1 && (
           (!favoriteRecipes || favoriteRecipes.length === 0) ? (
@@ -70,7 +79,6 @@ export default function ProfilePage() {
         )}
       </Box>
 
-      {/* FAB tylko dla wybranych zakładek */}
       <Zoom in={currentTab === 0 || currentTab === 2}>
         <Fab
           color="primary"
@@ -88,7 +96,6 @@ export default function ProfilePage() {
         </Fab>
       </Zoom>
 
-      {/* Modal formularza listy zakupów */}
       <ShoppingListForm
         open={isShoppingListFormOpen}
         setOpen={setShoppingListFormOpen}

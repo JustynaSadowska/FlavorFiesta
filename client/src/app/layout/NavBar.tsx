@@ -93,7 +93,6 @@ export default function NavBar() {
               variant="h4"
               noWrap
               component= {Link} to = '/'
-              //href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },

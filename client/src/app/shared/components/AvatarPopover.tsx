@@ -31,16 +31,17 @@ export default function AvatarPopover({ profile, onNavigate, avatarProps, showNa
   const open = Boolean(anchorEl);
 
   const navigate = useNavigate();
-
   return (
     <>
       <Box
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
         sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}
+        
       >
         <Avatar
           alt={`${profile.firstName} ${profile.lastName}`}
+          src={profile.imageUrl}
           {...avatarProps}
           onClick={handleClick}
         />

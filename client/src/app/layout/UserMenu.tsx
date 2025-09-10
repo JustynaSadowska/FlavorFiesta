@@ -8,12 +8,12 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Avatar,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { useAccount } from '../../lib/hooks/useAccount';
 import { Link } from 'react-router';
 import { Add, Logout } from '@mui/icons-material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -36,8 +36,12 @@ export default function UserMenu() {
     <>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenMenu} sx={{ p: 0 }}>
-          <PersonIcon />
-        </IconButton>
+          <Avatar
+            alt={`${currentUser.firstName} ${currentUser.lastName}`}
+            src={currentUser.imageUrl || undefined}
+          >
+            {!currentUser.imageUrl && <PersonIcon />}
+          </Avatar>        </IconButton>
       </Tooltip>
       <Menu
         sx={{ mt: '45px' }}
@@ -58,13 +62,15 @@ export default function UserMenu() {
 
         <Divider />
 
-        <MenuItem
-          component={Link}
-          to={`/profiles/${currentUser.id}`}
-          onClick={handleCloseMenu}
-        >
+       <MenuItem component={Link} to={`/profiles/${currentUser.id}`} onClick={handleCloseMenu}>
           <ListItemIcon>
-            <AccountCircleIcon />
+            <Avatar
+              alt={`${currentUser.firstName} ${currentUser.lastName}`}
+              src={currentUser.imageUrl || undefined}
+              sx={{ width: 24, height: 24 }}
+            >
+              {!currentUser.imageUrl && <PersonIcon fontSize="small" />}
+            </Avatar>
           </ListItemIcon>
           <ListItemText primary="My Profile" />
         </MenuItem>
@@ -80,6 +86,7 @@ export default function UserMenu() {
           </ListItemIcon>
           <ListItemText primary="My Recipes" />
         </MenuItem>
+        
         <MenuItem
           component={Link}
           to={`/profiles/${currentUser.id}?tab=favorites`}
