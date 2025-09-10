@@ -54,14 +54,14 @@ export default function AllergensSection() {
     <Paper sx={{ p: 3, borderRadius: 3}}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6"  fontWeight="bold" >Your allergens</Typography>
-        <IconButton size="small" onClick={handleEditClick}>
+        <IconButton onClick={handleEditClick}>
           <EditIcon />
         </IconButton>
       </Box>
 
       {userAllergens.length === 0 ? (
         <Typography variant="body2" color="text.secondary">
-          Nie wybrales allergneow
+          You don't have any chosen allergens yet
         </Typography>
       ) : (
         <Stack direction="row" flexWrap="wrap" gap={1}>
