@@ -53,14 +53,18 @@ export default function PhotoSection() {
     cropper?.getCroppedCanvas().toBlob((blob) => {
       if (blob) {
         uploadPhoto.mutate(blob, {
-        onSuccess: (uploadedPhoto) => {setMainPhoto.mutate(uploadedPhoto);
-        setEditOpen(false);
-        setFiles([]);}
-                });
-            }
-            });
-        }, [setMainPhoto, uploadPhoto]);
-
+          onSuccess: (uploadedPhoto) => {
+            if (photos && photos.length > 0) {
+              setMainPhoto.mutate(uploadedPhoto);
+              }
+              setEditOpen(false);
+              setFiles([]);
+              }
+          });
+        }
+      });
+  }, [uploadPhoto, setMainPhoto, photos]);
+  
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   if (loadingPhotos) {
@@ -83,9 +87,9 @@ export default function PhotoSection() {
       </Box>
 
       {(!photos || photos.length === 0) ? (
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Typography>You don't have any photos yet</Typography>
-        </Box>
+        <Typography variant="body2" color="text.secondary">
+          You don't have any photos yet
+        </Typography>
       ) : (
         <ImageList cols={3} gap={8}>
           {photos.map((photo: { id: string; url: string }) => (
