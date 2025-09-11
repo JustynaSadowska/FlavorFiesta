@@ -12,12 +12,14 @@ export default function SettingsPage() {
       mt={4}
     >
       <Box width="100%" maxWidth={900}>
-        <AllergensSection />
+        <Box mb={2}>
+          <AllergensSection />
+        </Box>
+        <Box mb={2}>
+          <PhotoSection />
+        </Box>
       </Box>
-      <Box width="100%" maxWidth={900}>
-        <PhotoSection />
-      </Box>
-            
+
     </Box>
   )
 }
