@@ -412,7 +412,19 @@ export default function RecipeForm() {
           <Button onClick={() => navigate(recipe ? `/recipes/${id}` : "/recipes")} color="inherit">
             Cancel
           </Button>
-          <Button type="submit" color='success' variant="contained" disabled={updateRecipe.isPending || createRecipe.isPending || !isDirty || !isValid }>Submit</Button>
+          <Button
+            type="submit"
+            color="success"
+            variant="contained"
+            disabled={updateRecipe.isPending || createRecipe.isPending || !isDirty || !isValid}
+          >
+            {(updateRecipe.isPending || createRecipe.isPending) ? (
+              <CircularProgress color="inherit" size={24}/>
+            ) : (
+              "Submit"
+            )}
+          </Button>
+
         </Box>
       </Box>
     </Paper>

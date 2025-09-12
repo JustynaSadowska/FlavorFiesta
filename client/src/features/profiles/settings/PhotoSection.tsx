@@ -208,10 +208,14 @@ export default function PhotoSection() {
             color="success"
             onClick={onCrop}
             disabled={!files[0] || uploadPhoto.isPending}
-            startIcon={<Upload />}
-          >
-            Add Photo
+            startIcon={<Upload />}>
+            {uploadPhoto.isPending ? (
+              <CircularProgress color="inherit" size={24} />
+            ) : (
+              "Add Photo"
+            )}
           </Button>
+
         </DialogActions>
       </Dialog>
       
