@@ -19,7 +19,7 @@ export default function ReviewSection({ reviews }: Props) {
 
 
   return (
-    <Card  sx={{ maxWidth: 1200, margin: "auto", borderRadius: 3, mt: 4, p: 2}}>
+    <Card  sx={{ maxWidth: 1200, margin: "auto", borderRadius: 3, my: 4, p: 2}}>
       <CardContent>
         <Stack spacing={2}>
             <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" >

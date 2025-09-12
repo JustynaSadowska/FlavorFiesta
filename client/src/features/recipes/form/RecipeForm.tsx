@@ -11,6 +11,7 @@ import {
   Stack,
   Switch,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
@@ -28,6 +29,7 @@ import { useDropzone } from "react-dropzone";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import { CloudUpload, Close as CloseIcon } from "@mui/icons-material";
 import { useRef, useState, useCallback, useEffect } from "react";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export default function RecipeForm() {
   const { id } = useParams();
@@ -60,6 +62,7 @@ export default function RecipeForm() {
     difficulty: 1,  
     servings: 1,
     isVisible: false,
+    description: '',
   },
 });
 
@@ -115,7 +118,7 @@ export default function RecipeForm() {
               })),
           tagsIds: data.tags.map(x => x.id),
           allergensIds: data.allergens?.map(x => x.id),
-          description: data?.description || "",
+          description: data?.description,
         }
 
     if (recipe) {
@@ -250,7 +253,7 @@ export default function RecipeForm() {
                   isOptionEqualToValue={(opt, val) => opt.id === val.id}
                   value={value}
                   onChange={(_, data) => onChange(data)}
-                  renderInput={(params) => <TextField {...params} label="Allergens" />}
+                  renderInput={(params) => <TextField {...params} label="Allergens (optional)" />}
                 />
               )}
             />
@@ -357,10 +360,16 @@ export default function RecipeForm() {
         </Box>
 
         {!recipe && (
-          <Box sx={{ mt: 4, p: 3, border: "1px solid #eee", borderRadius: 3 }}>
-            <Typography variant="h6" fontWeight="bold" mb={2}>
+          <Box sx={{ mt: 4, p: 3}}>
+            <Box display="flex">
+            <Typography variant="h6"  mb={2}>
               Recipe Photo
             </Typography>
+            <Tooltip title="You can add or change the photo later. A default image will be used for now." arrow sx={{mt:1, ml:1}}>
+        <InfoOutlinedIcon color="action" fontSize="small" />
+      </Tooltip>
+
+            </Box>
 
             {!files[0]?.preview && (
               <Box

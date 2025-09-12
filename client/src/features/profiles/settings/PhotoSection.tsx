@@ -106,7 +106,7 @@ export default function PhotoSection() {
                       alt="user profile image"
                       loading="lazy" />
                   <Box
-                      sx={{ position: 'absolute', top: 0, left: 0 }}
+                      sx={{ position: 'absolute', top: 0, left: -10 }}
                       onClick={() => setMainPhoto.mutate(photo)}
                   >
                       <StarButton selected={photo.url === profile?.imageUrl} />
@@ -115,16 +115,21 @@ export default function PhotoSection() {
                       <Box
                           sx={{ position: 'absolute', top: 0, right: 0 }}
                       >
+
                           <IconButton
                                 onClick={() => deletePhoto.mutate(photo.id)}
-                                aria-label="delete"  
+                                aria-label="delete"
                                 sx={{
-                                    color: 'black',
-                                    p: 1.5,
-                            }}
-                            >
-                              <DeleteIcon />
-                          </IconButton>
+                                  color: "rgba(0,0,0,0.5)",
+                                  p: 1.5,
+                                  transition: "color 0.3s",
+                                  "&:hover": {
+                                    color: "white",
+                                  },
+                                }}
+                              >
+                                <DeleteIcon sx={{ fontSize: 28 }} />
+                              </IconButton>
                       </Box>
                   )}
               </ImageListItem>     

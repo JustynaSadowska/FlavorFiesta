@@ -125,7 +125,7 @@ useEffect(() => {
           >
             <Box
               component="img"
-              src={recipe.imageUrl || "/images/noImage.jpg"}
+              src={recipe.imageUrl || "/images/jedzenie.jpg"}
               alt={recipe.title}
               sx={{
                 width: "100%",
