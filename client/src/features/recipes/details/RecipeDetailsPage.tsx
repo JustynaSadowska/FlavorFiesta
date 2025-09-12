@@ -318,7 +318,9 @@ useEffect(() => {
       />
 
        <Dialog open={editOpen} onClose={() => { setEditOpen(false); setFiles([]); }} fullWidth maxWidth="sm">
-        <DialogTitle>Add recipe photo</DialogTitle>
+          <DialogTitle>
+            {recipe.imageUrl ? "Change recipe photo" : "Add recipe photo"}
+          </DialogTitle>
         <DialogContent dividers>
           <Box sx={{ position: "relative" }}>
             {files[0]?.preview && (
