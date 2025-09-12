@@ -78,7 +78,7 @@ export default function RecipeDetails() {
       >
         <Box
           component="img"
-          src={recipe.imageUrl || "/images/jedzenie.jpg"}
+          src={recipe.imageUrl || "/images/noImage.jpg"}
           alt={recipe.title}
           sx={{
             width: { xs: "100%", md: "40%" },

@@ -120,6 +120,31 @@ export const useRecipes = (id?: string) => {
     },
   });
 
+  const uploadRecipePhoto = useMutation({
+  mutationFn: async ({ file, recipeId }: { file: Blob; recipeId: string }) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await agent.post(`/recipes/${recipeId}/photo`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data as Photo;
+  },
+  onSuccess: async (photo: Photo, { recipeId }) => {
+    await queryClient.invalidateQueries({ queryKey: ["recipes", recipeId] });
+
+    queryClient.setQueryData<Recipe>(["recipes", recipeId], (data) => {
+      if (!data) return data;
+      return {
+        ...data,
+        imageUrl: photo.url,
+      };
+    });
+  },
+});
+
+
   return {
     recipes,
     isLoading,
@@ -132,6 +157,7 @@ export const useRecipes = (id?: string) => {
     tags,
     units,
     addToFavorite,
-    removeFromFavorite
+    removeFromFavorite,
+    uploadRecipePhoto
   };
 };

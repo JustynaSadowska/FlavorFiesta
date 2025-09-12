@@ -32,7 +32,7 @@ export default function RecipeCard({ recipe }: Props) {
         <CardMedia
           component="img"
           height="200"
-          image={recipe.imageUrl || "/images/jedzenie.jpg"}
+          image={recipe.imageUrl || "/images/noImage.jpg"}
           alt={recipe.title}
           sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
         />

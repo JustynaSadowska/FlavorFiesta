@@ -1,4 +1,5 @@
 using System;
+using Application.Photos.Commands;
 using Application.Recipes.Commands;
 using Application.Recipes.DTOs;
 using Application.Recipes.Queries;
@@ -76,5 +77,13 @@ public class RecipesController : BaseApiController
    public async Task<ActionResult> RemoveFromFavorites(string id)
    {
       return HandleResult(await Mediator.Send(new RemoveFromFavorites.Command { Id = id }));
+   }
+
+   [HttpPost("{id}/photo")]
+   [Authorize(Policy = "IsRecipeAuthor")]
+   [Consumes("multipart/form-data")]
+   public async Task<ActionResult<Photo>> AddPhoto(IFormFile file, string id)
+   {
+      return HandleResult(await Mediator.Send(new AddRecipePhoto.Command { File = file, RecipeId = id }));
    }
 }
