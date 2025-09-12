@@ -37,7 +37,7 @@ public class AddRecipePhoto
                 PublicId = uploadResult.PublicId,
                 RecipeId = recipe.Id
             };
-            recipe.ImageUrl ??= photo.Url;
+            recipe.ImageUrl = photo.Url;
 
             context.Photos.Add(photo);
 
