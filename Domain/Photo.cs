@@ -12,9 +12,13 @@ namespace Domain
         public required string Url { get; set; }
         public required string PublicId { get; set; }
 
-        public required string UserId { get; set; }
+        public string? UserId { get; set; }
+        public string? RecipeId { get; set; }
 
         [JsonIgnore]
         public User User { get; set; } = null!;
+
+        [JsonIgnore]
+        public Recipe Recipe { get; set; } = null!;
     }
 }

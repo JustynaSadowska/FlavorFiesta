@@ -33,6 +33,7 @@ type Recipe = {
   reviewCount: number;
   reviews: Review[];
   userImageUrl?: string;
+  imageUrl?:string;
 };
 
 type User = {

@@ -53,7 +53,7 @@ namespace API.Controllers
         [HttpPost("add-photo")]
         public async Task<ActionResult<Photo>> AddPhoto(IFormFile file)
         {
-            return HandleResult(await Mediator.Send(new AddPhoto.Command { File = file }));
+            return HandleResult(await Mediator.Send(new AddUserPhoto.Command { File = file }));
         }
 
         [HttpGet("{userId}/photos")]
@@ -65,7 +65,7 @@ namespace API.Controllers
         [HttpDelete("{photoId}/photos")]
         public async Task<ActionResult> DeletePhoto(string photoId)
         {
-            return HandleResult(await Mediator.Send(new DeletePhoto.Command { PhotoId = photoId }));
+            return HandleResult(await Mediator.Send(new DeleteUserPhoto.Command { PhotoId = photoId }));
         }
         
         [HttpPut("{photoId}/setMain")]

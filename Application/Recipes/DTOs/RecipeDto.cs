@@ -29,8 +29,8 @@ public class RecipeDto
     public double AverageRating { get; set; }
     public int ReviewCount { get; set; }
     public string? UserImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
     public required ICollection<TagDto> Tags { get; set; }
     public ICollection<AllergenDto>? Allergens { get; set; } = [];
-    //public ICollection<Photo> Photos { get; set; } = [];
 }

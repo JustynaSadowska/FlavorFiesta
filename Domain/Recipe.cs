@@ -16,6 +16,7 @@ public class Recipe
     public bool IsVisible { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool IsDeleted { get; set; }
+    public string? ImageUrl { get; set; }
 
     public ICollection<Step> Steps { get; set; } = [];
     public ICollection<Ingredient> Ingredients { get; set; } = [];
@@ -23,6 +24,6 @@ public class Recipe
     public User User { get; set; } = null!;
     public ICollection<Tag> Tags { get; set; } = [];
     public ICollection<Allergen>? Allergens { get; set; } = [];
-    //public ICollection<Photo> Photos { get; set; } = [];
+    public Photo Photo { get; set; } = null!;
     public ICollection<UserFavoriteRecipe>? UsersWhoFavorited { get; set; } = [];
 }
