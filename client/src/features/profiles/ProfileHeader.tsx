@@ -10,7 +10,8 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    IconButton
+    IconButton,
+    Chip
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useProfile } from "../../lib/hooks/useProfile";
@@ -18,12 +19,14 @@ import { useNavigate, useParams } from "react-router";
 import { useState } from "react";
 import ProfileFollowings from "./ProfileFollowings";
 import EditIcon from '@mui/icons-material/Edit';
+import { useAllergens } from "../../lib/hooks/useAllergens";
 
 export default function ProfileHeader() {
     const { id } = useParams();
     const { isCurrentUser, profile, updateFollowing } = useProfile(id);
     const [openDialog, setOpenDialog] = useState<null | "followers" | "followings">(null);
     const navigate = useNavigate();
+    const {userAllergens} = useAllergens();
 
 
     if (!profile) return null;
@@ -34,57 +37,83 @@ export default function ProfileHeader() {
                 <Grid container spacing={2}>
                     <Grid item xs={8}>
                         <Stack direction="row" spacing={3} alignItems="center">
-                    <Box
-                        sx={{
-                        position: "relative",
-                        width: 150,
-                        height: 150,
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        cursor: isCurrentUser ? "pointer" : "default",
-                        "&:hover .hoverOverlay": { opacity: 1 },
-                        }}
-                        onClick={() => {
-                        if (isCurrentUser) {
-                            navigate(`/profiles/${id}/settings`)
-                        }
-                        }}
-                    >
-                        <Avatar
-                        src={profile.imageUrl || "/images/default-user.png"}
-                        sx={{ width: "100%", height: "100%" }}
-                        />
-                        {isCurrentUser && (
-                        <Box
-                            className="hoverOverlay"
-                            sx={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            width: "100%",
-                            height: "100%",
-                            bgcolor: "rgba(0,0,0,0.5)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "white",
-                            opacity: 0,
-                            transition: "opacity 0.3s",
-                            }}
-                        >
-                            <EditIcon sx={{ fontSize: 32 }} />
-                        </Box>
-                        )}
-                    </Box>
+                            <Box
+                                sx={{
+                                position: "relative",
+                                width: 150,
+                                height: 150,
+                                flexShrink: 0,
+                                borderRadius: "50%",
+                                overflow: "hidden",
+                                cursor: isCurrentUser ? "pointer" : "default",
+                                "&:hover .hoverOverlay": { opacity: 1 },
+                                }}
+                                onClick={() => {
+                                if (isCurrentUser) {
+                                    navigate(`/profiles/${id}/settings`)
+                                }
+                                }}
+                            >
+                                <Avatar
+                                src={profile.imageUrl || "/images/default-user.png"}
+                                sx={{ width: "100%", height: "100%" }}
+                                />
+                                    {isCurrentUser && (
+                                        <Box
+                                            className="hoverOverlay"
+                                            sx={{
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            width: "100%",
+                                            height: "100%",
+                                            bgcolor: "rgba(0,0,0,0.5)",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            color: "white",
+                                            opacity: 0,
+                                            transition: "opacity 0.3s",
+                                            }}
+                                        >
+                                            <EditIcon sx={{ fontSize: 32 }} />
+                                        </Box>
+                                    )}
+                                </Box>
 
-                    <Box display="flex" flexDirection="column" gap={1}>
-                        <Box display="flex" alignItems="flex-start" gap={1}>
-                        <Typography variant="h4">
-                            {profile.firstName} {profile.lastName}
-                        </Typography>
-                        </Box>
-                    </Box>
-                    </Stack>
+                                <Box display="flex" flexDirection="column" gap={1}> 
+                                    <Typography variant="h4" mt={3}>
+                                        {profile.firstName} {profile.lastName}
+                                    </Typography>
+                                    {isCurrentUser && (
+                                        <Box display="flex" alignItems="center" flexWrap="wrap" gap={1}>
+                                        <Typography
+                                            variant="subtitle1"
+                                            fontWeight="bold"
+                                            sx={{ whiteSpace: "nowrap" }}
+                                        >
+                                            Your allergens:
+                                        </Typography>
+                                            {userAllergens && userAllergens.length > 0 ? 
+                                                (userAllergens.map((allergen) => (
+                                                    <Chip
+                                                        key={allergen.id}
+                                                        label={allergen.name}
+                                                        variant="outlined"
+                                                        color="error"
+                                                        size="small"
+                                                    />
+                                                )
+                                        )
+                                ) : (
+                                    <Typography variant="body2" color="text.secondary">
+                                    No allergens yet
+                                    </Typography>
+                                    )}
+                                </Box>
+                             )}
+                            </Box>
+                        </Stack>
                     </Grid>
                     <Grid item xs={4}>
                         <Stack spacing={2} alignItems="center">
