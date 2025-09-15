@@ -1,5 +1,9 @@
-import { createTheme } from "@mui/material";
+import { createTheme, keyframes } from "@mui/material";
 
+const blink = keyframes`
+  0%, 50%, 100% { opacity: 1;  }
+  25%, 75% { opacity: 0.5; }
+`;
 const theme = createTheme({
     palette: {
       background: {
@@ -29,7 +33,15 @@ const theme = createTheme({
           },
         },
       },
-  
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            "&.blink": {
+              animation: `${blink} 1.5s infinite`,
+            },
+          },
+        },
+      },
       MuiInputLabel: {
         styleOverrides: {
           root: {

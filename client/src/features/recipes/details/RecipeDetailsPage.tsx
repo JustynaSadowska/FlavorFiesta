@@ -39,6 +39,7 @@ import { useDropzone } from "react-dropzone";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { CloudUpload, Close as CloseIcon, Upload } from "@mui/icons-material";
+import { useAllergens } from "../../../lib/hooks/useAllergens";
 
 export const StyledBox = styled(Box)({
   display: "flex",
@@ -56,6 +57,8 @@ export default function RecipeDetails() {
   const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(recipe?.isVisible);
   const { favoriteRecipes } = useProfile();
+  const { userAllergens } = useAllergens();
+ console.log(userAllergens);
   const isFavorite = favoriteRecipes?.some(fav => fav.id === recipe?.id) ?? false;
 
  const [editOpen, setEditOpen] = useState(false);
@@ -269,10 +272,18 @@ useEffect(() => {
                 <Box display="flex" alignItems="center" gap={1}>
                   <WarningAmberOutlinedIcon fontSize="small" color="error" />
                   <Typography variant="body1" color="error">Allergens:</Typography>
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                    {recipe.allergens.map(allergen => (
-                      <Chip key={allergen.id} label={allergen.name} color="error" variant="outlined" size="small" />
-                    ))}
+                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                  {recipe.allergens.map(allergen => {
+                    return (
+                      <Chip
+                        key={allergen.id}
+                        label={allergen.name}
+                        color="error"
+                        variant="outlined"
+                        size="small"
+                        className={userAllergens?.some(a => a.name === allergen.name) ? "blink" : ""}
+                      />);
+                    })}
                   </Box>
                 </Box>
               )}
