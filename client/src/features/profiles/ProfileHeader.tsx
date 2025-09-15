@@ -33,126 +33,145 @@ export default function ProfileHeader() {
 
     return (
         <>
-            <Paper elevation={3} sx={{ p: 4, borderRadius: 3,  maxWidth: 1250, margin: "auto", position: "relative"}}>
-                <Grid container spacing={2}>
-                    <Grid item xs={8}>
-                        <Stack direction="row" spacing={3} alignItems="center">
+        <Paper elevation={3} sx={{ p: 4, borderRadius: 3,  maxWidth: 1250, margin: "auto", position: "relative"}}>
+            <Grid container spacing={2} alignItems="flex-start">
+                <Grid item xs={12} md={8}>
+                    <Stack direction="row" spacing={3} alignItems="center">
+                    <Box
+                        sx={{
+                        position: "relative",
+                        width: 150,
+                        height: 150,
+                        flexShrink: 0,
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        cursor: isCurrentUser ? "pointer" : "default",
+                        "&:hover .hoverOverlay": { opacity: 1 },
+                        }}
+                        onClick={() => {
+                        if (isCurrentUser) {
+                            navigate(`/profiles/${id}/settings`);
+                        }
+                        }}
+                    >
+                        <Avatar
+                        src={profile.imageUrl || "/images/default-user.png"}
+                        sx={{ width: "100%", height: "100%" }}
+                        />
+                        {isCurrentUser && (
+                        <Box
+                            className="hoverOverlay"
+                            sx={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            bgcolor: "rgba(0,0,0,0.5)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "white",
+                            opacity: 0,
+                            transition: "opacity 0.3s",
+                            }}
+                        >
+                            <EditIcon sx={{ fontSize: 32 }} />
+                        </Box>
+                        )}
+                    </Box>
+
+                    <Box display="flex" flexDirection="column" gap={1}>
+                        <Typography variant="h4" mt={2}>
+                        {profile.firstName} {profile.lastName}
+                        </Typography>
+
+                        {isCurrentUser && (
                             <Box
+                                onClick={() => navigate(`/profiles/${id}/settings`)}
                                 sx={{
-                                position: "relative",
-                                width: 150,
-                                height: 150,
-                                flexShrink: 0,
-                                borderRadius: "50%",
-                                overflow: "hidden",
-                                cursor: isCurrentUser ? "pointer" : "default",
-                                "&:hover .hoverOverlay": { opacity: 1 },
-                                }}
-                                onClick={() => {
-                                if (isCurrentUser) {
-                                    navigate(`/profiles/${id}/settings`)
-                                }
+                                display: "flex",
+                                alignItems: "center",
+                                flexWrap: "wrap",
+                                gap: 1,
+                                cursor: "pointer",
+                                transition: "color 0.2s",
+                                "&:hover": {
+                                    color: "primary.main",
+                                },
                                 }}
                             >
-                                <Avatar
-                                src={profile.imageUrl || "/images/default-user.png"}
-                                sx={{ width: "100%", height: "100%" }}
+                                <Typography
+                                variant="subtitle1"
+                                fontWeight="bold"
+                                sx={{ whiteSpace: "nowrap" }}
+                                >
+                                Your allergens:
+                                </Typography>
+
+                            {userAllergens && userAllergens.length > 0 ? (
+                            userAllergens.map((allergen) => (
+                                <Chip
+                                key={allergen.id}
+                                label={allergen.name}
+                                variant="outlined"
+                                color="error"
+                                size="small"
                                 />
-                                    {isCurrentUser && (
-                                        <Box
-                                            className="hoverOverlay"
-                                            sx={{
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            width: "100%",
-                                            height: "100%",
-                                            bgcolor: "rgba(0,0,0,0.5)",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            color: "white",
-                                            opacity: 0,
-                                            transition: "opacity 0.3s",
-                                            }}
-                                        >
-                                            <EditIcon sx={{ fontSize: 32 }} />
-                                        </Box>
-                                    )}
-                                </Box>
-
-                                <Box display="flex" flexDirection="column" gap={1}> 
-                                    <Typography variant="h4" mt={3}>
-                                        {profile.firstName} {profile.lastName}
-                                    </Typography>
-                                    {isCurrentUser && (
-                                        <Box display="flex" alignItems="center" flexWrap="wrap" gap={1}>
-                                        <Typography
-                                            variant="subtitle1"
-                                            fontWeight="bold"
-                                            sx={{ whiteSpace: "nowrap" }}
-                                        >
-                                            Your allergens:
-                                        </Typography>
-                                            {userAllergens && userAllergens.length > 0 ? 
-                                                (userAllergens.map((allergen) => (
-                                                    <Chip
-                                                        key={allergen.id}
-                                                        label={allergen.name}
-                                                        variant="outlined"
-                                                        color="error"
-                                                        size="small"
-                                                    />
-                                                )
-                                        )
-                                ) : (
-                                    <Typography variant="body2" color="text.secondary">
-                                    No allergens yet
-                                    </Typography>
-                                    )}
-                                </Box>
-                             )}
-                            </Box>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <Stack spacing={2} alignItems="center">
-                            <Box display="flex" justifyContent="space-around" width="100%">
-                                <Box
-                                    textAlign="center"
-                                    sx={{ cursor: "pointer" }}
-                                    onClick={() => setOpenDialog("followers")}
-                                >
-                                    <Typography variant="h6">Followers</Typography>
-                                    <Typography variant="h3">{profile.followersCount}</Typography>
-                                </Box>
-                                <Box
-                                    textAlign="center"
-                                    sx={{ cursor: "pointer" }}
-                                    onClick={() => setOpenDialog("followings")}
-                                >
-                                    <Typography variant="h6">Following</Typography>
-                                    <Typography variant="h3">{profile.followingCount}</Typography>
-                                </Box>
-                            </Box>
-                            <Divider sx={{ width: "100%" }} />
-                            {!isCurrentUser && (
-                                <Button
-                                    onClick={() => updateFollowing.mutate(profile.id)}
-                                    disabled={updateFollowing.isPending}
-                                    fullWidth
-                                    variant="outlined"
-                                    color={profile.following ? "error" : "success"}
-                                >
-                                    {profile.following ? "Unfollow" : "Follow"}
-                                </Button>
+                            ))
+                            ) : (
+                            <Typography variant="body2" color="text.secondary">
+                                No allergens yet
+                            </Typography>
                             )}
-                        </Stack>
-                    </Grid>
+                        </Box>
+                        )}
+                    </Box>
+                    </Stack>
                 </Grid>
-            </Paper>
 
-            {openDialog && (
+                <Grid item xs={12} md={4}>
+                    <Stack spacing={2} alignItems="center">
+                    <Box
+                        display="flex"
+                        justifyContent="space-around"
+                        width="100%"
+                        flexWrap="wrap"
+                    >
+                        <Box
+                        textAlign="center"
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => setOpenDialog("followers")}
+                        >
+                        <Typography variant="h6">Followers</Typography>
+                        <Typography variant="h3">{profile.followersCount}</Typography>
+                        </Box>
+                        <Box
+                        textAlign="center"
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => setOpenDialog("followings")}
+                        >
+                        <Typography variant="h6">Following</Typography>
+                        <Typography variant="h3">{profile.followingCount}</Typography>
+                        </Box>
+                    </Box>
+                    <Divider sx={{ width: "100%" }} />
+                    {!isCurrentUser && (
+                        <Button
+                        onClick={() => updateFollowing.mutate(profile.id)}
+                        disabled={updateFollowing.isPending}
+                        fullWidth
+                        variant="outlined"
+                        color={profile.following ? "error" : "success"}
+                        >
+                        {profile.following ? "Unfollow" : "Follow"}
+                        </Button>
+                    )}
+                    </Stack>
+                </Grid>
+            </Grid>
+        </Paper>
+        {openDialog && (
             <Dialog
                 open={!!openDialog}
                 onClose={() => setOpenDialog(null)}
