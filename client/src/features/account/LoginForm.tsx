@@ -52,7 +52,7 @@ export default function LoginForm() {
                 flexDirection: 'column',
                 p: 3,
                 gap: 3,
-                maxWidth: 'md',
+                maxWidth: 'sm',
                 mx: 'auto',
                 borderRadius: 3
             }}

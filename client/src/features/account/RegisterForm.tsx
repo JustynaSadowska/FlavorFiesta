@@ -46,7 +46,7 @@ export default function RegisterForm() {
                             flexDirection: 'column',
                             p: 3,
                             gap: 3,
-                            maxWidth: 'md',
+                            maxWidth: 'sm',
                             mx: 'auto',
                             borderRadius: 3
                         }}

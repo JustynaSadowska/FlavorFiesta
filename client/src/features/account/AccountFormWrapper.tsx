@@ -38,7 +38,7 @@ export default function AccountFormWrapper<TFormData extends FieldValues>({
                     flexDirection: 'column',
                     p: 3,
                     gap: 3,
-                    maxWidth: 'md',
+                    maxWidth: 'sm',
                     mx: 'auto',
                     borderRadius: 3
                 }}
