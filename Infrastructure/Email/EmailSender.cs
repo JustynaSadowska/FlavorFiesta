@@ -48,8 +48,7 @@ public class EmailSender(IConfiguration config) : IEmailSender<User>
     private async Task SendMailAsync(string recipient, string subject, string body)
     {
         var host = config["Smtp:Host"];
-        var portStr = config["Smtp:Port"];
-        var port = int.Parse(portStr!);
+        var port = int.Parse(config["Smtp:Port"]!);
         var user = config["Smtp:User"];
         var password = config["Smtp:Password"];
         var senderEmail = config["Smtp:SenderEmail"];
