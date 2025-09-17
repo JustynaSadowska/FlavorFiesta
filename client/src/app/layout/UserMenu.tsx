@@ -13,7 +13,7 @@ import {
 import PersonIcon from '@mui/icons-material/Person';
 import { useAccount } from '../../lib/hooks/useAccount';
 import { Link } from 'react-router';
-import { Add, Logout } from '@mui/icons-material';
+import { Add, Logout, Password } from '@mui/icons-material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -111,6 +111,12 @@ export default function UserMenu() {
         </MenuItem>
 
         <Divider />
+        <MenuItem component={Link} to={`/change-password`} onClick={handleCloseMenu}>
+          <ListItemIcon>
+            <Password/>
+          </ListItemIcon>
+          <ListItemText primary="Change Password" />
+        </MenuItem>
 
         <MenuItem
           onClick={() => {

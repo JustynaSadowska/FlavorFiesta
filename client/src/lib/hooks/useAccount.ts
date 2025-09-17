@@ -4,6 +4,7 @@ import agent from "../api/agent";
 import { useNavigate } from "react-router";
 import { RegisterSchema } from "../schemas/registerSchema";
 import { toast } from "react-toastify";
+import { ChangePasswordSchema } from "../schemas/changePasswordSchema";
 
 export const useAccount = () => {
   const queryClient = useQueryClient();
@@ -24,11 +25,34 @@ export const useAccount = () => {
     mutationFn: async (creds: RegisterSchema) => {
       await agent.post("/account/register", creds);
     },
-    onSuccess: () => {
-      toast.success("Register successful - you can now login");
-      navigate("/login");
+  });
+
+  const verifyEmail = useMutation({
+    mutationFn: async ({ userId, code }: { userId: string; code: string }) => {
+      await agent.get(`/confirmEmail?userId=${userId}&code=${code}`);
     },
   });
+
+  const resendConfirmationEmail = useMutation({
+    mutationFn: async ({
+      email,
+      userId,
+    }: {
+      email?: string;
+      userId?: string | null;
+    }) => {
+      await agent.get(`/account/resendConfirmEmail`, {
+        params: {
+          email,
+          userId,
+        },
+      });
+    },
+    onSuccess: () => {
+      toast.success("Email sent - please check your email");
+    },
+  });
+
   const logoutUser = useMutation({
     mutationFn: async () => {
       await agent.post("/account/logout");
@@ -52,11 +76,34 @@ export const useAccount = () => {
     enabled: !queryClient.getQueryData(["user"]),
   });
 
+  const changePassword = useMutation({
+        mutationFn: async (data: ChangePasswordSchema) => {
+            await agent.post('/account/change-password', data);
+        }
+    });
+
+  const forgotPassword = useMutation({
+      mutationFn: async (email: string) => {
+          await agent.post('/forgotPassword', {email})
+      }
+  })
+
+  const resetPassword = useMutation({
+      mutationFn: async (data: ResetPassword) => {
+          await agent.post('/resetPassword', data);
+      }
+  })
+  
   return {
     loginUser,
     currentUser,
     logoutUser,
     loadingUserUnfo,
     registerUser,
+    verifyEmail,
+    resendConfirmationEmail,
+    changePassword,
+    forgotPassword,
+    resetPassword
   };
 };

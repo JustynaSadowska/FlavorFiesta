@@ -1,3 +1,9 @@
+type ResetPassword = {
+  email: string
+  resetCode: string
+  newPassword: string
+}
+
 type CreateUpdateRecipe = {
   id?: string;
   title: string;
