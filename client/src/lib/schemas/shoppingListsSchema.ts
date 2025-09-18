@@ -1,8 +1,5 @@
 import z from "zod";
-const requiredString = (fieldName: string) =>
-  z
-    .string({ required_error: `${fieldName} is required` })
-    .min(1, { message: `${fieldName} is required` });
+import { requiredString } from "../util/util";
 export const shoppingListsSchema = z.object({
   title: requiredString("Title").max(20, { message: `Max 20 characters` }),
   shoppingListItems: z

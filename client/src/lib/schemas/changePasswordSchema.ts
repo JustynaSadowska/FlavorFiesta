@@ -2,9 +2,9 @@ import { z } from "zod";
 import { requiredString } from "../util/util";
 
 export const changePasswordSchema = z.object({
-    currentPassword: requiredString('currentPassword'),
-    newPassword: requiredString('newPassword'),
-    confirmPassword: requiredString('confirmPassword')
+    currentPassword: requiredString('current password'),
+    newPassword: requiredString('new password'),
+    confirmPassword: requiredString('confirm password')
 })
 .refine((data) => data.newPassword === data.confirmPassword, {
     message: 'Passwords must match',

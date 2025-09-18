@@ -121,7 +121,7 @@ export default function ProfileHeader() {
                             ))
                             ) : (
                             <Typography variant="body2" color="text.secondary">
-                                No allergens yet
+                                You have no allergens
                             </Typography>
                             )}
                         </Box>

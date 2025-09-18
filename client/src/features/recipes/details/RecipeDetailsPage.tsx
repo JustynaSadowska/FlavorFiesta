@@ -52,13 +52,13 @@ export const StyledBox = styled(Box)({
 export default function RecipeDetails() {
   const { id } = useParams();
   const { recipe, isLoadingRecipe, updateVisibility, addToFavorite, removeFromFavorite, uploadRecipePhoto } = useRecipes(id);
-  const { deleteRecipe } = useRecipes();
+  const { deleteRecipe} = useRecipes();
+  const { profile: author } = useProfile(recipe?.userId);
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(recipe?.isVisible);
   const { favoriteRecipes } = useProfile();
   const { userAllergens } = useAllergens();
- console.log(userAllergens);
   const isFavorite = favoriteRecipes?.some(fav => fav.id === recipe?.id) ?? false;
 
  const [editOpen, setEditOpen] = useState(false);
@@ -108,6 +108,7 @@ useEffect(() => {
     </Box>
   );
   if (!recipe) return <Typography>Recipe not found</Typography>;
+  if (!author) return <Typography>Author not found</Typography>;
 
   return (
     <>
@@ -230,12 +231,7 @@ useEffect(() => {
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: -1 }}> 
                 <Box sx={{ width: 24, height: 24 }}> 
                   <AvatarPopover 
-                    profile={{ 
-                      id: recipe.userId, 
-                      firstName: recipe.authorFirstName, 
-                      lastName: recipe.authorLastName, 
-                      imageUrl: recipe.userImageUrl 
-                    }} 
+                    profile={author} 
                     avatarProps={{ sx: { width: 24, height: 24 } }} 
                     showName={true} /> 
                   </Box> 
