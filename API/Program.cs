@@ -37,13 +37,8 @@ builder.Services.AddMediatR(x =>
     x.RegisterServicesFromAssemblyContaining<GetRecipeList.Handler>();
     x.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
-// builder.Services.AddHttpClient<ResendClient>();
-// builder.Services.Configure<ResendClientOptions>(opt =>
-// {
-//     opt.ApiToken = builder.Configuration["Resend:ApiToken"]!;
-// });
-// builder.Services.AddTransient<IResend, ResendClient>();
- builder.Services.AddTransient<IEmailSender<User>, EmailSender>();
+builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddTransient<IEmailSender<User>, EmailSender>();
 
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();

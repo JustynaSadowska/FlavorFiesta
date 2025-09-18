@@ -6,11 +6,13 @@ using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Email;
 
-public class EmailSender(IConfiguration config) : IEmailSender<User>
+public class EmailSender(IOptions<EmailConfiguration> emailConfig, IConfiguration config) : IEmailSender<User>
 {
+    private readonly EmailConfiguration _emailConfig = emailConfig.Value;
     public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
     {
         var subject = "Confirm your email address";
@@ -47,24 +49,25 @@ public class EmailSender(IConfiguration config) : IEmailSender<User>
 
     private async Task SendMailAsync(string recipient, string subject, string body)
     {
-        var host = config["Smtp:Host"];
-        var port = int.Parse(config["Smtp:Port"]!);
-        var user = config["Smtp:User"];
-        var password = config["Smtp:Password"];
-        var senderEmail = config["Smtp:SenderEmail"];
-        var senderName = config["Smtp:SenderName"];
 
         var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(senderName, senderEmail));
+        message.From.Add(new MailboxAddress(_emailConfig.SenderName, _emailConfig.SenderEmail));
         message.To.Add(new MailboxAddress("", recipient));
         message.Subject = subject;
         message.Body = new BodyBuilder { HtmlBody = body }.ToMessageBody();
-
-        using var client = new SmtpClient();
-        await client.ConnectAsync(host, port, SecureSocketOptions.StartTls);
-        client.AuthenticationMechanisms.Remove("XOAUTH2");
-        await client.AuthenticateAsync(user, password);
-        await client.SendAsync(message);
-        await client.DisconnectAsync(true);
+        
+        try
+        {
+            using var client = new SmtpClient();
+            await client.ConnectAsync(_emailConfig.Host, _emailConfig.Port, SecureSocketOptions.StartTls);
+            client.AuthenticationMechanisms.Remove("XOAUTH2");
+            await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException("Could not send email", ex);
+        }
     }
 }
