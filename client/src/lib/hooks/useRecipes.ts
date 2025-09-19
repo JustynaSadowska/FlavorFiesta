@@ -14,7 +14,7 @@ export const useRecipes = (id?: string) => {
       const response = await agent.get<Recipe[]>("/recipes");
       return response.data;
     },
-    enabled: !id && location.pathname === "/recipes" && !!currentUser,
+    enabled: !id,
     select: (data) => {
       return data.map((recipe) => {
         return {
@@ -93,11 +93,14 @@ export const useRecipes = (id?: string) => {
     queryKey: ["tags"],
     queryFn: () =>
       agent.get<TagAllergen[]>("/recipes/tags").then((res) => res.data),
+    enabled: location.pathname.startsWith("/recipes")
   });
 
   const { data: units = [] } = useQuery({
     queryKey: ["units"],
     queryFn: () => agent.get<Unit[]>("/recipes/units").then((res) => res.data),
+      enabled: location.pathname.startsWith("/recipes")
+
   });
 
   const addToFavorite = useMutation({

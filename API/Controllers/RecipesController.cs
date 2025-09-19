@@ -15,7 +15,7 @@ namespace API.Controllers;
 
 public class RecipesController : BaseApiController
 {
-   //[AllowAnonymous]
+   [AllowAnonymous]
    [HttpGet]
    public async Task<ActionResult<List<RecipeDto>>> GetRecipes()
    {

@@ -64,20 +64,23 @@ console.log(profile)
               </Typography>
             </Box>
           </Box>
+        
+        {userRecipes && userRecipes.length > 0 && (
+          <>
+            <Divider sx={{ mb: 1.5 }} />
 
-        <Divider sx={{ mb: 1.5 }} />
-      
-        <Box display="flex" justifyContent="center" gap={0.5}>
-          {userRecipes?.slice(0, 3).map((recipe, index) => (
-            <CardMedia
-              key={index}
-              component="img"
-              src={recipe.imageUrl || "/images/jedzenie.jpg" }
-              alt={`Recipe ${index + 1}`}
-              sx={{ width: 65, height: 65, objectFit: "cover", borderRadius: 1 }}
-            />
-          ))}
-        </Box>
+            <Box display="flex" justifyContent="center" gap={0.5}>
+              {userRecipes.slice(0, 3).map((recipe, index) => (
+                <CardMedia
+                  key={index}
+                  component="img"
+                  src={recipe.imageUrl || "/images/jedzenie.jpg"}
+                  alt={`Recipe ${index + 1}`}
+                  sx={{ width: 65, height: 65, objectFit: "cover", borderRadius: 1 }}
+                />
+              ))}
+            </Box>
+          </>)}
       </Card>
    </Link>
   )
