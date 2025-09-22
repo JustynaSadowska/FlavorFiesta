@@ -89,13 +89,15 @@ public class DbInitializer
                 Email = "anna@test.com",
                 FirstName = "Anna",
                 LastName = "Marek",
-                Allergens = [allergens[1], allergens[2], allergens[10], allergens[12]]
+                Allergens = [allergens[1], allergens[2], allergens[10], allergens[12]],
+                EmailConfirmed = true
             },
             new() {
                 UserName = "antoni@test.com",
                 Email = "antoni@test.com",
                 FirstName = "Antoni",
                 LastName = "Kowalski",
+                EmailConfirmed = true
                 //Allergens = [allergens[2]]
             },
             new() {
@@ -103,7 +105,9 @@ public class DbInitializer
                 Email = "tomek@test.com",
                 FirstName = "Tomek",
                 LastName = "Kowaleski",
-                Allergens = [allergens[2]]
+                Allergens = [allergens[2]],
+                EmailConfirmed = true
+
             }
         };
 
@@ -145,7 +149,7 @@ public class DbInitializer
                 PreparationTime = 40,
                 Difficulty = RecipeDifficulty.Hard,
                 IsVisible = true,
-                CreatedAt = DateTime.Now.AddMonths(-2),
+                CreatedAt = DateTime.UtcNow.AddMonths(-2),
                 Tags =
                 {
                     tags[8],
