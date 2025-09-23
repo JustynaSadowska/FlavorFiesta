@@ -1,9 +1,10 @@
 using System;
 using System.Reflection.Metadata;
 using Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain;
-
+[Index(nameof(CreatedAt))]
 public class Recipe
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();

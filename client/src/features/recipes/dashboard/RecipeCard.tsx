@@ -22,6 +22,7 @@ export default function RecipeCard({ recipe }: Props) {
         borderRadius: 3,
         width: 230,
         height: 290,
+        mb:1,
         transition: "transform 0.2s ease-in-out",
         "&:hover": {
           transform: "scale(1.03)",

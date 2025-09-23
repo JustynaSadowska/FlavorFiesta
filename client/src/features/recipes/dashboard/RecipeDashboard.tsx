@@ -1,17 +1,22 @@
 import { Grid2} from '@mui/material'
 import RecipeList from './RecipeList'
 import { useRecipes } from '../../../lib/hooks/useRecipes'
+import RecipeFilters from './RecipeFilters';
 
 export default function RecipeDashboard() {
- const {recipes, isLoading} = useRecipes();
+ const {recipesGroup, isLoading} = useRecipes();
+ const handleFiltersChange = (filters: unknown) => {
+    console.log("Selected filters:", filters);
+  };
   return (
-    <Grid2 container spacing={3}>
-        <Grid2 size = {12}>
-        <RecipeList recipes={recipes} isLoading={isLoading} />
+    <Grid2 container spacing={2}>
+      <Grid2 size={8} offset={{ xs:2, md: 2 }}>
+         <RecipeFilters onFilterChange={handleFiltersChange} />
         </Grid2>
-        <Grid2 size={5}>
-          Recipe filters go here
+        <Grid2 size ={12} offset={{ md: 1,  xs:2,}}>
+          <RecipeList recipesGroup={recipesGroup} isLoading={isLoading} />
         </Grid2>
+        
     </Grid2>
   )
 }

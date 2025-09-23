@@ -4,6 +4,11 @@ type ResetPassword = {
   newPassword: string
 }
 
+type PagedList<T, TCursor> = {
+  items: T[];
+  nextCursor: TCursor;
+}
+
 type CreateUpdateRecipe = {
   id?: string;
   title: string;

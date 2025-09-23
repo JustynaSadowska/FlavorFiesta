@@ -35,7 +35,7 @@ export default function NavBar() {
   };
 
   return (
-    <AppBar position="relative">
+    <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
         <RestaurantMenuIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

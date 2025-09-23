@@ -112,7 +112,7 @@ useEffect(() => {
 
   return (
     <>
-      <Card sx={{ maxWidth: 1200, margin: "auto", mt: 4, borderRadius: 3, p: 2, position: "relative" }}>
+      <Card sx={{ maxWidth: 1200, margin: "auto", borderRadius: 3, p: 2, position: "relative" }}>
         <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: 4 }}>
           
           <Box
