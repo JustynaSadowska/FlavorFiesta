@@ -66,13 +66,13 @@ public class GetRecipeList
                 query = query
                     .Where(r => r.Ingredients.Any(i =>
                         fridgeIngredients.Any(fi =>
-                            EF.Functions.TrigramsSimilarity(i.Name.ToLower(), fi) > 0.3 
+                            EF.Functions.TrigramsSimilarity(i.Name.ToLower(), fi) > 0.2 
                         )
                     ))
                     .OrderByDescending(r =>
                         r.Ingredients.Count(i =>
                             fridgeIngredients.Any(fi =>
-                                EF.Functions.TrigramsSimilarity(i.Name.ToLower(), fi) > 0.3
+                                EF.Functions.TrigramsSimilarity(i.Name.ToLower(), fi) > 0.2
                             )
                         )
                     );
