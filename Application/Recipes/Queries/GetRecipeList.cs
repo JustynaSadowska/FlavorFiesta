@@ -51,6 +51,14 @@ public class GetRecipeList
                     );
                 }
             }
+
+            if (request.Params.SelectedTags != null && request.Params.SelectedTags.Any())
+            {
+                var selectedTagIds = request.Params.SelectedTags;
+                query = query.Where(r =>
+                    selectedTagIds.All(tagId => r.Tags.Any(t => t.Id == tagId))
+                );
+            }
             
             var projectedRecipes = query.ProjectTo<RecipeDto>(mapper.ConfigurationProvider);
 
