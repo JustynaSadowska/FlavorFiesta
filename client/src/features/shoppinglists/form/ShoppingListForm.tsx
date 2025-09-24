@@ -8,6 +8,7 @@ import { useShoppingLists } from "../../../lib/hooks/useShoppingLists";
 import { shoppingListsSchema, ShoppingListsSchema } from "../../../lib/schemas/shoppingListsSchema";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import TextInput from "../../../app/shared/components/TextInput";
+import { Upload } from "@mui/icons-material";
 type Props = {
   shoppingListId?: string;
   open: boolean;
@@ -209,8 +210,8 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen, initia
 
                 <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
                 <Button onClick={() => setOpen(false)} color="inherit">Cancel</Button>
-                <Button type="submit" variant="contained" color="success" disabled={!isDirty || !isValid}>
-                    Save
+                <Button type="submit" variant="contained" color="success" disabled={!isDirty || !isValid} loading={updateShoppingList.isPending || createShoppingList.isPending} loadingPosition="start" startIcon={<Upload />}>
+                    Submit
                 </Button>
                 </Box>
             </Box>

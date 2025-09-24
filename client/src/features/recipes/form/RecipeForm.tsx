@@ -27,7 +27,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useDropzone } from "react-dropzone";
 import Cropper, { ReactCropperElement } from "react-cropper";
-import { CloudUpload, Close as CloseIcon } from "@mui/icons-material";
+import { CloudUpload, Close as CloseIcon, Upload } from "@mui/icons-material";
 import { useRef, useState, useCallback, useEffect } from "react";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
@@ -426,12 +426,11 @@ export default function RecipeForm() {
             color="success"
             variant="contained"
             disabled={updateRecipe.isPending || createRecipe.isPending || !isDirty || !isValid}
+            loading={updateRecipe.isPending || createRecipe.isPending}
+            startIcon={<Upload />}
+            loadingPosition="start"
           >
-            {(updateRecipe.isPending || createRecipe.isPending) ? (
-              <CircularProgress color="inherit" size={24}/>
-            ) : (
-              "Submit"
-            )}
+            Submit
           </Button>
 
         </Box>

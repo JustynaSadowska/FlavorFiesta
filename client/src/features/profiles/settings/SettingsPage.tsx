@@ -9,7 +9,6 @@ export default function SettingsPage() {
       flexDirection="column" 
       alignItems="center" 
       gap={3}
-      mt={4}
     >
       <Box width="100%" maxWidth={900}>
         <Box mb={2}>
