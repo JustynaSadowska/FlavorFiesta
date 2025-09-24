@@ -59,6 +59,14 @@ public class GetRecipeList
                     selectedTagIds.All(tagId => r.Tags.Any(t => t.Id == tagId))
                 );
             }
+             if (request.Params.SelectedIngredients != null && request.Params.SelectedIngredients.Count != 0)
+            {
+                var fridgeIngredients = request.Params.SelectedIngredients.Select(i => i.ToLower()).ToList();
+
+                query = query
+                    .Where(r => r.Ingredients.Any(i => fridgeIngredients.Contains(i.Name.ToLower())))
+                    .OrderByDescending(r => r.Ingredients.Count(i => fridgeIngredients.Contains(i.Name.ToLower())));
+            }
             
             var projectedRecipes = query.ProjectTo<RecipeDto>(mapper.ConfigurationProvider);
 
