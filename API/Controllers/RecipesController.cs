@@ -1,4 +1,5 @@
 using System;
+using Application.Core;
 using Application.Photos.Commands;
 using Application.Recipes.Commands;
 using Application.Recipes.DTOs;
@@ -17,9 +18,9 @@ public class RecipesController : BaseApiController
 {
    [AllowAnonymous]
    [HttpGet]
-   public async Task<ActionResult<List<RecipeDto>>> GetRecipes()
+   public async Task<ActionResult<PagedList<RecipeDto, DateTime?>>> GetRecipes([FromQuery]RecipeParams recipeParams)
    {
-      return await Mediator.Send(new GetRecipeList.Query());
+      return HandleResult (await Mediator.Send(new GetRecipeList.Query{ Params = recipeParams }));
    }
 
    [HttpGet("{id}")]
