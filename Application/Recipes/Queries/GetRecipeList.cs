@@ -25,7 +25,7 @@ public class GetRecipeList
         {
             var query = context.Recipes
                 .OrderBy(x => x.CreatedAt)
-                .Where(x => !x.IsDeleted && x.IsVisible && x.CreatedAt >= (request.Params.Cursor ?? request.Params.StartDate))
+                .Where(x => !x.IsDeleted && x.IsVisible && (request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor))
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(request.Params.Filter))
