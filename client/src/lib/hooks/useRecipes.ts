@@ -1,28 +1,44 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
-import { useLocation } from "react-router";
 import { useAccount } from "./useAccount";
-
+import { useStore } from "./useStore";
 export const useRecipes = (id?: string) => {
+  const {recipeStore: {title, selectedIngredients, selectedTags, includeUserAllergens}} = useStore();
   const queryClient = useQueryClient();
   const { currentUser } = useAccount();
-  const location = useLocation();
 
-  const { data: recipes, isLoading } = useQuery({
-    queryKey: ["recipes"],
-    queryFn: async () => {
-      const response = await agent.get<Recipe[]>("/recipes");
+  const { data: recipesGroup, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage} = useInfiniteQuery<PagedList<Recipe, string>>({
+    queryKey: ['recipes', title, selectedIngredients, selectedTags, includeUserAllergens],
+    queryFn: async ({pageParam = null}) => {
+      const response = await agent.get<PagedList<Recipe,string>>("/recipes", {
+        params: {
+          cursor: pageParam,
+          pageSize: 9,
+          title,
+          selectedIngredients,
+          selectedTags,
+          includeUserAllergens
+        }
+      });
       return response.data;
     },
+    staleTime: 1000 * 60 * 5,//dopiero po 5 minutach trzeba bedzie je na nowo załadowywać
+    placeholderData: keepPreviousData,
+    initialPageParam: null,
+    getNextPageParam:(lastPage)=> lastPage.nextCursor,
     enabled: !id,
-    select: (data) => {
-      return data.map((recipe) => {
-        return {
+    select: data => ({
+      ...data,
+      pages: data.pages.map((page)=> ({
+        ...page,
+        items: page.items.map(recipe => {
+          return {
           ...recipe,
           isAuthor: currentUser?.id === recipe.userId
-        };
-      });
-    },
+        }
+        })
+      }))
+    }),
   });
 
   const { data: recipe, isLoading: isLoadingRecipe } = useQuery({
@@ -93,14 +109,11 @@ export const useRecipes = (id?: string) => {
     queryKey: ["tags"],
     queryFn: () =>
       agent.get<TagAllergen[]>("/recipes/tags").then((res) => res.data),
-    enabled: location.pathname.startsWith("/recipes")
   });
 
   const { data: units = [] } = useQuery({
     queryKey: ["units"],
     queryFn: () => agent.get<Unit[]>("/recipes/units").then((res) => res.data),
-      enabled: location.pathname.startsWith("/recipes")
-
   });
 
   const addToFavorite = useMutation({
@@ -135,7 +148,7 @@ export const useRecipes = (id?: string) => {
     return response.data as Photo;
   },
   onSuccess: async (photo: Photo, { recipeId }) => {
-    await queryClient.invalidateQueries({ queryKey: ["recipes", recipeId] });
+    await queryClient.invalidateQueries({ queryKey: ["recipes"] });
 
     queryClient.setQueryData<Recipe>(["recipes", recipeId], (data) => {
       if (!data) return data;
@@ -149,8 +162,11 @@ export const useRecipes = (id?: string) => {
 
 
   return {
-    recipes,
+    recipesGroup,
     isLoading,
+    isFetchingNextPage, 
+    fetchNextPage, 
+    hasNextPage,
     updateRecipe,
     createRecipe,
     deleteRecipe,

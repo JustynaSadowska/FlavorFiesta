@@ -28,10 +28,10 @@ public class GetRecipeList
                 .Where(x => !x.IsDeleted && x.IsVisible && (request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor))
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(request.Params.Filter))
+            if (!string.IsNullOrEmpty(request.Params.Title))
             {
-                var filter = request.Params.Filter.ToLower();
-                query = query.Where(r => r.Title.ToLower().Contains(filter));
+                var title = request.Params.Title.ToLower();
+                query = query.Where(r => r.Title.ToLower().Contains(title));
             }
 
             if (request.Params.IncludeUserAllergens)
