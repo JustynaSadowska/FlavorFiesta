@@ -59,14 +59,25 @@ public class GetRecipeList
                     selectedTagIds.All(tagId => r.Tags.Any(t => t.Id == tagId))
                 );
             }
-             if (request.Params.SelectedIngredients != null && request.Params.SelectedIngredients.Count != 0)
+            if (request.Params.SelectedIngredients != null && request.Params.SelectedIngredients.Count != 0)
             {
                 var fridgeIngredients = request.Params.SelectedIngredients.Select(i => i.ToLower()).ToList();
 
                 query = query
-                    .Where(r => r.Ingredients.Any(i => fridgeIngredients.Contains(i.Name.ToLower())))
-                    .OrderByDescending(r => r.Ingredients.Count(i => fridgeIngredients.Contains(i.Name.ToLower())));
+                    .Where(r => r.Ingredients.Any(i =>
+                        fridgeIngredients.Any(fi =>
+                            EF.Functions.TrigramsSimilarity(i.Name.ToLower(), fi) > 0.3 
+                        )
+                    ))
+                    .OrderByDescending(r =>
+                        r.Ingredients.Count(i =>
+                            fridgeIngredients.Any(fi =>
+                                EF.Functions.TrigramsSimilarity(i.Name.ToLower(), fi) > 0.3
+                            )
+                        )
+                    );
             }
+
             
             var projectedRecipes = query.ProjectTo<RecipeDto>(mapper.ConfigurationProvider);
 

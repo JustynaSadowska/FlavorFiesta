@@ -94,35 +94,35 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(op
             .HasMany(a => a.Users)
             .WithMany(u => u.Allergens)
             .UsingEntity("UserAllergen");
-        
-        modelBuilder.Entity<UserFollowing>(x => 
+
+        modelBuilder.Entity<UserFollowing>(x =>
         {
-            x.HasKey(k => new {k.ObserverId, k.TargetId});
+            x.HasKey(k => new { k.ObserverId, k.TargetId });
 
             x.HasOne(o => o.Observer)
                 .WithMany(f => f.Followings)
                 .HasForeignKey(o => o.ObserverId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
+
             x.HasOne(o => o.Target)
                 .WithMany(f => f.Followers)
                 .HasForeignKey(o => o.TargetId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
-        
-         modelBuilder.Entity<UserFavoriteRecipe>(x => 
-         {
-            x.HasKey(k => new{ k.UserId, k.RecipeId});
+
+        modelBuilder.Entity<UserFavoriteRecipe>(x =>
+        {
+            x.HasKey(k => new { k.UserId, k.RecipeId });
 
             x.HasOne(uf => uf.User)
-                .WithMany(u => u.FavoriteRecipes)
-                .HasForeignKey(uf => uf.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
+                 .WithMany(u => u.FavoriteRecipes)
+                 .HasForeignKey(uf => uf.UserId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
             x.HasOne(uf => uf.Recipe)
-                .WithMany(r => r.UsersWhoFavorited)
-                .HasForeignKey(uf => uf.RecipeId)
-                .OnDelete(DeleteBehavior.Cascade);;
-         });
+                 .WithMany(r => r.UsersWhoFavorited)
+                 .HasForeignKey(uf => uf.RecipeId)
+                 .OnDelete(DeleteBehavior.Cascade); ;
+        });
     }
 }
