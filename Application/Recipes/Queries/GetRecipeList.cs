@@ -18,7 +18,7 @@ public class GetRecipeList
         public required RecipeParams Params { get; set; }
     }
 
-    public class Handler(AppDbContext context, RatingService ratingService, IMapper mapper) :
+    public class Handler(AppDbContext context, RatingService ratingService,IUserAccessor userAccessor, IMapper mapper) :
         IRequestHandler<Query, Result<PagedList<RecipeDto, DateTime?>>>
     {
         public async Task<Result<PagedList<RecipeDto, DateTime?>>> Handle(Query request, CancellationToken cancellationToken)
@@ -32,6 +32,24 @@ public class GetRecipeList
             {
                 var filter = request.Params.Filter.ToLower();
                 query = query.Where(r => r.Title.ToLower().Contains(filter));
+            }
+
+            if (request.Params.IncludeUserAllergens)
+            {
+                var userId = userAccessor.GetUserId();
+
+                var userAllergenIds = await context.Users
+                    .Where(u => u.Id == userId)
+                    .SelectMany(u => u.Allergens!)
+                    .Select(a => a.Id)
+                    .ToListAsync(cancellationToken);
+
+                if (request.Params.IncludeUserAllergens && userAllergenIds.Any())
+                {
+                    query = query.Where(r =>
+                        !r.Allergens!.Any(a => userAllergenIds.Contains(a.Id))
+                    );
+                }
             }
             
             var projectedRecipes = query.ProjectTo<RecipeDto>(mapper.ConfigurationProvider);
