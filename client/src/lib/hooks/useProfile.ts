@@ -22,9 +22,6 @@ export const useProfile = (id?: string, predicate?: string) => {
           pageSize: 9,
         }
       });
-      console.log("pageParam")
-            console.log(pageParam)
-
       return response.data;
     },
         staleTime: 1000 * 60 * 5,//dopiero po 5 minutach trzeba bedzie je na nowo załadowywać
@@ -79,12 +76,22 @@ export const useProfile = (id?: string, predicate?: string) => {
       queryClient.invalidateQueries({ queryKey: ["followings", targetId] });
     },
   });
-  const { data: favoriteRecipes, isLoading: isFavoriteLoading } = useQuery({
-    queryKey: ["profile", "favorites"],
-    queryFn: async () => {
-      const response = await agent.get<Recipe[]>(`/profiles/favorites`);
+  const { data: favoriteRecipesGroup, isLoading: isFavoriteLoading, isFetchingNextPage: isFetchingNextPageFavorite, fetchNextPage: fetchNextPageFavorite, hasNextPage: hasNextPageFavorite } = useInfiniteQuery<PagedList<Recipe, string>>({
+    queryKey: ["profile", "favorites",id],
+    queryFn: async ({pageParam = null}) => {
+      const response = await agent.get<PagedList<Recipe,string>>(`/profiles/favorites`, {
+         params: {
+          cursor: pageParam,
+          pageSize: 9,
+        }
+      });
       return response.data;
     },
+    initialPageParam: null,
+    placeholderData: keepPreviousData,
+    getNextPageParam:(lastPage)=> lastPage.nextCursor,
+    enabled: !! id
+
   });
 
   const isCurrentUser = useMemo(() => {
@@ -186,7 +193,10 @@ export const useProfile = (id?: string, predicate?: string) => {
     loadingFollowings,
     updateFollowing,
     isCurrentUser,
-    favoriteRecipes,
+    favoriteRecipesGroup,
+    isFetchingNextPageFavorite,
+    fetchNextPageFavorite,
+    hasNextPageFavorite,
     isFavoriteLoading,
     photos,
     loadingPhotos,

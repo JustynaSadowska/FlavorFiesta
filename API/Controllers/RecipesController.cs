@@ -56,13 +56,15 @@ public class RecipesController : BaseApiController
    {
       return HandleResult(await Mediator.Send(new UpdateVisibility.Command { Id = id }));
    }
-
+   
+   [AllowAnonymous]
    [HttpGet("tags")]
    public async Task<ActionResult<List<TagDto>>> GetTags()
    {
       return await Mediator.Send(new GetTags.Query());
    }
 
+   [AllowAnonymous]
    [HttpGet("units")]
    public async Task<ActionResult<List<UnitDto>>> GetUnits()
    {

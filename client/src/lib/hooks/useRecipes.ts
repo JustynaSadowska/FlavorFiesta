@@ -15,7 +15,9 @@ export const useRecipes = (id?: string) => {
           cursor: pageParam,
           pageSize: 9,
           title,
-          selectedIngredients,
+          selectedIngredients: selectedIngredients.length > 0 
+            ? `[${selectedIngredients.join(",")}]` 
+            : undefined,
           selectedTags,
           includeUserAllergens
         }
@@ -100,8 +102,11 @@ export const useRecipes = (id?: string) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["recipes", id],
+        queryKey: ["recipes",id],
       });
+      await queryClient.invalidateQueries({
+      queryKey: ["recipes"],
+    });
     },
   });
 

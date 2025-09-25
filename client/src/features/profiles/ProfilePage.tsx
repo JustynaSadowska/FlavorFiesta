@@ -16,7 +16,7 @@ const tabMapping = ["recipes", "favorites", "shoppinglists"];
 export default function ProfilePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profile, loadingProfile, isCurrentUser, userRecipesGroup, favoriteRecipes, isLoading, isFavoriteLoading, fetchNextPage, hasNextPage } = useProfile(id);
+  const { profile, loadingProfile, isCurrentUser, userRecipesGroup, isLoading, isFavoriteLoading, fetchNextPage, hasNextPage, fetchNextPageFavorite, hasNextPageFavorite, favoriteRecipesGroup} = useProfile(id);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isShoppingListFormOpen, setShoppingListFormOpen] = useState(false);
 
@@ -73,7 +73,7 @@ if (loadingProfile) {
           )
         )}
         {currentTab === 1 && (
-          (!favoriteRecipes || favoriteRecipes.length === 0) ? (
+          (!favoriteRecipesGroup) ? (
             <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
               <FavoriteIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
               <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
@@ -81,7 +81,8 @@ if (loadingProfile) {
               </Typography>
             </Box>
           ) : (
-            <RecipeList recipes={favoriteRecipes} isLoading={isFavoriteLoading} />
+            <RecipeList recipesGroup={favoriteRecipesGroup} isLoading={isFavoriteLoading} fetchNextPage={fetchNextPageFavorite} 
+              hasNextPage={hasNextPageFavorite}/>
           )
         )}
         {currentTab === 2 && (

@@ -46,9 +46,9 @@ namespace API.Controllers
         }
 
         [HttpGet("favorites")]
-        public async Task<ActionResult<List<Recipe>>> GetUserFavoriteRecipes()
+        public async Task<ActionResult<List<Recipe>>> GetUserFavoriteRecipes([FromQuery] PaginationParams<DateTime?> paginationParams)
         {
-            return HandleResult(await Mediator.Send(new GetFavoriteRecipes.Query { }));
+            return HandleResult(await Mediator.Send(new GetFavoriteRecipes.Query { Params = paginationParams}));
         }
 
         [HttpPost("add-photo")]

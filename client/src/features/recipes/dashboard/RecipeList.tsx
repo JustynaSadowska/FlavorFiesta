@@ -3,23 +3,22 @@ import RecipeCard from "./RecipeCard";
 import { InfiniteData } from "@tanstack/react-query";
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from "react";
-import { useRecipes } from "../../../lib/hooks/useRecipes";
+import { observer } from "mobx-react-lite";
 type Props = {
   recipesGroup?: InfiniteData<PagedList<Recipe, string>>;
   isLoading?: boolean;
+  fetchNextPage?: () => void;
+  hasNextPage?: boolean;
 };
-export default function RecipeList({ recipesGroup, isLoading }: Props) {
-  const { hasNextPage, fetchNextPage } = useRecipes();
-  const [ref, inView] = useInView({
-    threshold: 0.5
-  }); 
-  useEffect(() => {
-    if(inView && hasNextPage)
-    {
-      fetchNextPage();
-    }
-  },[inView, hasNextPage, fetchNextPage])
 
+const RecipeList = observer(function RecipeList({ recipesGroup, isLoading, fetchNextPage, hasNextPage }: Props) {
+  const [ref, inView] = useInView({ threshold: 0.4 });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage?.();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" mt={2}>
@@ -28,7 +27,6 @@ export default function RecipeList({ recipesGroup, isLoading }: Props) {
     );
   } 
   if (!recipesGroup) return <Typography>No recipes found</Typography>;
-
   return (
     // <Box sx={{display: "flex",
     //     flexWrap: "wrap",           
@@ -76,4 +74,6 @@ export default function RecipeList({ recipesGroup, isLoading }: Props) {
 
     
   
-}
+});
+
+export default RecipeList;

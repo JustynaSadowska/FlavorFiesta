@@ -27,7 +27,7 @@ import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import ReviewSection from "../../reviews/ReviewSection";
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import DeleteDialog from "../../../app/shared/components/DeleteDialog";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -40,6 +40,7 @@ import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { CloudUpload, Close as CloseIcon, Upload } from "@mui/icons-material";
 import { useAllergens } from "../../../lib/hooks/useAllergens";
+import { useAccount } from "../../../lib/hooks/useAccount";
 
 export const StyledBox = styled(Box)({
   display: "flex",
@@ -54,14 +55,21 @@ export default function RecipeDetails() {
   const { recipe, isLoadingRecipe, updateVisibility, addToFavorite, removeFromFavorite, uploadRecipePhoto } = useRecipes(id);
   const { deleteRecipe} = useRecipes();
   const { profile: author } = useProfile(recipe?.userId);
+  const {currentUser} = useAccount();
   const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(recipe?.isVisible);
-  const { favoriteRecipes } = useProfile();
+  const { favoriteRecipesGroup } = useProfile(currentUser?.id);
+console.log("currentUser?.id")
+  console.log(currentUser?.id)
   const { userAllergens } = useAllergens();
-  const isFavorite = favoriteRecipes?.some(fav => fav.id === recipe?.id) ?? false;
-
- const [editOpen, setEditOpen] = useState(false);
+  const isFavorite = useMemo(() => { 
+    if (!favoriteRecipesGroup?.pages) 
+      return false; 
+    return favoriteRecipesGroup.pages 
+      .flatMap(page => page.items) 
+      .some(fav => fav.id === recipe?.id); }, [favoriteRecipesGroup, recipe?.id]);
+  const [editOpen, setEditOpen] = useState(false);
   const [files, setFiles] = useState<(File & { preview: string })[]>([]);
 
   const cropperRef = useRef<ReactCropperElement>(null);
