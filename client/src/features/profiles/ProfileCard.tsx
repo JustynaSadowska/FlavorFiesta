@@ -7,7 +7,7 @@ type Props = {
     profile: Profile
 }
 export default function ProfileCard({profile} : Props) {
-const {userRecipes} = useProfile(profile.id);
+const {recentRecipes} = useProfile(profile.id);
 
 console.log(profile)
   return (
@@ -44,7 +44,7 @@ console.log(profile)
                 Recipes
               </Typography>
               <Typography variant="body1" fontWeight="bold">
-                {userRecipes?.length ?? 0}
+                {recentRecipes?.totalCount ?? 0}
               </Typography>
             </Box>
             <Box textAlign="center">
@@ -65,12 +65,12 @@ console.log(profile)
             </Box>
           </Box>
         
-        {userRecipes && userRecipes.length > 0 && (
+        {recentRecipes?.recentRecipes && recentRecipes.recentRecipes.length > 0 && (
           <>
             <Divider sx={{ mb: 1.5 }} />
 
             <Box display="flex" justifyContent="center" gap={0.5}>
-              {userRecipes.slice(0, 3).map((recipe, index) => (
+              {recentRecipes.recentRecipes.map((recipe, index) => (
                 <CardMedia
                   key={index}
                   component="img"

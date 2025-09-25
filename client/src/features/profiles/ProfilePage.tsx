@@ -1,4 +1,4 @@
-import { Box, Divider, Tab, Tabs, Typography, Fab, Zoom } from '@mui/material'
+import { Box, Divider, Tab, Tabs, Typography, Fab, Zoom, CircularProgress } from '@mui/material'
 import RecipeList from '../recipes/dashboard/RecipeList'
 import ProfileHeader from './ProfileHeader'
 import { useParams, useSearchParams, useNavigate } from 'react-router';
@@ -16,7 +16,7 @@ const tabMapping = ["recipes", "favorites", "shoppinglists"];
 export default function ProfilePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { profile, loadingProfile, isCurrentUser, userRecipes, favoriteRecipes, isLoading, isFavoriteLoading } = useProfile(id);
+  const { profile, loadingProfile, isCurrentUser, userRecipesGroup, favoriteRecipes, isLoading, isFavoriteLoading, fetchNextPage, hasNextPage } = useProfile(id);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isShoppingListFormOpen, setShoppingListFormOpen] = useState(false);
 
@@ -30,8 +30,13 @@ export default function ProfilePage() {
     setSearchParams({ tab: tabMapping[newValue] });
   };
 
-  if (loadingProfile) return <Typography>Loading profile...</Typography>
-  if (!profile) return <Typography>Profile not found</Typography>
+if (loadingProfile) {
+    return (
+      <Box display="flex" justifyContent="center" mt={2}>
+        <CircularProgress />
+      </Box>
+    );
+  }   if (!profile) return <Typography>Profile not found</Typography>
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>
@@ -51,7 +56,7 @@ export default function ProfilePage() {
 
       <Box sx={{ mt: 3 }}>
         {currentTab === 0 && (
-          (!userRecipes|| userRecipes.length === 0) ? (
+          (!userRecipesGroup) ? (
             <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
               <RestaurantIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
               <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
@@ -59,7 +64,12 @@ export default function ProfilePage() {
               </Typography>
             </Box>
           ): (
-            <RecipeList recipes={userRecipes} isLoading={isLoading} />
+            <RecipeList 
+              recipesGroup={userRecipesGroup} 
+              isLoading={isLoading} 
+              fetchNextPage={fetchNextPage} 
+              hasNextPage={hasNextPage} 
+            />
           )
         )}
         {currentTab === 1 && (

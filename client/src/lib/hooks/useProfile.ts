@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 import { useMemo } from "react";
 //import { useAccount } from "./useAccount";
@@ -13,14 +13,28 @@ export const useProfile = (id?: string, predicate?: string) => {
     enabled: !!id && !predicate,
   });
 
-  const { data: userRecipes, isLoading } = useQuery({
-    queryKey: ["user-recipes", id],
-    queryFn: async () => {
-      const response = await agent.get<Recipe[]>(`/profiles/${id}/recipes`);
+  const { data: userRecipesGroup, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery<PagedList<Recipe, string>>({
+    queryKey: ["recipes", "user", id],
+    queryFn: async ({pageParam = null}) => {
+      const response = await agent.get<PagedList<Recipe,string>>(`/profiles/${id}/recipes`, {
+        params: {
+          cursor: pageParam,
+          pageSize: 9,
+        }
+      });
+      console.log("pageParam")
+            console.log(pageParam)
+
       return response.data;
     },
-    enabled: !!id,
+        staleTime: 1000 * 60 * 5,//dopiero po 5 minutach trzeba bedzie je na nowo załadowywać
+        placeholderData: keepPreviousData,
+        initialPageParam: null,
+        getNextPageParam:(lastPage)=> lastPage.nextCursor,
+
+      enabled: !!id,
   });
+  
 
   const { data: users, isLoading: isUsersLoading } = useQuery({
     queryKey: ["users"],
@@ -147,11 +161,23 @@ export const useProfile = (id?: string, predicate?: string) => {
             })
         }
     });
+   const { data: recentRecipes, isLoading: loadingRecent } = useQuery<UserRecentRecipes>({
+    queryKey: ["recent-recipes", id],
+    queryFn: async () => {
+      const response = await agent.get<UserRecentRecipes>(`/profiles/${id}/recent-recipes`);
+        console.log(response.data)
 
+      return response.data;
+    },
+    enabled: !!id,
+  });
 
   return {
-    userRecipes,
-    isLoading,
+    userRecipesGroup,
+    isLoading, 
+    isFetchingNextPage, 
+    fetchNextPage, 
+    hasNextPage,
     isUsersLoading,
     users,
     profile,
@@ -166,6 +192,8 @@ export const useProfile = (id?: string, predicate?: string) => {
     loadingPhotos,
     deletePhoto,
     setMainPhoto,
-    uploadPhoto
+    uploadPhoto,
+    recentRecipes,
+    loadingRecent
   };
 };

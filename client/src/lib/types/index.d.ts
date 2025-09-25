@@ -64,14 +64,14 @@ type Step = {
 type Ingredient = {
   id: string;
   name: string;
-  quantity: decimal;
+  quantity: number;
   unit: Unit;
   order: number;
 };
 
 type CreateUpdateIngredient = {
   name: string;
-  quantity: decimal;
+  quantity: number;
   unitId: string;
   order?: number;
 };
@@ -128,14 +128,14 @@ type CreateShoppingList = {
 type ShoppingListItem = {
   id: string;
   name: string;
-  quantity: decimal;
+  quantity: number;
   unit: Unit;
   isChecked: boolean;
   order: number;
 }
 type CreateShoppingListItem = {
   name: string;
-  quantity: decimal;
+  quantity: number;
   unitId: string;
   order: number;
 };
@@ -146,7 +146,7 @@ type UpdateShoppingList = {
 };
 type UpdateShoppingListItem = {
   name: string;
-  quantity: decimal;
+  quantity: number;
   unitId: string;
   isChecked: boolean;
 };
@@ -154,4 +154,14 @@ type UpdateShoppingListItem = {
 type Photo = {
   id: string
   url: string
+}
+
+type RecentRecipes = {
+  id: string;
+  imageUrl?:string;
+}
+
+type UserRecentRecipes = {
+  recentRecipes : RecentRecipes[];
+  totalCount : number;
 }

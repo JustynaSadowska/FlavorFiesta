@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Core;
 using Application.Profiles.Commands;
 using Application.Profiles.DTOs;
 using Application.Profiles.Queries;
@@ -15,9 +16,9 @@ namespace API.Controllers
     public class ProfilesController : BaseApiController
     {
         [HttpGet("{userId}/recipes")]
-        public async Task<ActionResult<List<RecipeDto>>> GetUserRecipes(string userId)
+        public async Task<ActionResult<List<RecipeDto>>> GetUserRecipes(string userId, [FromQuery] PaginationParams<DateTime?> paginationParams)
         {
-            return await Mediator.Send(new GetUserRecipes.Query { UserId = userId });
+            return HandleResult(await Mediator.Send(new GetUserRecipes.Query { UserId = userId, Params = paginationParams }));
         }
 
         [HttpGet]
@@ -67,11 +68,17 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new DeleteUserPhoto.Command { PhotoId = photoId }));
         }
-        
+
         [HttpPut("{photoId}/setMain")]
         public async Task<ActionResult> SetMainPhoto(string photoId)
         {
-            return HandleResult(await Mediator.Send(new SetMainPhoto.Command{PhotoId = photoId}));
+            return HandleResult(await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId }));
+        }
+        
+        [HttpGet("{userId}/recent-recipes")]
+        public async Task<ActionResult<List<RecentRecipesDto>>> GetUserRecentRecipes(string userId)
+        {
+            return HandleResult (await Mediator.Send(new GetUserRecentRecipes.Query { UserId = userId}));
         }
     }
 }

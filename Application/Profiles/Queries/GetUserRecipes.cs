@@ -10,30 +10,37 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Application.Services;
+using Application.Core;
 
 namespace Application.Profiles.Queries
 {
     public class GetUserRecipes
     {
-        public class Query : IRequest<List<RecipeDto>>
+        public class Query : IRequest<Result<PagedList<RecipeDto, DateTime?>>>
         {
             public required string UserId { get; set; }
+            public required PaginationParams<DateTime?> Params { get; set; }
         }
 
-        public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor, RatingService ratingService) : IRequestHandler<Query, List<RecipeDto>>
+        public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor, RatingService ratingService) : IRequestHandler<Query, Result<PagedList<RecipeDto, DateTime?>>>
         {
-            public async Task<List<RecipeDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<RecipeDto, DateTime?>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var currentUser = await userAccessor.GetUserAsync();
-                var query = context.Recipes.Where(x => x.IsDeleted == false && x.UserId == request.UserId);
+                var query = context.Recipes
+                    .OrderBy(x => x.CreatedAt)
+                    .Where(x => x.IsDeleted == false && x.UserId == request.UserId && (request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor))
+                .AsQueryable();
 
                 if (request.UserId != currentUser.Id)
                 {
                     query = query.Where(x => x.IsVisible);//jesli user jest na swoim profilu to widzi swoje wszystkie przepisy
                 }
-                
-                var recipes = await query
-                    .ProjectTo<RecipeDto>(mapper.ConfigurationProvider)
+                              
+                var projectedRecipes = query.ProjectTo<RecipeDto>(mapper.ConfigurationProvider);
+
+                var recipes = await projectedRecipes
+                    .Take(request.Params.PageSize + 1)
                     .ToListAsync(cancellationToken);
                     
                 foreach (var recipe in recipes)
@@ -51,7 +58,21 @@ namespace Application.Profiles.Queries
                         recipe.ReviewCount = 0;
                     }
                 }
-                return recipes;
+                
+                DateTime? nextCursor = null;
+                if (recipes.Count > request.Params.PageSize)
+                {
+                    nextCursor = recipes.Last().CreatedAt;
+                    recipes.RemoveAt(recipes .Count - 1);
+                }
+
+                return Result<PagedList<RecipeDto, DateTime?>>.Success(
+                    new PagedList<RecipeDto, DateTime?>
+                    {
+                        Items = recipes,
+                        NextCursor = nextCursor
+                    }
+                );
                  
             }
         }
