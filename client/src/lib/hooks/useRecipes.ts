@@ -2,6 +2,7 @@ import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClie
 import agent from "../api/agent";
 import { useAccount } from "./useAccount";
 import { useStore } from "./useStore";
+import qs from "qs";
 export const useRecipes = (id?: string) => {
   const {recipeStore: {title, selectedIngredients, selectedTags, includeUserAllergens}} = useStore();
   const queryClient = useQueryClient();
@@ -18,11 +19,13 @@ export const useRecipes = (id?: string) => {
           selectedIngredients: selectedIngredients.length > 0 
             ? `[${selectedIngredients.join(",")}]` 
             : undefined,
-          selectedTags,
-          includeUserAllergens
-        }
-      });
-      return response.data;
+            includeUserAllergens,
+          ...(selectedTags.length > 0 ? { selectedTags: selectedTags } : {})
+        },
+        paramsSerializer: params => 
+          qs.stringify(params, { arrayFormat: "repeat" })
+            });
+        return response.data;
     },
     staleTime: 1000 * 60 * 5,//dopiero po 5 minutach trzeba bedzie je na nowo załadowywać
     placeholderData: keepPreviousData,

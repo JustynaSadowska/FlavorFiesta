@@ -52,7 +52,7 @@ public class GetRecipeList
                 }
             }
 
-            if (request.Params.SelectedTags != null && request.Params.SelectedTags.Any())
+            if (request.Params.SelectedTags != null && request.Params.SelectedTags.Count != 0)
             {
                 var selectedTagIds = request.Params.SelectedTags;
                 query = query.Where(r =>
