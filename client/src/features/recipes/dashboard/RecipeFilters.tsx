@@ -14,21 +14,21 @@ import {
   Stack,
   TextField,
   Chip,
-  //MenuItem,
-  //Select,
-  //InputLabel,
-  //FormControl,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../lib/hooks/useStore";
 import { useState } from "react";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 
-// const sortOptions = [
-//   { value: "oldest", label: "Oldest" },
-//   { value: "newest", label: "Newest" },
-//   { value: "rating", label: "Best rated" },
-// ];
+const sortOptions = [
+  { value: "oldest", label: "Oldest" },
+  { value: "newest", label: "Newest" },
+  { value: "rating", label: "Best rated" },
+];
 
 const RecipeFilters = observer(function RecipeFilters() {
   const {
@@ -42,6 +42,8 @@ const RecipeFilters = observer(function RecipeFilters() {
       resetFilters,
       selectedTags,
       setSelectedTags,
+      setSortBy,
+      sortBy
     },
   } = useStore();
   const{tags} = useRecipes();
@@ -111,21 +113,20 @@ const RecipeFilters = observer(function RecipeFilters() {
             />
           </FormGroup>
 
-          {/* <FormControl fullWidth>
+          <FormControl fullWidth>
             <InputLabel id="sort-label">Sort by</InputLabel>
-            <Select
-              labelId="sort-label"
-              //value={sortBy}
-              //onChange={(e) => setSortBy(e.target.value)}
-              label="Sort by"
-            >
-              {sortOptions.map((opt) => (
-                <MenuItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
+              <Select
+                labelId="sort-label"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                {sortOptions.map((opt) => (
+                  <MenuItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </MenuItem>
+                ))}
+              </Select>
+          </FormControl>
 
           <Autocomplete
             multiple

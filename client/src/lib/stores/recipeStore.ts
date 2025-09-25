@@ -5,6 +5,7 @@ export class RecipeStore {
   selectedTags: string[] = [];
   includeUserAllergens = false;
   selectedIngredients: string[] = [];
+  sortBy = 'newest';
 
   constructor() {
     makeAutoObservable(this);
@@ -26,10 +27,15 @@ export class RecipeStore {
     this.selectedIngredients = ingredients;
   };
 
+  setSortBy = (sortBy: string) => {
+    this.sortBy = sortBy;
+  };
+
   resetFilters = () => {
     this.title = '';
     this.selectedTags = [];
     this.includeUserAllergens = false;
     this.selectedIngredients = [];
+    this.sortBy = 'newest';
   };
 }

@@ -24,9 +24,17 @@ public class GetRecipeList
         public async Task<Result<PagedList<RecipeDto, DateTime?>>> Handle(Query request, CancellationToken cancellationToken)
         {
             var query = context.Recipes
-                .OrderBy(x => x.CreatedAt)
-                .Where(x => !x.IsDeleted && x.IsVisible && (request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor))
-                .AsQueryable();
+                .Where(x => !x.IsDeleted && x.IsVisible);
+
+            query = request.Params.SortBy?.ToLower() switch
+            {
+                "newest" => query.Where(x => request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor)
+                                .OrderByDescending(x => x.CreatedAt),
+                "oldest" => query.Where(x => request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor)
+                                .OrderBy(x => x.CreatedAt),
+                _ => query.Where(x => request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor)
+                        .OrderByDescending(x => x.CreatedAt)
+            };
 
             if (!string.IsNullOrEmpty(request.Params.Title))
             {

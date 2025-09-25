@@ -9,4 +9,5 @@ public class RecipeParams : PaginationParams<DateTime?>
     public bool IncludeUserAllergens { get; set; }
     public List<string>? SelectedTags { get; set; } = [];
     public List<string>? SelectedIngredients { get; set; } = [];
+    public string? SortBy { get; set; }
 }
