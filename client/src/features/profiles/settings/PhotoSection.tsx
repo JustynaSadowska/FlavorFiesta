@@ -13,7 +13,7 @@ import {
   ImageListItem,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { CloudUpload, Close as CloseIcon, Upload } from "@mui/icons-material";
+import { CloudUpload, Close as CloseIcon } from "@mui/icons-material";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useProfile } from "../../../lib/hooks/useProfile";
 import { useParams } from "react-router";
@@ -22,6 +22,7 @@ import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import StarButton from "../../../app/shared/components/StarButton";
 import DeleteIcon from '@mui/icons-material/Delete';
+import SubmitButton from "../../../app/shared/components/SubmitButton";
 
 
 export default function PhotoSection() {
@@ -208,17 +209,13 @@ export default function PhotoSection() {
              setFiles([])}} color="inherit">
             Cancel
           </Button>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={onCrop}
-            disabled={!files[0] || uploadPhoto.isPending}
-            startIcon={<Upload />}
-            loading={uploadPhoto.isPending}
-            loadingPosition="start"
-            >
-            Submit
-          </Button>
+          
+          <SubmitButton
+              onClick={onCrop}
+              loading={uploadPhoto.isPending}
+              disabled={!files[0] || uploadPhoto.isPending}
+          >
+          </SubmitButton>
 
         </DialogActions>
       </Dialog>

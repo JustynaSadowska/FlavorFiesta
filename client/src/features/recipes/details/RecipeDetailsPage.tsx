@@ -38,9 +38,10 @@ import AvatarPopover from "../../../app/shared/components/AvatarPopover";
 import { useDropzone } from "react-dropzone";
 import Cropper, { ReactCropperElement } from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { CloudUpload, Close as CloseIcon, Upload } from "@mui/icons-material";
+import { CloudUpload, Close as CloseIcon } from "@mui/icons-material";
 import { useAllergens } from "../../../lib/hooks/useAllergens";
 import { useAccount } from "../../../lib/hooks/useAccount";
+import SubmitButton from "../../../app/shared/components/SubmitButton";
 
 export const StyledBox = styled(Box)({
   display: "flex",
@@ -366,9 +367,13 @@ useEffect(() => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => { setEditOpen(false); setFiles([]); }}>Cancel</Button>
-          <Button variant="contained" color="success" onClick={onCrop} disabled={!files[0] || uploadRecipePhoto.isPending} startIcon={<Upload />} loading={uploadRecipePhoto.isPending} loadingPosition="start" >
-            Sumbit
-          </Button>
+          <SubmitButton
+            onClick={onCrop}
+            loading={uploadRecipePhoto.isPending}
+            disabled={!files[0] || uploadRecipePhoto.isPending}
+          >
+          </SubmitButton>
+
         </DialogActions>
       </Dialog>
     </>
