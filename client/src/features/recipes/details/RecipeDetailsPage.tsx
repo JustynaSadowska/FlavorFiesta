@@ -366,8 +366,8 @@ useEffect(() => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => { setEditOpen(false); setFiles([]); }}>Cancel</Button>
-          <Button variant="contained" color="success" onClick={onCrop} disabled={!files[0] || uploadRecipePhoto.isPending} startIcon={<Upload />}>
-            {uploadRecipePhoto.isPending ? <CircularProgress color="inherit" size={24} /> : "Add Photo"}
+          <Button variant="contained" color="success" onClick={onCrop} disabled={!files[0] || uploadRecipePhoto.isPending} startIcon={<Upload />} loading={uploadRecipePhoto.isPending} loadingPosition="start" >
+            Sumbit
           </Button>
         </DialogActions>
       </Dialog>
