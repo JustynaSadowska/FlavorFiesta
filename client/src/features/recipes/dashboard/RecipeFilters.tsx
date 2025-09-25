@@ -1,6 +1,6 @@
 import {
   Autocomplete,
-  Button,
+  IconButton,
   Checkbox,
   Collapse,
   Dialog,
@@ -14,19 +14,21 @@ import {
   Stack,
   TextField,
   Chip,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
+  Tooltip,
+  Button,
+  MenuItem
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../lib/hooks/useStore";
 import { useState } from "react";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
+import KitchenIcon from '@mui/icons-material/Kitchen';
+import TuneIcon from '@mui/icons-material/Tune';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 const sortOptions = [
-  { value: "oldest", label: "Oldest" },
   { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
   { value: "rating", label: "Best rated" },
 ];
 
@@ -46,7 +48,7 @@ const RecipeFilters = observer(function RecipeFilters() {
       sortBy
     },
   } = useStore();
-  const{tags} = useRecipes();
+  const { tags } = useRecipes();
 
   const [fridgeOpen, setFridgeOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -68,39 +70,41 @@ const RecipeFilters = observer(function RecipeFilters() {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 2, mb: 3 }}>
+    <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
       <Grid2 container spacing={2} alignItems="center">
-        <Grid2 sx ={{xs:12, md:6}}>
+        <Grid2 size={9.5} >
           <TextField
             label="Search by recipe name"
             variant="outlined"
-            fullWidth
             value={title}
+            fullWidth
             onChange={(e) => setTitle(e.target.value)}
           />
         </Grid2>
 
-        <Grid2 sx ={{xs:6, md:2}}>
-          <Button variant="outlined" fullWidth onClick={toggleFridge}>
-            Fridge
-          </Button>
-        </Grid2>
+        <Grid2  sx={{ display: "flex", justifyContent: "flex-end", gap: 2, xs:12 ,md:6}}>
+          <Tooltip title="Fridge">
+            <IconButton onClick={toggleFridge} color="primary">
+              <KitchenIcon />
+            </IconButton>
+          </Tooltip>
 
-        <Grid2 sx ={{xs:6, md:2}}>
-          <Button variant="outlined" fullWidth onClick={toggleFilters}>
-            {filtersOpen ? "Hide filters" : "Show filters"}
-          </Button>
-        </Grid2>
+          <Tooltip title="Filters">
+            <IconButton onClick={toggleFilters} color={filtersOpen ? "secondary" : "default"}>
+              <TuneIcon />
+            </IconButton>
+          </Tooltip>
 
-        <Grid2 sx ={{xs:12, md:2}}>
-          <Button variant="outlined" fullWidth onClick={resetFilters}>
-            Reset filters
-          </Button>
+          <Tooltip title="Reset filters">
+            <IconButton onClick={resetFilters} color="error">
+              <RestartAltIcon />
+            </IconButton>
+          </Tooltip>
         </Grid2>
       </Grid2>
 
       <Collapse in={filtersOpen} timeout="auto" unmountOnExit>
-        <Stack spacing={3} mt={3}>
+        <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={3} alignItems="center">
           <FormGroup>
             <FormControlLabel
               control={
@@ -113,20 +117,20 @@ const RecipeFilters = observer(function RecipeFilters() {
             />
           </FormGroup>
 
-          <FormControl fullWidth>
-            <InputLabel id="sort-label">Sort by</InputLabel>
-              <Select
-                labelId="sort-label"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                {sortOptions.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </MenuItem>
-                ))}
-              </Select>
-          </FormControl>
+            <TextField
+    select
+    label="Sort by"
+    value={sortBy}
+    onChange={(e) => setSortBy(e.target.value)}
+    sx={{ minWidth: 150 }}
+    variant="outlined"
+  >
+    {sortOptions.map((opt) => (
+      <MenuItem key={opt.value} value={opt.value}>
+        {opt.label}
+      </MenuItem>
+    ))}
+  </TextField>
 
           <Autocomplete
             multiple
@@ -135,20 +139,20 @@ const RecipeFilters = observer(function RecipeFilters() {
             getOptionLabel={(opt) => opt.name}
             filterSelectedOptions
             isOptionEqualToValue={(opt, val) => opt.id === val.id}
-            value={tags.filter(t => selectedTags.includes(t.id!))} 
-            onChange={(_, data) => setSelectedTags(data.map(d => d.id!))} 
+            value={tags.filter((t) => selectedTags.includes(t.id!))}
+            onChange={(_, data) => setSelectedTags(data.map((d) => d.id!))}
+            sx={{ flex: 1 }}
             renderInput={(params) => (
-              <TextField {...params} label="Tags" placeholder="Choose tags" />
+              <TextField {...params} label="Tags" placeholder="Choose tags" fullWidth />
             )}
           />
-
         </Stack>
       </Collapse>
 
       <Dialog open={fridgeOpen} onClose={toggleFridge} fullWidth maxWidth="sm">
         <DialogTitle>What's in your fridge?</DialogTitle>
         <DialogContent>
-          <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+          <Stack direction="row" spacing={2} my={2}>
             <TextField
               label="Add ingredient"
               fullWidth
@@ -169,6 +173,7 @@ const RecipeFilters = observer(function RecipeFilters() {
                 onDelete={() => removeIngredient(i)}
                 color="secondary"
                 variant="outlined"
+                sx={{ mb: 1 }}
               />
             ))}
           </Stack>
