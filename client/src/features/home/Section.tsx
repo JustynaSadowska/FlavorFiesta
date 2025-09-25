@@ -1,5 +1,5 @@
-import { Typography, Box } from "@mui/material";
-import RecipeList from "../recipes/dashboard/RecipeList";
+import { Typography, Box, CircularProgress} from "@mui/material";
+import RecipeCard from "../recipes/dashboard/RecipeCard";
 
 type Props = {
   title: string;
@@ -9,7 +9,7 @@ type Props = {
 
 export default function Section({ title, recipes, isLoading }: Props) {
   return (
-    <Box sx={{ mb: 5 }}>
+    <Box sx={{ mb: 5}}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
         <Box
           sx={{
@@ -25,7 +25,17 @@ export default function Section({ title, recipes, isLoading }: Props) {
         </Typography>
       </Box>
 
-      <RecipeList recipes={recipes} isLoading={isLoading} />
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" mt={2}>
+          <CircularProgress />
+        </Box>
+      ) : (
+            <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2}>
+            {recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
+          </Box>
+      )}
     </Box>
   );
 }

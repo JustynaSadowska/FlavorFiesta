@@ -169,6 +169,39 @@ export const useRecipes = (id?: string) => {
   },
 });
 
+const { data: latestRecipes, isLoading: loadingLatest } = useQuery({
+  queryKey: ["recipes", "latest"],
+  queryFn: async () => {
+    const res = await agent.get("/recipes", { params: { pageSize: 4, sortBy: "newest" } });
+    return res.data.items 
+  },
+});
+const dinnerTag = tags.find(t => t.name.toLowerCase() === "dinner")?.id;
+const quickTag = tags.find(t => t.name.toLowerCase() === "quick & easy")?.id;
+
+ const { data: dinnerRecipes, isLoading: loadingDinner} = useQuery({
+  queryKey: ["recipes", "dinner"],
+  queryFn: async () => {
+    const res = await agent.get("/recipes", {
+      params: { pageSize: 4, selectedTags: dinnerTag },
+      paramsSerializer: params => qs.stringify(params, { arrayFormat: "repeat" }),
+    });
+    return res.data.items;
+  },
+  enabled: !!dinnerTag,
+});
+
+const { data: quickRecipes, isLoading: loadingQuick}  = useQuery({
+  queryKey: ["recipes", "quick"],
+  queryFn: async () => {
+    const res = await agent.get("/recipes", {
+      params: { pageSize: 4, selectedTags: quickTag },
+      paramsSerializer: params => qs.stringify(params, { arrayFormat: "repeat" }),
+    });
+    return res.data.items;
+  },
+  enabled: !!quickTag,
+});
 
   return {
     recipesGroup,
@@ -186,6 +219,12 @@ export const useRecipes = (id?: string) => {
     units,
     addToFavorite,
     removeFromFavorite,
-    uploadRecipePhoto
+    uploadRecipePhoto,
+    latestRecipes,
+    dinnerRecipes,
+    quickRecipes,
+    loadingLatest,
+    loadingDinner,
+    loadingQuick
   };
 };
