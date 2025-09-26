@@ -1,49 +1,22 @@
-import { Box, Stack, TextField, Typography, InputAdornment } from "@mui/material";
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import ProfileCard from "./ProfileCard";
+import { Grid2 } from "@mui/material";
 import { useProfile } from "../../lib/hooks/useProfile";
-import React from "react";
+import { observer } from "mobx-react-lite";
+import UserList from "./UserList";
+import UserFilter from "./UserFilter";
 
-export default function UserDashboard() {
-  const { users } = useProfile();
-  const [search, setSearch] = React.useState("");
-
-  const filtered = users?.filter(p =>
-    ((p.firstName || "") + " " + (p.lastName || ""))
-      .toLowerCase()
-      .includes(search.toLowerCase())
-  );
-
+const UserDashboard = observer( function UserDashboard() {
+  const { users, isUsersLoading, hasNextPageUser, fetchNextPageUser} = useProfile();
+console.log(users)
   return (
-    <Box>
-      <TextField
-        placeholder="Search"
-        variant="outlined"
-        size="small"
-        fullWidth
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        sx={{ mb: 2 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchOutlinedIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
-
-      {filtered && filtered.length > 0 ? (
-        <Stack spacing={2}>
-          {filtered.map((user) => (
-            <ProfileCard key={user.id} profile={user} />
-          ))}
-        </Stack>
-      ) : (
-        <Typography color="text.secondary" sx={{ mt: 2 }}>
-          No such user
-        </Typography>
-      )}
-    </Box>
+    <Grid2 container spacing={2}>
+      <Grid2 size={8} offset={{ xs:2, md: 2 }}>
+       <UserFilter/>
+       </Grid2>
+        <Grid2 size ={12} offset={{ md: 1,  xs:2,}}>
+          <UserList usersGroup={users} isLoading={isUsersLoading} fetchNextPage={fetchNextPageUser} 
+              hasNextPage={hasNextPageUser}/>
+        </Grid2>        
+    </Grid2>
   );
-}
+});
+export default UserDashboard;

@@ -1,9 +1,12 @@
 import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 import { useMemo } from "react";
+import { useStore } from "./useStore";
 //import { useAccount } from "./useAccount";
 export const useProfile = (id?: string, predicate?: string) => {
   const queryClient = useQueryClient();
+  const {profileStore: {name}} = useStore();
+
   const { data: profile, isLoading: loadingProfile } = useQuery<Profile>({
     queryKey: ["profile", id],
     queryFn: async () => {
@@ -19,7 +22,7 @@ export const useProfile = (id?: string, predicate?: string) => {
       const response = await agent.get<PagedList<Recipe,string>>(`/profiles/${id}/recipes`, {
         params: {
           cursor: pageParam,
-          pageSize: 9,
+          pageSize: 10,
         }
       });
       return response.data;
@@ -33,12 +36,22 @@ export const useProfile = (id?: string, predicate?: string) => {
   });
   
 
-  const { data: users, isLoading: isUsersLoading } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const response = await agent.get<Profile[]>(`/profiles`);
+  const { data: users, isLoading: isUsersLoading, isFetchingNextPage: isFetchingNextPageUser , fetchNextPage: fetchNextPageUser, hasNextPage: hasNextPageUser} = useInfiniteQuery<PagedList<Profile, string>>({
+    queryKey: ["users", id, name],
+    queryFn: async ({pageParam = null}) => {
+      const response = await agent.get<PagedList<Profile,string>>(`/profiles`, {
+         params: {
+          cursor: pageParam,
+          pageSize: 10,
+          name
+        }
+      });
+      console.log(response.data)
       return response.data;
     },
+        placeholderData: keepPreviousData,
+        initialPageParam: null,
+        getNextPageParam:(lastPage)=> lastPage.nextCursor,
   });
 
   const { data: followings, isLoading: loadingFollowings } = useQuery<
@@ -82,7 +95,7 @@ export const useProfile = (id?: string, predicate?: string) => {
       const response = await agent.get<PagedList<Recipe,string>>(`/profiles/favorites`, {
          params: {
           cursor: pageParam,
-          pageSize: 9,
+          pageSize: 10,
         }
       });
       return response.data;
@@ -204,6 +217,9 @@ export const useProfile = (id?: string, predicate?: string) => {
     setMainPhoto,
     uploadPhoto,
     recentRecipes,
-    loadingRecent
+    loadingRecent,
+    isFetchingNextPageUser,
+    hasNextPageUser, 
+    fetchNextPageUser
   };
 };

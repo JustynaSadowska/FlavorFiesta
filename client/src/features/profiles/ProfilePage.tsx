@@ -56,7 +56,7 @@ if (loadingProfile) {
 
       <Box sx={{ mt: 3 }}>
         {currentTab === 0 && (
-          (!userRecipesGroup) ? (
+          (!userRecipesGroup || userRecipesGroup.pages.every(page => page.items.length === 0)) ? (
             <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
               <RestaurantIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
               <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
@@ -73,7 +73,7 @@ if (loadingProfile) {
           )
         )}
         {currentTab === 1 && (
-          (!favoriteRecipesGroup) ? (
+          (!favoriteRecipesGroup || favoriteRecipesGroup.pages.every(page => page.items.length === 0)) ? (
             <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
               <FavoriteIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
               <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">

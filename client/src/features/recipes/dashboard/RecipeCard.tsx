@@ -37,6 +37,7 @@ export default function RecipeCard({ recipe }: Props) {
           alt={recipe.title}
           sx={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
         />
+        {!recipe.isVisible && (
          <Box
             sx={{
               position: "absolute",
@@ -51,25 +52,10 @@ export default function RecipeCard({ recipe }: Props) {
               boxShadow: 1,
             }}
           >
-            {!recipe.isVisible && (
-              <VisibilityOffIcon color="disabled" fontSize="small" />
-            )}
+            <VisibilityOffIcon color="disabled" fontSize="small" />
+           
           </Box>
-           {/* <Box
-            sx={{
-              position: "absolute",
-              px: 1,
-              py: 1,
-              display: "flex",
-                justifyContent: "flex-end", 
-
-            }}
-          >
-          
-            {recipe.isVisible && (
-              <VisibilityOffIcon color="disabled" fontSize="small" />
-            )}
-          </Box> */}
+           )}
         <CardContent sx={{ px: 2, pb: 2 }}>
           <Typography
             variant="subtitle1"

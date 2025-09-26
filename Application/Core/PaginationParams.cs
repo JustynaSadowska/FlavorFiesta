@@ -6,7 +6,7 @@ public class PaginationParams<TCursor>
 {
     private const int MaxPageSize = 50;
     public TCursor? Cursor { get; set; }
-    private int _pageSize = 9;
+    private int _pageSize = 10;
     public int PageSize
     {
         get => _pageSize;

@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain
 {
+    [Index(nameof(DateRegistered))]
+
     public class User : IdentityUser
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? ImageUrl { get; set; }
+        public DateTime DateRegistered { get; set; }
 
         public ICollection<Recipe>? Recipes { get; set; } = [];
         public ICollection<Review>? Reviews { get; set; } = [];

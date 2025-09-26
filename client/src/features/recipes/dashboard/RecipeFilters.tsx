@@ -118,19 +118,19 @@ const RecipeFilters = observer(function RecipeFilters() {
           </FormGroup>
 
             <TextField
-    select
-    label="Sort by"
-    value={sortBy}
-    onChange={(e) => setSortBy(e.target.value)}
-    sx={{ minWidth: 150 }}
-    variant="outlined"
-  >
-    {sortOptions.map((opt) => (
-      <MenuItem key={opt.value} value={opt.value}>
-        {opt.label}
-      </MenuItem>
-    ))}
-  </TextField>
+              select
+              label="Sort by"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              sx={{ minWidth: 150 }}
+              variant="outlined"
+            >
+              {sortOptions.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </MenuItem>
+              ))}
+            </TextField>
 
           <Autocomplete
             multiple
@@ -141,7 +141,7 @@ const RecipeFilters = observer(function RecipeFilters() {
             isOptionEqualToValue={(opt, val) => opt.id === val.id}
             value={tags.filter((t) => selectedTags.includes(t.id!))}
             onChange={(_, data) => setSelectedTags(data.map((d) => d.id!))}
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, minWidth:150 }}
             renderInput={(params) => (
               <TextField {...params} label="Tags" placeholder="Choose tags" fullWidth />
             )}

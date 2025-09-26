@@ -25,6 +25,7 @@ namespace API.Controllers
                 Email = registerDto.Email,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
+                DateRegistered = DateTime.UtcNow
             };
 
             var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);

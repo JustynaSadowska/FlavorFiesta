@@ -90,14 +90,17 @@ public class DbInitializer
                 FirstName = "Anna",
                 LastName = "Marek",
                 Allergens = [allergens[1], allergens[2], allergens[10], allergens[12]],
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                DateRegistered = DateTime.UtcNow.AddMonths(2)
             },
             new() {
                 UserName = "antoni@test.com",
                 Email = "antoni@test.com",
                 FirstName = "Antoni",
                 LastName = "Kowalski",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                DateRegistered = DateTime.UtcNow
+
                 //Allergens = [allergens[2]]
             },
             new() {
@@ -106,7 +109,8 @@ public class DbInitializer
                 FirstName = "Tomek",
                 LastName = "Kowaleski",
                 Allergens = [allergens[2]],
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                DateRegistered = DateTime.UtcNow.AddMonths(3)
 
             }
         };

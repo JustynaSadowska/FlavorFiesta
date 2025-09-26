@@ -22,9 +22,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<UserProfile>>> GetAllUsers()
+        public async Task<ActionResult<List<UserProfile>>> GetAllUsers([FromQuery] UserParams userParams)
         {
-            return await Mediator.Send(new GetAllUsers.Query());
+            return HandleResult(await Mediator.Send(new GetAllUsers.Query { Params = userParams }));
         }
 
         [HttpGet("{userId}")]//zwraca userprofiel=> id, firstname i lastname, przy wiekszej ilosci danych stworzyc nowe dto do alergenow itp

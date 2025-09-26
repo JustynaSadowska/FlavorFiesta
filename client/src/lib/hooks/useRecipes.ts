@@ -14,7 +14,7 @@ export const useRecipes = (id?: string) => {
       const response = await agent.get<PagedList<Recipe,string>>("/recipes", {
         params: {
           cursor: pageParam,
-          pageSize: 9,
+          pageSize: 10,
           title,
           selectedIngredients: selectedIngredients.length > 0 
             ? `[${selectedIngredients.join(",")}]` 
