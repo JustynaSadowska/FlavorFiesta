@@ -95,7 +95,7 @@ public class GetRecipeList
                         )
                     );
             }
-            if (request.Params.Difficulty.HasValue)
+            if (request.Params.Difficulty.HasValue && request.Params.Difficulty.Value != 0)
             {
                 query = query.Where(r => r.Difficulty == request.Params.Difficulty.Value);
             }

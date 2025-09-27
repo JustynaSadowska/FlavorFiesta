@@ -25,7 +25,7 @@ import { useRecipes } from "../../../lib/hooks/useRecipes";
 import KitchenIcon from '@mui/icons-material/Kitchen';
 import TuneIcon from '@mui/icons-material/Tune';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { difficultyOptions } from "../../../lib/util/constants";
+import { difficultyFilterOptions } from "../../../lib/util/constants";
 
 const sortOptions = [
   { value: "newest", label: "Newest" },
@@ -139,11 +139,11 @@ const RecipeFilters = observer(function RecipeFilters() {
               select
               label="Difficulty"
               value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value)}
+              onChange={(e) => setDifficulty(Number(e.target.value))}
               sx={{ minWidth: 150 }}
               variant="outlined"
             >
-              {difficultyOptions.map((opt) => (
+              {difficultyFilterOptions.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}
                 </MenuItem>

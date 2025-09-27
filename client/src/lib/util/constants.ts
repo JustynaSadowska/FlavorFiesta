@@ -9,3 +9,7 @@ export const difficultyOptions = [
   { label: "Medium", value: Difficulty.Medium },
   { label: "Hard", value: Difficulty.Hard },
 ];
+export const difficultyFilterOptions = [
+  { label: "All", value: 0 },
+  ...difficultyOptions,
+];

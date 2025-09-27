@@ -6,7 +6,7 @@ export class RecipeStore {
   includeUserAllergens = false;
   selectedIngredients: string[] = [];
   sortBy = 'newest';
-  difficulty = '';
+  difficulty = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -32,7 +32,7 @@ export class RecipeStore {
     this.sortBy = sortBy;
   };
 
-  setDifficulty = (difficulty: string) => {
+  setDifficulty = (difficulty: number) => {
     this.difficulty = difficulty;
   };
 
@@ -42,6 +42,6 @@ export class RecipeStore {
     this.includeUserAllergens = false;
     this.selectedIngredients = [];
     this.sortBy = 'newest';
-    this.difficulty= '';
+    this.difficulty= 0;
   };
 }

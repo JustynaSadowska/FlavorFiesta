@@ -21,7 +21,7 @@ export const useRecipes = (id?: string) => {
             : undefined,
             includeUserAllergens,
             sortBy,
-            difficulty,
+            difficulty: difficulty !== 0 ? difficulty : undefined,
           ...(selectedTags.length > 0 ? { selectedTags: selectedTags } : {})
         },
         paramsSerializer: params => 
