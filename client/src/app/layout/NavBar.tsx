@@ -9,6 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 //import PersonIcon from '@mui/icons-material/Person';
 //import Tooltip from '@mui/material/Tooltip';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import MenuItem from '@mui/material/MenuItem';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import { Link, NavLink } from 'react-router';
@@ -23,6 +24,7 @@ const pages = ['Recipes', 'Profiles'];
 
 export default function NavBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElAccount, setAnchorElAccount] = useState<null | HTMLElement>(null);
   const {uiStore} = useStore();
   const {currentUser} = useAccount();
 
@@ -32,6 +34,14 @@ export default function NavBar() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleOpenAccountMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElAccount(event.currentTarget);
+  };
+
+  const handleCloseAccountMenu = () => {
+    setAnchorElAccount(null);
   };
 
   return (
@@ -119,10 +129,41 @@ export default function NavBar() {
             {currentUser ? (
               <UserMenu />
             ) : (
-              <>
-                <MenuItemLink to="/login">Login</MenuItemLink>
-                <MenuItemLink to="/register">Register</MenuItemLink>
-              </>
+             <><Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
+                  <MenuItemLink to="/login">Login</MenuItemLink>
+                  <MenuItemLink to="/register">Register</MenuItemLink>
+                </Box>
+                <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none' } }}>
+                    <IconButton
+                      size="large"
+                      aria-label="account menu"
+                      aria-controls="menu-account"
+                      aria-haspopup="true"
+                      onClick={handleOpenAccountMenu}
+                      color="inherit"
+                    >
+                      <ArrowDropDownIcon />
+                    </IconButton>
+                    <Menu
+                      id="menu-account"
+                      anchorEl={anchorElAccount}
+                      open={Boolean(anchorElAccount)}
+                      onClose={handleCloseAccountMenu}
+                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                      sx={{ display: { xs: 'block', md: 'none' } }}
+                    >
+                      <>
+                        <MenuItem component={Link} to="/login" onClick={handleCloseAccountMenu}>
+                          Login
+                        </MenuItem>
+                        <MenuItem component={Link} to="/register" onClick={handleCloseAccountMenu}>
+                          Register
+                        </MenuItem>
+                      </>
+                    </Menu>
+                  </Box></>
+              
             )}
           </Box>
         </Toolbar>

@@ -52,6 +52,7 @@ export default function UserMenu() {
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         open={Boolean(anchorEl)}
         onClose={handleCloseMenu}
+        
       >
         <MenuItem component={Link} to="/createRecipe" onClick={handleCloseMenu}>
           <ListItemIcon>
