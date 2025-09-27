@@ -12,6 +12,8 @@ import { formatDate } from "../../../lib/util/util";
 import { useShoppingLists } from "../../../lib/hooks/useShoppingLists";
 import ShoppingListForm from "../form/ShoppingListForm";
 import EditIcon from '@mui/icons-material/Edit';
+import jsPDF from "jspdf";
+import DownloadIcon from '@mui/icons-material/Download';
 
 type Props = { shoppingList: ShoppingList };
 
@@ -28,6 +30,26 @@ export default function ShoppingListCard({ shoppingList }: Props) {
   const sortedItems = [...shoppingList.shoppingListItems].sort(
     (a, b) => a.order - b.order
   );
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text(shoppingList.title, 14, 20);
+    let y = 36;
+    sortedItems.forEach((item) => {
+      doc.text(
+        `${item.isChecked ? "(X)" : "( )"} ${item.name} ${item.quantity} ${item.unit.displayName}`,
+        14,
+        y
+      );
+      y += 8;
+      if (y > 280) { 
+        doc.addPage();
+        y = 20;
+      }
+    });
+
+    doc.save(`${shoppingList.title}.pdf`);
+  };
   return (
     <>
       <Card elevation={4} sx={{ borderRadius: 3, width: 292, height:300, "&:hover": { transform: "scale(1.03)" }, transition: "transform 0.2s" }}>
@@ -38,6 +60,9 @@ export default function ShoppingListCard({ shoppingList }: Props) {
                 {shoppingList.title}
               </Typography>
             </Box>
+             {/* <IconButton onClick={downloadPDF} title="Download PDF">
+                <DownloadIcon/>
+              </IconButton> */}
               <IconButton onClick={() => setFormOpen(true)} aria-label="edit">
                 <EditIcon />
               </IconButton>
@@ -99,6 +124,9 @@ export default function ShoppingListCard({ shoppingList }: Props) {
             </Typography>
           </Box>
           <Box>
+            <IconButton onClick={downloadPDF} title="Download PDF">
+                <DownloadIcon/>
+              </IconButton>
             <IconButton onClick={() => setFormOpen(true)} aria-label="edit">
               <EditIcon />
             </IconButton>
