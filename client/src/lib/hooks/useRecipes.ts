@@ -4,12 +4,12 @@ import { useAccount } from "./useAccount";
 import { useStore } from "./useStore";
 import qs from "qs";
 export const useRecipes = (id?: string) => {
-  const {recipeStore: {title, selectedIngredients, selectedTags, includeUserAllergens, sortBy}} = useStore();
+  const {recipeStore: {title, selectedIngredients, selectedTags, includeUserAllergens, sortBy, difficulty}} = useStore();
   const queryClient = useQueryClient();
   const { currentUser } = useAccount();
 
   const { data: recipesGroup, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage} = useInfiniteQuery<PagedList<Recipe, string>>({
-    queryKey: ['recipes', title, selectedIngredients, selectedTags, includeUserAllergens, sortBy],
+    queryKey: ['recipes', title, selectedIngredients, selectedTags, includeUserAllergens, sortBy, difficulty],
     queryFn: async ({pageParam = null}) => {
       const response = await agent.get<PagedList<Recipe,string>>("/recipes", {
         params: {
@@ -21,6 +21,7 @@ export const useRecipes = (id?: string) => {
             : undefined,
             includeUserAllergens,
             sortBy,
+            difficulty,
           ...(selectedTags.length > 0 ? { selectedTags: selectedTags } : {})
         },
         paramsSerializer: params => 

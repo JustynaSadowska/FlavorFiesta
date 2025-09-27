@@ -5,6 +5,7 @@ using Application.Recipes.Queries;
 using Application.Services;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -32,6 +33,15 @@ public class GetRecipeList
                                 .OrderByDescending(x => x.CreatedAt),
                 "oldest" => query.Where(x => request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor)
                                 .OrderBy(x => x.CreatedAt),
+                // "rating" => query
+                //     .OrderByDescending(x => x.Reviews
+                //         .Where(r => !r.IsDeleted)
+                //         .Select(r => (double?)r.Rating)
+                //         .Average() ?? 0
+                //     )
+                //     .ThenByDescending(x => x.CreatedAt)
+                //     .Where(x => request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor),
+                
                 _ => query.Where(x => request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor)
                         .OrderByDescending(x => x.CreatedAt)
             };
@@ -85,7 +95,10 @@ public class GetRecipeList
                         )
                     );
             }
-
+            if (request.Params.Difficulty.HasValue)
+            {
+                query = query.Where(r => r.Difficulty == request.Params.Difficulty.Value);
+            }
             
             var projectedRecipes = query.ProjectTo<RecipeDto>(mapper.ConfigurationProvider);
 
