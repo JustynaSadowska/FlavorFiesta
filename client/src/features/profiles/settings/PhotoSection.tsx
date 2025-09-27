@@ -114,20 +114,25 @@ export default function PhotoSection() {
                   </Box>
                   {profile?.imageUrl !== photo.url && (
                       <Box
-                          sx={{ position: 'absolute', top: 0, right: 0 }}
+                          sx={{ position: 'absolute', top: 0, right: 0, 
+                          borderRadius: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          }}
                       >
 
                           <IconButton
                                 onClick={() => deletePhoto.mutate(photo.id)}
                                 aria-label="delete"
                                 sx={{
-                                  color: "rgba(0,0,0,0.5)",
+                                  color: "black",
                                   p: 1.5,
                                   transition: "color 0.3s",
                                   "&:hover": {
                                     color: "white",
                                   },
                                 }}
+                                
                               >
                                 <DeleteIcon sx={{ fontSize: 28 }} />
                               </IconButton>

@@ -20,7 +20,7 @@ export default function RecipeCard({ recipe }: Props) {
       elevation={4}
       sx={{
         borderRadius: 3,
-        width: 230,
+        width: 228,
         height: 290,
         mb:1,
         transition: "transform 0.2s ease-in-out",

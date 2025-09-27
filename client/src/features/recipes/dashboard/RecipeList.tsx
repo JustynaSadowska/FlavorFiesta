@@ -28,25 +28,7 @@ const RecipeList = observer(function RecipeList({ recipesGroup, isLoading, fetch
   } 
   if (!recipesGroup) return <Typography>No recipes found</Typography>;
   return (
-    // <Box sx={{display: "flex",
-    //     flexWrap: "wrap",           
-    //     gap: 3,
-    //     justifyContent: "center",
-    //     }}>
-    //       {recipesGroup.pages.map((recipes,index) => (
-    //         <Box 
-    //           key={index}
-    //           ref={index === recipesGroup.pages.length -1 ? ref : null}
-    //           display= 'flex'
-    //           gap={3}
-    //           >
-    //           {recipes.items.map((recipe) => (
-    //             <RecipeCard key={recipe.id} recipe={recipe} />
-    //             ))}
-    //         </Box>
-    //       ))}
-    // </Box>
-     <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center"}}>
+     //<Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center"}}>
       <Grid2 
         container 
         spacing={{ xs: 1, md: 3 }} 
@@ -69,7 +51,7 @@ const RecipeList = observer(function RecipeList({ recipesGroup, isLoading, fetch
           })
         )}
       </Grid2>
-    </Box>
+    //</Box>
   );
 
     

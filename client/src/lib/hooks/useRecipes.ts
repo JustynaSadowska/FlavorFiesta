@@ -28,7 +28,6 @@ export const useRecipes = (id?: string) => {
             });
         return response.data;
     },
-    staleTime: 1000 * 60 * 5,//dopiero po 5 minutach trzeba bedzie je na nowo załadowywać
     placeholderData: keepPreviousData,
     initialPageParam: null,
     getNextPageParam:(lastPage)=> lastPage.nextCursor,

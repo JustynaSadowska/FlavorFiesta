@@ -28,7 +28,6 @@ const UserList = observer(function UserList({ usersGroup, isLoading, fetchNextPa
   if (!usersGroup) return <Typography>No profiles found</Typography>;
 
   return (
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center"}}>
         <Grid2 
             container 
             spacing={{ xs: 1, md: 3 }} 
@@ -51,7 +50,6 @@ const UserList = observer(function UserList({ usersGroup, isLoading, fetchNextPa
             })
             )}
         </Grid2>
-        </Box>
   );
 });
 export default UserList;

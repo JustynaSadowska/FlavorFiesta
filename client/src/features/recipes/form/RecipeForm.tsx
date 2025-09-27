@@ -214,7 +214,7 @@ export default function RecipeForm() {
               )}
             />
           </Box>
-          <TextInput label='Description' control = {control} name='description'  sx={{maxWidth: 1200}} multiline rows={2} />
+          <TextInput label='Description(optional)' control = {control} name='description'  sx={{maxWidth: 1200}} multiline rows={2} />
         </Box> 
 
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4 }}>

@@ -1,4 +1,4 @@
-import { Box, Divider, Tab, Tabs, Typography, Fab, Zoom, CircularProgress } from '@mui/material'
+import { Box, Divider, Tab, Tabs, Typography, Fab, Zoom, CircularProgress, Grid2 } from '@mui/material'
 import RecipeList from '../recipes/dashboard/RecipeList'
 import ProfileHeader from './ProfileHeader'
 import { useParams, useSearchParams, useNavigate } from 'react-router';
@@ -44,7 +44,7 @@ if (loadingProfile) {
       <Box sx={{ mt: 4 }}>
         {isCurrentUser && (
           <>
-            <Tabs value={currentTab} onChange={handleTabChange} centered>
+            <Tabs value={currentTab} onChange={handleTabChange} centered >
               <Tab icon={<RestaurantIcon />} label="RECIPES" />
               <Tab icon={<FavoriteIcon />} label="FAVORITES" />
               <Tab icon={<ShoppingCartIcon />} label="SHOPPING LISTS" />
@@ -53,59 +53,79 @@ if (loadingProfile) {
           </>
         )}
       </Box>
+      {isCurrentUser ? (
+        <><Box sx={{ mt: 3 }}>
+          {currentTab === 0 && (
+            (!userRecipesGroup || userRecipesGroup.pages.every(page => page.items.length === 0)) ? (
+              <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
+                <RestaurantIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
+                <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
+                  You don’t have any recipes yet.
+                </Typography>
+              </Box>
+            ) : (
+              <Grid2 container spacing={2}>
+                <Grid2 size={12} offset={{ md: 1, xs: 2, }}>
+                  <RecipeList
+                    recipesGroup={userRecipesGroup}
+                    isLoading={isLoading}
+                    fetchNextPage={fetchNextPage}
+                    hasNextPage={hasNextPage} />
+                </Grid2>
+              </Grid2>
+            )
+          )}
+          {currentTab === 1 && (
+            (!favoriteRecipesGroup || favoriteRecipesGroup.pages.every(page => page.items.length === 0)) ? (
+              <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
+                <FavoriteIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
+                <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
+                  You don’t have any favorite recipes yet.
+                </Typography>
+              </Box>
+            ) : (
+              <Grid2 container spacing={2}>
+                <Grid2 size={12} offset={{ md: 1, xs: 2, }}>
+                  <RecipeList recipesGroup={favoriteRecipesGroup} isLoading={isFavoriteLoading} fetchNextPage={fetchNextPageFavorite}
+                    hasNextPage={hasNextPageFavorite} />
+                </Grid2>
+              </Grid2>
+            )
+          )}
+          {currentTab === 2 && (
+            <ShoppingListDashboard />
+          )}
+        </Box><Zoom in={currentTab === 0 || currentTab === 2}>
+            <Fab
+              color="primary"
+              aria-label="add"
+              sx={{ position: "fixed", bottom: 24, right: 24 }}
+              onClick={() => {
+                if (currentTab === 0) {
+                  navigate("/createRecipe");
+                } else if (currentTab === 2) {
+                  setShoppingListFormOpen(true);
+                }
+              } }
+            >
+              <AddIcon />
+            </Fab>
+          </Zoom></>
+      ) : (
+        <Grid2 container spacing={2}>
+                <Grid2 size ={12} offset={{ md: 1,  xs:2,}}>
+                  <RecipeList 
+                    recipesGroup={userRecipesGroup} 
+                    isLoading={isLoading} 
+                    fetchNextPage={fetchNextPage} 
+                    hasNextPage={hasNextPage} 
+                  />
+                </Grid2>
+              </Grid2>
 
-      <Box sx={{ mt: 3 }}>
-        {currentTab === 0 && (
-          (!userRecipesGroup || userRecipesGroup.pages.every(page => page.items.length === 0)) ? (
-            <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
-              <RestaurantIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
-              <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
-                You don’t have any recipes yet.
-              </Typography>
-            </Box>
-          ): (
-            <RecipeList 
-              recipesGroup={userRecipesGroup} 
-              isLoading={isLoading} 
-              fetchNextPage={fetchNextPage} 
-              hasNextPage={hasNextPage} 
-            />
-          )
-        )}
-        {currentTab === 1 && (
-          (!favoriteRecipesGroup || favoriteRecipesGroup.pages.every(page => page.items.length === 0)) ? (
-            <Box sx={{ textAlign: "center", mt: 5, ml: -6 }}>
-              <FavoriteIcon sx={{ fontSize: 64, mb: 1, color: "grey.500" }} />
-              <Typography variant="subtitle1" fontStyle="italic" color="text.secondary">
-                You don’t have any favorite recipes yet.
-              </Typography>
-            </Box>
-          ) : (
-            <RecipeList recipesGroup={favoriteRecipesGroup} isLoading={isFavoriteLoading} fetchNextPage={fetchNextPageFavorite} 
-              hasNextPage={hasNextPageFavorite}/>
-          )
-        )}
-        {currentTab === 2 && (
-          <ShoppingListDashboard />
-        )}
-      </Box>
+      )}
 
-      <Zoom in={currentTab === 0 || currentTab === 2}>
-        <Fab
-          color="primary"
-          aria-label="add"
-          sx={{ position: "fixed", bottom: 24, right: 24 }}
-          onClick={() => {
-            if (currentTab === 0) {
-              navigate("/createRecipe");
-            } else if (currentTab === 2) {
-              setShoppingListFormOpen(true);
-            }
-          }}
-        >
-          <AddIcon />
-        </Fab>
-      </Zoom>
+
 
       <ShoppingListForm
         open={isShoppingListFormOpen}

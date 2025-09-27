@@ -1,6 +1,6 @@
 import { useShoppingLists } from '../../../lib/hooks/useShoppingLists';
 import ShoppingListCard from './ShoppingListCard';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid2, Typography } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 
@@ -27,24 +27,18 @@ export default function ShoppingListDashboard() {
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
   return (
-    
-    // <Grid2 container spacing={3}>
-    //   {shoppingLists.map((list:) => (
-    //     <Grid2 key={list.id} xs={12} sm={6} md={4}>
-    //       <ShoppingListCard title={list.title} items={list.items} />
-    //     </Grid2>
-    //   ))}
-    // </Grid2>
-     <Box sx={{display: "flex",
-        flexWrap: "wrap",           
-        gap: 3,
-        justifyContent: "center",
-        mt:3,
-        mb:5
-        }}>
-       {sortedLists.map((shoppingList) => (
-        <ShoppingListCard key={shoppingList.id} shoppingList={shoppingList} />
-        ))}
-    </Box>
+    <Grid2 container spacing={2}>
+      <Grid2 size ={12} offset={{ md: 1,  xs:2,}}>
+        <Grid2 container 
+            spacing={{ xs: 1, md: 3 }} 
+            columns={{ xs: 4, sm: 8, md: 12 }} >
+            {sortedLists.map((shoppingList) => (
+            <ShoppingListCard key={shoppingList.id} shoppingList={shoppingList} />
+            ))}
+        </Grid2>
+      </Grid2>
+    </Grid2>
+
+
   );
 }

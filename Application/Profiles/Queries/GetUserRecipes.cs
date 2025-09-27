@@ -28,8 +28,8 @@ namespace Application.Profiles.Queries
             {
                 var currentUser = await userAccessor.GetUserAsync();
                 var query = context.Recipes
-                    .OrderBy(x => x.CreatedAt)
-                    .Where(x => x.IsDeleted == false && x.UserId == request.UserId && (request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor))
+                    .OrderByDescending(x => x.CreatedAt)
+                    .Where(x => x.IsDeleted == false && x.UserId == request.UserId && (request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor))
                 .AsQueryable();
 
                 if (request.UserId != currentUser.Id)

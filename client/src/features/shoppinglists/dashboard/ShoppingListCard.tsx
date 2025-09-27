@@ -30,7 +30,7 @@ export default function ShoppingListCard({ shoppingList }: Props) {
   );
   return (
     <>
-      <Card elevation={4} sx={{ borderRadius: 3, width: 370, height:300, "&:hover": { transform: "scale(1.03)" }, transition: "transform 0.2s" }}>
+      <Card elevation={4} sx={{ borderRadius: 3, width: 292, height:300, "&:hover": { transform: "scale(1.03)" }, transition: "transform 0.2s" }}>
         <CardContent>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
             <Box sx={{ flex: 1, cursor: "pointer" }} onClick={() => setOpen(true)}>
