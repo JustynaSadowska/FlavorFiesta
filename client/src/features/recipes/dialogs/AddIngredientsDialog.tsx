@@ -45,6 +45,11 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
     })),
   };
 
+  const sortedLists = [...shoppingLists].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+
   return (
     <>
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
@@ -54,9 +59,9 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
             <Box display="flex" justifyContent="center" mt={2}>
               <CircularProgress />
             </Box>
-          ) : shoppingLists && shoppingLists.length > 0 ? (
+          ) : sortedLists && sortedLists.length > 0 ? (
             <Box display="flex" flexDirection="column" gap={2} >
-              {shoppingLists.map((list) => (
+              {sortedLists.map((list) => (
                 <Box
                   key={list.id}
                   onClick={() => handleSelectList(list.id)}
@@ -89,7 +94,7 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
           )}
         </DialogContent>
         <DialogActions sx={{ display: "flex", justifyContent: "space-between", mt: 2, mb: 1 }}>
-          <Button onClick={() => setOpen(false)} color="inherit">
+          <Button onClick={() => setOpen(false)} color="inherit" sx={{ml:2}}>
             Cancel
           </Button>
           <Button
@@ -99,6 +104,7 @@ export default function AddIngredientsDialog({ open, setOpen, ingredients }: Pro
               setOpen(false);
               setFormOpen(true);
             }}
+            sx={{mr:2}}
           >
             + Create new list
           </Button>

@@ -40,8 +40,11 @@ export class RecipeStore {
     this.title = '';
     this.selectedTags = [];
     this.includeUserAllergens = false;
-    this.selectedIngredients = [];
     this.sortBy = 'newest';
     this.difficulty= 0;
+  };
+
+  resetFridge = () => {
+    this.selectedIngredients = [];
   };
 }

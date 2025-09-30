@@ -26,6 +26,7 @@ import KitchenIcon from '@mui/icons-material/Kitchen';
 import TuneIcon from '@mui/icons-material/Tune';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { difficultyFilterOptions } from "../../../lib/util/constants";
+import ClearIcon from '@mui/icons-material/Clear';
 
 const sortOptions = [
   { value: "newest", label: "Newest" },
@@ -48,7 +49,8 @@ const RecipeFilters = observer(function RecipeFilters() {
       setSortBy,
       sortBy,
       difficulty,
-      setDifficulty
+      setDifficulty,
+      resetFridge
     },
   } = useStore();
   const { tags } = useRecipes();
@@ -85,15 +87,21 @@ const RecipeFilters = observer(function RecipeFilters() {
           />
         </Grid2>
 
-        <Grid2  sx={{ display: "flex", justifyContent: "flex-end", gap: 2, xs:12 ,md:6}}>
+        <Grid2  sx={{ display: "flex", justifyContent: "flex-end", xs:12 ,md:6}}>
           <Tooltip title="Fridge">
-            <IconButton onClick={toggleFridge} color="primary">
+            <IconButton onClick={toggleFridge} color="default">
               <KitchenIcon />
             </IconButton>
           </Tooltip>
 
-          <Tooltip title="Filters">
-            <IconButton onClick={toggleFilters} color={filtersOpen ? "secondary" : "default"}>
+          <Tooltip title="Empty fridge">
+            <IconButton onClick={resetFridge} color="error">
+              <ClearIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Filters" sx ={{ml:2}}>
+            <IconButton onClick={toggleFilters} color={filtersOpen ? "secondary" : "default"} >
               <TuneIcon />
             </IconButton>
           </Tooltip>
@@ -116,7 +124,7 @@ const RecipeFilters = observer(function RecipeFilters() {
                   onChange={(e) => setIncludeUserAllergens(e.target.checked)}
                 />
               }
-              label="Include your allergens"
+              label="Exclude your allergens"
             />
           </FormGroup>
 
@@ -197,7 +205,7 @@ const RecipeFilters = observer(function RecipeFilters() {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={toggleFridge}>Close</Button>
+          <Button onClick={toggleFridge} color="inherit" sx= {{mr:1.5}}>Close</Button>
         </DialogActions>
       </Dialog>
     </Paper>
