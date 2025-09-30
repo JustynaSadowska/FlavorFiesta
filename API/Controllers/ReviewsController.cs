@@ -18,13 +18,13 @@ namespace API.Controllers
             return await Mediator.Send(new GetReviewList.Query { Id = recipeId });
         }
         [HttpPost]
-        public async Task<ActionResult<string>> CreateRecipe(CreateReviewDto reviewDto)
+        public async Task<ActionResult<string>> CreateReview(CreateReviewDto reviewDto)
         {
             return HandleResult(await Mediator.Send(new CreateReview.Command { ReviewDto = reviewDto }));
         }
         [HttpPut("{id}")]
         [Authorize(Policy = "IsReviewAuthor")]
-        public async Task<ActionResult<string>> EditRecipe(string id, [FromBody] EditReviewDto review)
+        public async Task<ActionResult<string>> EditReview(string id, [FromBody] EditReviewDto review)
         {
             review.Id = id;
             return HandleResult(await Mediator.Send(new EditReview.Command { ReviewDto = review }));
@@ -32,7 +32,7 @@ namespace API.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Policy = "IsReviewAuthor")]
-        public async Task<ActionResult> DeleteRecipe(string id)
+        public async Task<ActionResult> DeleteReview(string id)
         {
             return HandleResult(await Mediator.Send(new DeleteReview.Command { Id = id }));
         }

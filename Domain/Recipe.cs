@@ -18,10 +18,12 @@ public class Recipe
     public DateTime CreatedAt { get; set; }
     public bool IsDeleted { get; set; }
     public string? ImageUrl { get; set; }
+    public double AverageRating { get; set; } = 0;
+    public int ReviewCount { get; set; } = 0;
 
     public ICollection<Step> Steps { get; set; } = [];
     public ICollection<Ingredient> Ingredients { get; set; } = [];
-    public ICollection<Review>? Reviews { get; set; } = [];
+    public ICollection<Review> Reviews { get; set; } = [];
     public User User { get; set; } = null!;
     public ICollection<Tag> Tags { get; set; } = [];
     public ICollection<Allergen>? Allergens { get; set; } = [];

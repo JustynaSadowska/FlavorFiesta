@@ -45,7 +45,7 @@ namespace Application.Profiles.Queries
                     
                 foreach (var recipe in recipes)
                 {
-                    var ratingResult = await ratingService.GetRatings(recipe.Id);
+                    var ratingResult = await ratingService.GetAndUpdateRatings(recipe.Id);
 
                     if (ratingResult.Value != null)
                     {

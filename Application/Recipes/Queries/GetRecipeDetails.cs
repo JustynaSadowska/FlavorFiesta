@@ -18,7 +18,7 @@ public class GetRecipeDetails
         public required string Id { get; set; }
     }
 
-    public class Handler (AppDbContext context, IMapper mapper, RatingService ratingService) :IRequestHandler<Query, Result<RecipeDto>>
+    public class Handler (AppDbContext context, IMapper mapper) :IRequestHandler<Query, Result<RecipeDto>>
     {
         public async Task<Result<RecipeDto>> Handle (Query request, CancellationToken cancellationToken)
         {
@@ -30,21 +30,6 @@ public class GetRecipeDetails
 
             recipe.Reviews = recipe.Reviews?.Where(r => !r.IsDeleted).ToList() ?? [];
 
-            if (recipe.Reviews.Count == 0)
-            {
-                recipe.AverageRating = 0;
-                recipe.ReviewCount = 0;
-            }
-            else
-            {
-                var ratings = await ratingService.GetRatings(request.Id);
-
-                if (ratings.Value != null)
-                {
-                    recipe.AverageRating = ratings.Value.AverageRating;
-                    recipe.ReviewCount = ratings.Value.ReviewCount;
-                }
-            }
             return Result<RecipeDto>.Success(recipe);
         }
     }

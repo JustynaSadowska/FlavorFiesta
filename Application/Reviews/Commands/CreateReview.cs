@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using Application.Reviews.DTOs;
+using Application.Services;
 using AutoMapper;
 using Domain;
 using MediatR;
@@ -21,13 +22,13 @@ namespace Application.Reviews.Commands
             public required CreateReviewDto ReviewDto { get; set; }
         }
 
-        public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor) : IRequestHandler<Command, Result<string>>
+        public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor, RatingService ratingService) : IRequestHandler<Command, Result<string>>
         {
             public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await userAccessor.GetUserAsync();
                 var recipe = await context.Recipes
-                    .AsNoTracking()
+                    .Include(r => r.Reviews)
                     .FirstOrDefaultAsync(r => r.Id == request.ReviewDto.RecipeId, cancellationToken);
 
                 if (recipe == null)
@@ -45,6 +46,10 @@ namespace Application.Reviews.Commands
                 var result = await context.SaveChangesAsync(cancellationToken) > 0;
 
                 if (!result) return Result<string>.Failure("Failed to create the review", 400);
+
+                var ratingResult = await ratingService.GetAndUpdateRatings(request.ReviewDto.RecipeId);
+
+                if (!ratingResult.IsSuccess) return Result<string>.Failure("Failed to update average rating", 500);
 
                 return Result<string>.Success(review.Id);
             }

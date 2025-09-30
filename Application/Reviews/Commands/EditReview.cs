@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
 using Application.Reviews.DTOs;
+using Application.Services;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ namespace Application.Reviews.Commands
             public required EditReviewDto ReviewDto { get; set; }
         }
 
-        public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor)  : IRequestHandler<Command, Result<Unit>>
+        public class Handler(AppDbContext context, IMapper mapper, IUserAccessor userAccessor, RatingService ratingService)  : IRequestHandler<Command, Result<Unit>>
         {
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -48,6 +49,10 @@ namespace Application.Reviews.Commands
                 var result = await context.SaveChangesAsync(cancellationToken) > 0;
 
                 if (!result) return Result<Unit>.Failure("Failed to update the review", 400);
+
+                var ratingResult = await ratingService.GetAndUpdateRatings(request.ReviewDto.RecipeId);
+                if (!ratingResult.IsSuccess)
+                    return Result<Unit>.Failure("Failed to update average rating", 500);
 
                 return Result<Unit>.Success(Unit.Value);
             }
