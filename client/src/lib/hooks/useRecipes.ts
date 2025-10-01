@@ -220,6 +220,29 @@ const { data: quickRecipes, isLoading: loadingQuick}  = useQuery({
   enabled: !!quickTag,
 });
 
+// const tagOfTheDayId = (() => {
+//   if (!tags || tags.length === 0) return undefined;
+//   const today = new Date();
+//   const dayOfYear = Math.floor(
+//     (today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24
+//   );
+//   return tags[dayOfYear % tags.length].id;
+// })();
+
+// const { data: dailyTagRecipes, isLoading: loadingDailyTag } = useQuery({
+//   queryKey: ["recipes", "dailyTag", tagOfTheDayId],
+//   queryFn: async () => {
+//     if (!tagOfTheDayId) return [];
+//     const res = await agent.get("/recipes", {
+//       params: { pageSize: 4, selectedTags: [tagOfTheDayId] },
+//       paramsSerializer: params => qs.stringify(params, { arrayFormat: "repeat" }),
+//     });
+//     return res.data.items;
+//   },
+//   enabled: !!tagOfTheDayId,
+// });
+
+
   return {
     recipesGroup,
     isLoading,
@@ -244,6 +267,8 @@ const { data: quickRecipes, isLoading: loadingQuick}  = useQuery({
     loadingDinner,
     loadingQuick,
     bestRatedRecipes,
-    loadingRated
+    loadingRated,
+    // dailyTagRecipes,
+    // loadingDailyTag
   };
 };

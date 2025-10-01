@@ -3,9 +3,9 @@ import Section from "./Section";
 import { useRecipes } from "../../lib/hooks/useRecipes";
 
 export default function HomePage() {
-  const{ dinnerRecipes,latestRecipes, quickRecipes , loadingDinner, loadingQuick, loadingLatest, loadingRated, bestRatedRecipes} = useRecipes();
+  const{ latestRecipes, quickRecipes, loadingQuick, loadingLatest, loadingRated, bestRatedRecipes,} = useRecipes();
 
-  if (loadingDinner || loadingQuick || loadingLatest) {
+  if (loadingRated || loadingQuick || loadingLatest) {
     return (
       <Box display="flex" justifyContent="center" mt={2}>
         <CircularProgress />
@@ -17,7 +17,7 @@ export default function HomePage() {
       <Container> 
         <Section title="Best Rated Recipes" recipes={bestRatedRecipes} isLoading={loadingRated} />
         <Section title="Latest Added Recipes" recipes={latestRecipes} isLoading={loadingLatest} />
-        <Section title="Dinner Ideas" recipes={dinnerRecipes} isLoading={loadingDinner} />
+        {/* <Section title="Daily tags" recipes={dailyTagRecipes} isLoading={loadingDailyTag} /> */}
         <Section title="Quick and Easy Recipes" recipes={quickRecipes} isLoading={loadingQuick} />
       </Container>
     </Box>
