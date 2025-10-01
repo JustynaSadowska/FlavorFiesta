@@ -19,7 +19,7 @@ public class GetRecipeList
         public required RecipeParams Params { get; set; }
     }
 
-    public class Handler(AppDbContext context,IUserAccessor userAccessor, IMapper mapper, RatingService ratingService) :
+    public class Handler(AppDbContext context,IUserAccessor userAccessor, IMapper mapper) :
         IRequestHandler<Query, Result<PagedList<RecipeDto, DateTime?>>>
     {
         public async Task<Result<PagedList<RecipeDto, DateTime?>>> Handle(Query request, CancellationToken cancellationToken)
@@ -106,21 +106,21 @@ public class GetRecipeList
                 .Take(request.Params.PageSize + 1)
                 .ToListAsync(cancellationToken);
 
-            foreach (var recipe in recipes)
-            {
-                var ratingResult = await ratingService.GetAndUpdateRatings(recipe.Id);
+            // foreach (var recipe in recipes)
+            // {
+            //     var ratingResult = await ratingService.GetAndUpdateRatings(recipe.Id);
 
-                if (ratingResult.Value != null)
-                {
-                    recipe.AverageRating = ratingResult.Value.AverageRating;
-                    recipe.ReviewCount = ratingResult.Value.ReviewCount;
-                }
-                else
-                {
-                    recipe.AverageRating = 0;
-                    recipe.ReviewCount = 0;
-                }
-            }
+            //     if (ratingResult.Value != null)
+            //     {
+            //         recipe.AverageRating = ratingResult.Value.AverageRating;
+            //         recipe.ReviewCount = ratingResult.Value.ReviewCount;
+            //     }
+            //     else
+            //     {
+            //         recipe.AverageRating = 0;
+            //         recipe.ReviewCount = 0;
+            //     }
+            // }
 
             DateTime? nextCursor = null;
             double? nextCursorRating = null;
