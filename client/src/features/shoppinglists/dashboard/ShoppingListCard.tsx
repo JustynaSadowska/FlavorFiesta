@@ -37,7 +37,7 @@ export default function ShoppingListCard({ shoppingList }: Props) {
     let y = 36;
     sortedItems.forEach((item) => {
       doc.text(
-        `${item.isChecked ? "(X)" : "( )"} ${item.name} ${item.quantity} ${item.unit.displayName}`,
+        `> ${item.name} ${item.quantity} ${item.unit.displayName}`,
         14,
         y
       );
