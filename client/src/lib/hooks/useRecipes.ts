@@ -184,6 +184,15 @@ const { data: latestRecipes, isLoading: loadingLatest } = useQuery({
     return res.data.items 
   },
 });
+
+const { data: bestRatedRecipes, isLoading: loadingRated } = useQuery({
+  queryKey: ["recipes", "rating"],
+  queryFn: async () => {
+    const res = await agent.get("/recipes", { params: { pageSize: 4, sortBy: "rating" } });
+    return res.data.items 
+  },
+});
+
 const dinnerTag = tags.find(t => t.name.toLowerCase() === "dinner")?.id;
 const quickTag = tags.find(t => t.name.toLowerCase() === "quick & easy")?.id;
 
@@ -233,6 +242,8 @@ const { data: quickRecipes, isLoading: loadingQuick}  = useQuery({
     quickRecipes,
     loadingLatest,
     loadingDinner,
-    loadingQuick
+    loadingQuick,
+    bestRatedRecipes,
+    loadingRated
   };
 };
