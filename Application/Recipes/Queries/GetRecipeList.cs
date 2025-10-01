@@ -19,7 +19,7 @@ public class GetRecipeList
         public required RecipeParams Params { get; set; }
     }
 
-    public class Handler(AppDbContext context, RatingService ratingService,IUserAccessor userAccessor, IMapper mapper) :
+    public class Handler(AppDbContext context,IUserAccessor userAccessor, IMapper mapper, RatingService ratingService) :
         IRequestHandler<Query, Result<PagedList<RecipeDto, DateTime?>>>
     {
         public async Task<Result<PagedList<RecipeDto, DateTime?>>> Handle(Query request, CancellationToken cancellationToken)
@@ -31,17 +31,17 @@ public class GetRecipeList
             {
                 "newest" => query.Where(x => request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor)
                                 .OrderByDescending(x => x.CreatedAt),
+
                 "oldest" => query.Where(x => request.Params.Cursor == null || x.CreatedAt >= request.Params.Cursor)
                                 .OrderBy(x => x.CreatedAt),
-                // "rating" => query
-                //     .OrderByDescending(x => x.Reviews
-                //         .Where(r => !r.IsDeleted)
-                //         .Select(r => (double?)r.Rating)
-                //         .Average() ?? 0
-                //     )
-                //     .ThenByDescending(x => x.CreatedAt)
-                //     .Where(x => request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor),
-                
+
+                "rating" => query
+                    .Where(x => request.Params.CursorRating == null 
+                        || x.AverageRating < request.Params.CursorRating
+                        || (x.AverageRating == request.Params.CursorRating && x.CreatedAt <= request.Params.Cursor))
+                    .OrderByDescending(x => x.AverageRating)
+                    .ThenByDescending(x => x.CreatedAt),
+
                 _ => query.Where(x => request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor)
                         .OrderByDescending(x => x.CreatedAt)
             };
@@ -105,10 +105,10 @@ public class GetRecipeList
             var recipes = await projectedRecipes
                 .Take(request.Params.PageSize + 1)
                 .ToListAsync(cancellationToken);
-            
+
             foreach (var recipe in recipes)
             {
-                var ratingResult = await ratingService.GetRatings(recipe.Id);
+                var ratingResult = await ratingService.GetAndUpdateRatings(recipe.Id);
 
                 if (ratingResult.Value != null)
                 {
@@ -121,18 +121,32 @@ public class GetRecipeList
                     recipe.ReviewCount = 0;
                 }
             }
+
             DateTime? nextCursor = null;
+            double? nextCursorRating = null;
+
             if (recipes.Count > request.Params.PageSize)
             {
-                nextCursor = recipes.Last().CreatedAt;
-                recipes.RemoveAt(recipes .Count - 1);
+                var last = recipes.Last();
+                recipes.RemoveAt(recipes.Count - 1);
+
+                if (request.Params.SortBy?.ToLower() == "rating")
+                {
+                    nextCursorRating = last.AverageRating;
+                    nextCursor = last.CreatedAt;
+                }
+                else
+                {
+                    nextCursor = last.CreatedAt;
+                }
             }
 
             return Result<PagedList<RecipeDto, DateTime?>>.Success(
                 new PagedList<RecipeDto, DateTime?>
                 {
                     Items = recipes,
-                    NextCursor = nextCursor
+                    NextCursor = nextCursor,
+                    CursorRating = nextCursorRating,
                 }
             );
         }

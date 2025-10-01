@@ -7,7 +7,14 @@ type ResetPassword = {
 type PagedList<T, TCursor> = {
   items: T[];
   nextCursor: TCursor;
+  cursorRating?: number;
 }
+
+  type RecipesCursor = {
+    cursor: string ;      
+    cursorRating?: number;
+  };
+  
 
 type CreateUpdateRecipe = {
   id?: string;

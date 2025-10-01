@@ -12,4 +12,5 @@ public class RecipeParams : PaginationParams<DateTime?>
     public List<string>? SelectedIngredients { get; set; } = [];
     public string? SortBy { get; set; }
     public RecipeDifficulty? Difficulty { get; set; }
+    public double? CursorRating { get; set; }
 }

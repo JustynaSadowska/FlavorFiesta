@@ -10,29 +10,37 @@ export const useRecipes = (id?: string) => {
 
   const { data: recipesGroup, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage} = useInfiniteQuery<PagedList<Recipe, string>>({
     queryKey: ['recipes', title, selectedIngredients, selectedTags, includeUserAllergens, sortBy, difficulty],
-    queryFn: async ({pageParam = null}) => {
-      const response = await agent.get<PagedList<Recipe,string>>("/recipes", {
-        params: {
-          cursor: pageParam,
-          pageSize: 10,
-          title,
-          selectedIngredients: selectedIngredients.length > 0 
-            ? `[${selectedIngredients.join(",")}]` 
-            : undefined,
-            includeUserAllergens,
-            sortBy,
-            difficulty: difficulty !== 0 ? difficulty : undefined,
-          ...(selectedTags.length > 0 ? { selectedTags: selectedTags } : {})
-        },
-        paramsSerializer: params => 
-          qs.stringify(params, { arrayFormat: "repeat" })
-            });
-        return response.data;
-    },
+   queryFn: async (context) => {
+  const pageParam = context.pageParam as RecipesCursor | undefined;
+    const response = await agent.get<PagedList<Recipe, string>>("/recipes", {
+      params: {
+        cursor: pageParam?.cursor ?? null,
+        cursorRating: pageParam?.cursorRating ?? null,
+        pageSize: 10,
+        title,
+        selectedIngredients: selectedIngredients.length > 0 
+          ? `[${selectedIngredients.join(",")}]` 
+          : undefined,
+        includeUserAllergens,
+        sortBy,
+        difficulty: difficulty !== 0 ? difficulty : undefined,
+        ...(selectedTags.length > 0 ? { selectedTags: selectedTags } : {})
+      },
+      paramsSerializer: params => qs.stringify(params, { arrayFormat: "repeat" })
+    });
+
+    return response.data;
+  },
     placeholderData: keepPreviousData,
     initialPageParam: null,
-    getNextPageParam:(lastPage)=> lastPage.nextCursor,
-    enabled: !id,
+    getNextPageParam: (lastPage) => {
+    if (!lastPage.nextCursor) return undefined;
+    return {
+      cursor: lastPage.nextCursor,
+      cursorRating: lastPage.cursorRating 
+    };
+  },    
+  enabled: !id,
     select: data => ({
       ...data,
       pages: data.pages.map((page)=> ({
