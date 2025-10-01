@@ -7,7 +7,7 @@ namespace Persistence;
 
 public class DbInitializer
 {
-    public static async Task SeedData(AppDbContext context, UserManager<User> userManager)
+    public static async Task SeedData(AppDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
 
         var units = new List<Unit>
@@ -82,6 +82,29 @@ public class DbInitializer
         };
         context.Tags.AddRange(tags);
 
+        bool isCustomerRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.CREATOR);
+        bool isAdminRoleExists = await roleManager.RoleExistsAsync(StaticUserRoles.ADMIN);
+
+        if (!isCustomerRoleExists)
+            await roleManager.CreateAsync(new IdentityRole(StaticUserRoles.CREATOR));
+
+        if (!isAdminRoleExists) 
+            await roleManager.CreateAsync(new IdentityRole(StaticUserRoles.ADMIN));
+
+        if (userManager.Users.Any()) return;
+
+        var admin = new User
+        {
+            UserName = "admin@test.com",
+            Email = "admin@test.com",
+            FirstName = "Admin",
+            EmailConfirmed = true,
+            DateRegistered = DateTime.UtcNow
+        };
+
+        await userManager.CreateAsync(admin, "Pa$$w0rd");
+        await userManager.AddToRoleAsync(admin, StaticUserRoles.ADMIN);
+
         var users = new List<User>
         {
             new() {
@@ -114,14 +137,12 @@ public class DbInitializer
 
             }
         };
-
-        if (!userManager.Users.Any())
+        foreach (var user in users)
         {
-            foreach (var user in users)
-            {
-                await userManager.CreateAsync(user, "Pa$$w0rd");
-            }
+            await userManager.CreateAsync(user, "Pa$$w0rd");
+            await userManager.AddToRoleAsync(user, StaticUserRoles.CREATOR);
         }
+        
         if (context.Recipes.Any()) return;
 
         var recipes = new List<Recipe>
