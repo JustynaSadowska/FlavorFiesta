@@ -153,14 +153,12 @@ export default function NavBar() {
                       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                       sx={{ display: { xs: 'block', md: 'none' } }}
                     >
-                      <>
-                        <MenuItem component={Link} to="/login" onClick={handleCloseAccountMenu}>
-                          Login
-                        </MenuItem>
-                        <MenuItem component={Link} to="/register" onClick={handleCloseAccountMenu}>
-                          Register
-                        </MenuItem>
-                      </>
+                      <MenuItem component={Link} to="/login" onClick={handleCloseAccountMenu}>
+                        Login
+                      </MenuItem>
+                      <MenuItem component={Link} to="/register" onClick={handleCloseAccountMenu}>
+                        Register
+                      </MenuItem>
                     </Menu>
                   </Box></>
               

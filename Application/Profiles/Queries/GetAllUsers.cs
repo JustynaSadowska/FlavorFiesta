@@ -27,8 +27,18 @@ namespace Application.Profiles.Queries
             {
                 var currentUser = await userAccessor.GetUserAsync();
 
+                var adminRoleId = await context.Roles
+                    .Where(r => r.Name == "ADMIN")
+                    .Select(r => r.Id)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                var adminUserIds = await context.UserRoles
+                    .Where(ur => ur.RoleId == adminRoleId)
+                    .Select(ur => ur.UserId)
+                    .ToListAsync(cancellationToken);
+
                 var query = context.Users
-                    .Where(x => x.Id != currentUser.Id)
+                    .Where(x => x.Id != currentUser.Id && !adminUserIds.Contains(x.Id))
                     .AsQueryable();
 
                 if (request.Params.Cursor != null)

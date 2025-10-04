@@ -59,7 +59,8 @@ type User = {
   email: string;
   firstName: string;
   lastName: string;
-  imageUrl?: string
+  imageUrl?: string;
+  isAdmin: boolean;
 };
 
 type Step = {

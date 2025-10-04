@@ -10,10 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Persistence;
 
 namespace API.Controllers
 {
-    public class AccountController(SignInManager<User> signInManager, IEmailSender<User> emailSender, IConfiguration config) : BaseApiController
+    public class AccountController(SignInManager<User> signInManager, IEmailSender<User> emailSender, IConfiguration config, UserManager<User> userManager) : BaseApiController
     {
         [AllowAnonymous]
         [HttpPost("register")]
@@ -33,6 +34,7 @@ namespace API.Controllers
             if (result.Succeeded)
             {
                 await SendConfirmationEmailAsync(user, registerDto.Email);
+                await userManager.AddToRoleAsync(user, StaticUserRoles.CREATOR);
                 return Ok();
             }
 
@@ -85,17 +87,19 @@ namespace API.Controllers
 
             if (user == null) return Unauthorized();
 
+            var roles = await userManager.GetRolesAsync(user);
             return Ok(new
             {
                 user.FirstName,
                 user.LastName,
                 user.Email,
                 user.Id,
-                user.ImageUrl
+                user.ImageUrl,
+                IsAdmin = roles.Contains(StaticUserRoles.ADMIN)
             });
         }
 
-
+        [Authorize]
         [HttpPost("logout")]
         public async Task<ActionResult> Logout()
         {
@@ -103,7 +107,8 @@ namespace API.Controllers
 
             return NoContent();
         }
-
+        
+        [Authorize]
         [HttpPost("change-password")]
         public async Task<ActionResult> ChangePassword(ChangePasswordDto passwordDto)
         {
