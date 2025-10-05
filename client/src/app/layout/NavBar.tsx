@@ -130,37 +130,37 @@ export default function NavBar() {
               <UserMenu />
             ) : (
              <><Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' }, gap: 2, alignItems: 'center' }}>
-                  <MenuItemLink to="/login">Login</MenuItemLink>
-                  <MenuItemLink to="/register">Register</MenuItemLink>
-                </Box>
-                <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none' } }}>
-                    <IconButton
-                      size="large"
-                      aria-label="account menu"
-                      aria-controls="menu-account"
-                      aria-haspopup="true"
-                      onClick={handleOpenAccountMenu}
-                      color="inherit"
-                    >
-                      <ArrowDropDownIcon />
-                    </IconButton>
-                    <Menu
-                      id="menu-account"
-                      anchorEl={anchorElAccount}
-                      open={Boolean(anchorElAccount)}
-                      onClose={handleCloseAccountMenu}
-                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                      sx={{ display: { xs: 'block', md: 'none' } }}
-                    >
-                      <MenuItem component={Link} to="/login" onClick={handleCloseAccountMenu}>
-                        Login
-                      </MenuItem>
-                      <MenuItem component={Link} to="/register" onClick={handleCloseAccountMenu}>
-                        Register
-                      </MenuItem>
-                    </Menu>
-                  </Box></>
+                 <MenuItemLink to="/login">Login</MenuItemLink>
+                 <MenuItemLink to="/register">Register</MenuItemLink>
+               </Box>
+               <Box sx={{ flexGrow: 0, display: { xs: 'flex', md: 'none' } }}>
+                   <IconButton
+                     size="large"
+                     aria-label="account menu"
+                     aria-controls="menu-account"
+                     aria-haspopup="true"
+                     onClick={handleOpenAccountMenu}
+                     color="inherit"
+                   >
+                     <ArrowDropDownIcon />
+                   </IconButton>
+                   <Menu
+                     id="menu-account"
+                     anchorEl={anchorElAccount}
+                     open={Boolean(anchorElAccount)}
+                     onClose={handleCloseAccountMenu}
+                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                     sx={{ display: { xs: 'block', md: 'none' } }}
+                   >
+                     <MenuItem component={Link} to="/login" onClick={handleCloseAccountMenu}>
+                       Login
+                     </MenuItem>
+                     <MenuItem component={Link} to="/register" onClick={handleCloseAccountMenu}>
+                       Register
+                     </MenuItem>
+                   </Menu>
+                 </Box></>
               
             )}
           </Box>
