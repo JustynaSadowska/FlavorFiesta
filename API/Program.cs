@@ -39,6 +39,7 @@ builder.Services.AddMediatR(x =>
 });
 builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddTransient<IEmailSender<User>, EmailSender>();
+builder.Services.AddTransient<IExtendedEmailSender, EmailSender>();
 
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();

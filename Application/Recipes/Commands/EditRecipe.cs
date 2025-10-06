@@ -22,6 +22,8 @@ public class EditRecipe
         public async Task<Result<MediatR.Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
             var user = await userAccessor.GetUserAsync();
+            if (user == null)
+                return Result<MediatR.Unit>.Failure("Unauthorized", 401);
 
             var recipe = await context.Recipes
                 .Include(r => r.Steps)

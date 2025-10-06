@@ -24,6 +24,8 @@ namespace Application.Recipes.Commands
             public async Task<Result<MediatR.Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await userAccessor.GetUserAsync();
+                if (user == null)
+                    return Result<MediatR.Unit>.Failure("Unauthorized", 401);
 
                 var recipe = await context.Recipes.FindAsync([request.Id], cancellationToken);
                 if (recipe == null) return Result<MediatR.Unit>.Failure("Recipe not found", 404);

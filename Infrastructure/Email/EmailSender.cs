@@ -7,10 +7,11 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
+using Application.Interfaces;
 
 namespace Infrastructure.Email;
 
-public class EmailSender(IOptions<EmailConfiguration> emailConfig, IConfiguration config) : IEmailSender<User>
+public class EmailSender(IOptions<EmailConfiguration> emailConfig, IConfiguration config) : IExtendedEmailSender
 {
     private readonly EmailConfiguration _emailConfig = emailConfig.Value;
     public async Task SendConfirmationLinkAsync(User user, string email, string confirmationLink)
@@ -55,7 +56,7 @@ public class EmailSender(IOptions<EmailConfiguration> emailConfig, IConfiguratio
         message.To.Add(new MailboxAddress("", recipient));
         message.Subject = subject;
         message.Body = new BodyBuilder { HtmlBody = body }.ToMessageBody();
-        
+
         try
         {
             using var client = new SmtpClient();
@@ -69,5 +70,18 @@ public class EmailSender(IOptions<EmailConfiguration> emailConfig, IConfiguratio
         {
             throw new InvalidOperationException("Could not send email", ex);
         }
+    }
+    public async Task SendDeletionNoticeAsync(User user, string deletedItemTitle, string content)
+    {
+        var subject = "Your content has been removed";
+        var body = $@"
+            <p>Hi {user.FirstName} {user.LastName}</p>
+            <p>We wanted to let you know that your {content} <strong>{deletedItemTitle}</strong> 
+            has been removed by an administrator.</p>
+            <p>Reason: Violation of content policy or inappropriate content</p>
+            <p><strong>The FlavorFiesta Team</strong></p>
+        ";
+
+        await SendMailAsync(user.Email!, subject, body);
     }
 }
