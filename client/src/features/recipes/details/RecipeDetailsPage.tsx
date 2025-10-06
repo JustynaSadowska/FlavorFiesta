@@ -43,6 +43,7 @@ import { useAllergens } from "../../../lib/hooks/useAllergens";
 import { useAccount } from "../../../lib/hooks/useAccount";
 import SubmitButton from "../../../app/shared/components/SubmitButton";
 import { isAdmin } from "../../../lib/util/permissions";
+import { toast } from "react-toastify";
 
 export const StyledBox = styled(Box)({
   display: "flex",
@@ -200,7 +201,9 @@ useEffect(() => {
                     {!currentUser ? ( 
                       <IconButton
                         aria-label="login-to-favorite"
-                        onClick={() => navigate("/login")}
+                        onClick={() => 
+                          {toast.warning("You must be logged in to perform this action")
+                           navigate("/login", { state: { from: location.pathname }} )}}
                       >
                         <FavoriteBorderIcon />
                       </IconButton>

@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import { useAccount } from "../../lib/hooks/useAccount";
 import { isAdmin} from "../../lib/util/permissions";
+import { toast } from "react-toastify";
 
 
 type Props = {
@@ -49,7 +50,8 @@ export default function ReviewSection({ reviews }: Props) {
                             }}
                             onClick={() => {
                               if (!currentUser) {
-                                navigate("/login"); 
+                                toast.warning("You must be logged in to perform this action");
+                                navigate("/login", { state: { from: location.pathname }}); 
                               } else {
                                 setOpen(true); 
                               }

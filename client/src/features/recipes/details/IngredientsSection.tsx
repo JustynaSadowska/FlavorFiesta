@@ -5,6 +5,7 @@ import AddIngredientsDialog from "../dialogs/AddIngredientsDialog";
 import { useNavigate } from "react-router";
 import { useAccount } from "../../../lib/hooks/useAccount";
 import {isAdmin } from "../../../lib/util/permissions";
+import { toast } from "react-toastify";
 
 type IngredientsSectionProps = {
   ingredients: Ingredient[];
@@ -31,7 +32,8 @@ export default function IngredientsSection({
 
   const handleOpenDialog = () => {
      if (!currentUser) {
-      navigate("/login");
+      toast.warning("You must be logged in to perform this action");
+      navigate("/login", { state: { from: location.pathname }});
       return;
     }
     const converted: Ingredient[] = ingredients.map((i, index) => ({

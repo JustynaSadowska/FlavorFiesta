@@ -22,6 +22,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useAllergens } from "../../lib/hooks/useAllergens";
 import { useAccount } from "../../lib/hooks/useAccount";
 import { isAdmin } from "../../lib/util/permissions";
+import { toast } from "react-toastify";
 
 export default function ProfileHeader() {
     const { id } = useParams();
@@ -163,7 +164,8 @@ export default function ProfileHeader() {
                         <Button
                          onClick={() => {
                             if (!currentUser) {
-                            navigate("/login"); 
+                                toast.warning("You must be logged in to perform this action");
+                                navigate("/login", { state: { from: location.pathname }}); 
                             } else {
                             updateFollowing.mutate(profile.id);
                             }

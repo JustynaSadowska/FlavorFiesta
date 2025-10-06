@@ -8,7 +8,7 @@ export default function RequireAuth() {
 
     if(loadingUserUnfo) return <Typography>Loading...</Typography>
 
-    if(!currentUser) return <Navigate to = '/login' state = {{from: location}}/>
+    if(!currentUser) return <Navigate to = '/login' state = {{from: location.pathname}}/>
   return (
     <Outlet/>
   )
