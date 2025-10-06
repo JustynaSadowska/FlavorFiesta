@@ -23,7 +23,13 @@ namespace Infrastructure.Security
         {
             var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return;
-
+            var role = context.User.FindFirstValue(ClaimTypes.Role);
+            if (role == StaticUserRoles.ADMIN)
+            {
+                context.Succeed(requirement);
+                return;
+            }
+            
             var httpContext = httpContextAccessor.HttpContext;
 
             if (httpContext?.GetRouteValue("id") is not string reviewId) return;
