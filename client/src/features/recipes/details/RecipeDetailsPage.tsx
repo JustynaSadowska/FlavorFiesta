@@ -44,6 +44,8 @@ import { useAccount } from "../../../lib/hooks/useAccount";
 import SubmitButton from "../../../app/shared/components/SubmitButton";
 import { isAdmin } from "../../../lib/util/permissions";
 import { toast } from "react-toastify";
+import StepByStepDialog from "../dialogs/StepByStepDialog";
+import BlenderOutlinedIcon from '@mui/icons-material/BlenderOutlined';
 
 export const StyledBox = styled(Box)({
   display: "flex",
@@ -63,10 +65,9 @@ export default function RecipeDetails() {
   const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(recipe?.isVisible);
   const { favoriteRecipesGroup } = useProfile(currentUser?.id);
+const [stepDialogOpen, setStepDialogOpen] = useState(false);
   const navigate = useNavigate();
   const auth = {user: currentUser}
-console.log("currentUser?.id")
-  console.log(currentUser?.id)
   const { userAllergens } = useAllergens();
   const isFavorite = useMemo(() => { 
     if (!favoriteRecipesGroup?.pages) 
@@ -329,13 +330,33 @@ useEffect(() => {
               <Typography variant="h5" fontWeight="bold">Preparation</Typography>
               <Divider sx={{ mb: 2, mt: 1 }} />
               {recipe.steps && recipe.steps.length > 0 ? (
-                <Box component="ol" sx={{ pl: 3, m: 0, display: "flex", flexDirection: "column", gap: 1 }}>
+                <><Box component="ol" sx={{ pl: 3, m: 0, display: "flex", flexDirection: "column", gap: 1 }}>
                   {recipe.steps.slice().sort((a, b) => a.order - b.order).map((step, i) => (
                     <li key={i} style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
                       <Typography variant="body1" sx={{ lineHeight: 1.7 }}>{step.description}</Typography>
                     </li>
                   ))}
-                </Box>
+                </Box><Box display="flex" justifyContent="center" mt={2}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => setStepDialogOpen(true)}
+                      startIcon={<BlenderOutlinedIcon />}
+                      sx={{
+                        borderColor: '#EAC1B1',
+                        color: 'gray',
+                        borderRadius: 2,
+                        px: 3,
+                        py: 1,
+                        textTransform: 'none',
+                        '&:hover': {
+                          backgroundColor: '#f6dfd1',
+                          borderColor: '#e6c5ae',
+                        },
+                      }}
+                    >
+                      View Steps Step-by-Step
+                    </Button>
+                  </Box></>
               ) : (
                 <Typography variant="body2" color="text.secondary" mb={3}>No steps provided.</Typography>
               )}
@@ -348,6 +369,12 @@ useEffect(() => {
         <ReviewSection reviews={recipe.reviews} />
       </div>
 
+      <StepByStepDialog
+        open={stepDialogOpen}
+        setOpen={setStepDialogOpen}
+        steps={recipe.steps.slice().sort((a,b)=>a.order-b.order) }
+        imageUrl={recipe.imageUrl}
+      />
       <DeleteDialog
         open={isDeleteDialogOpen}
         setOpen={setDeleteDialogOpen}
