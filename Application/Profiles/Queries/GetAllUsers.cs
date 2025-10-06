@@ -37,9 +37,18 @@ namespace Application.Profiles.Queries
                     .Select(ur => ur.UserId)
                     .ToListAsync(cancellationToken);
 
-                var query = context.Users
-                    .Where(x => x.Id != currentUser.Id && !adminUserIds.Contains(x.Id))
-                    .AsQueryable();
+                // var query = context.Users
+                //     .Where(x => x.Id != currentUser.Id && !adminUserIds.Contains(x.Id))
+                //     .AsQueryable();
+
+                var query = context.Users.AsQueryable();
+
+                if (currentUser != null)
+                {
+                    query = query.Where(x => x.Id != currentUser.Id);
+                }
+
+                query = query.Where(x => !adminUserIds.Contains(x.Id));
 
                 if (request.Params.Cursor != null)
                 {

@@ -16,7 +16,7 @@ import {
   Button,
 } from "@mui/material";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { formatDate } from "../../../lib/util/util";
 import IngredientsSection from "./IngredientsSection";
 import { formatPreparationTime } from "../../../lib/util/timeFormatter";
@@ -42,6 +42,7 @@ import { CloudUpload, Close as CloseIcon } from "@mui/icons-material";
 import { useAllergens } from "../../../lib/hooks/useAllergens";
 import { useAccount } from "../../../lib/hooks/useAccount";
 import SubmitButton from "../../../app/shared/components/SubmitButton";
+import { isAdmin } from "../../../lib/util/permissions";
 
 export const StyledBox = styled(Box)({
   display: "flex",
@@ -61,6 +62,8 @@ export default function RecipeDetails() {
   const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(recipe?.isVisible);
   const { favoriteRecipesGroup } = useProfile(currentUser?.id);
+  const navigate = useNavigate();
+  const auth = {user: currentUser}
 console.log("currentUser?.id")
   console.log(currentUser?.id)
   const { userAllergens } = useAllergens();
@@ -172,45 +175,63 @@ useEffect(() => {
           </Box>
 
           <Box sx={{ width: { xs: "100%", md: "60%" }, display: "flex", flexDirection: "column", gap: 2 }}>
-            
-            {recipe.isAuthor ? (
-              <StyledBox>
-                <IconButton
-                  onClick={() => {
-                    updateVisibility.mutate(recipe.id);
-                    setIsVisible(prev => !prev);
-                  }}
-                  aria-label="toggle visibility"
-                >
-                  {isVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </IconButton>
-                <IconButton component={Link} to={`/manage/${recipe.id}`} aria-label="edit">
-                  <EditIcon />
-                </IconButton>
+            {!isAdmin(auth) && (
+              <>
+                {recipe.isAuthor ? (
+                  <StyledBox>
+                    <IconButton
+                      onClick={() => {
+                        updateVisibility.mutate(recipe.id);
+                        setIsVisible(prev => !prev);
+                      }}
+                      aria-label="toggle visibility"
+                    >
+                      {isVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    </IconButton>
+                    <IconButton component={Link} to={`/manage/${recipe.id}`} aria-label="edit">
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setDeleteDialogOpen(true)} aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </StyledBox>
+                ) : (
+                  <StyledBox>
+                    {!currentUser ? ( 
+                      <IconButton
+                        aria-label="login-to-favorite"
+                        onClick={() => navigate("/login")}
+                      >
+                        <FavoriteBorderIcon />
+                      </IconButton>
+                    ) : isFavorite ? ( 
+                      <IconButton
+                        aria-label="remove from favorites"
+                        onClick={() => removeFromFavorite.mutate(recipe.id)}
+                        color="error"
+                      >
+                        <FavoriteIcon />
+                      </IconButton>
+                    ) : ( 
+                      <IconButton
+                        aria-label="add to favorites"
+                        onClick={() => addToFavorite.mutate(recipe.id)}
+                      >
+                        <FavoriteBorderIcon />
+                      </IconButton>
+                    )}
+                  </StyledBox>
+                )}
+              </>
+            )}
+             <StyledBox>
+              {isAdmin(auth) && (
                 <IconButton onClick={() => setDeleteDialogOpen(true)} aria-label="delete">
                   <DeleteIcon />
                 </IconButton>
-              </StyledBox>
-            ) : (
-              <StyledBox>
-                {isFavorite ? (
-                  <IconButton
-                    aria-label="remove from favorites"
-                    onClick={() => removeFromFavorite.mutate(recipe.id)}
-                    color="error"
-                  >
-                    <FavoriteIcon />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    aria-label="add to favorites"
-                    onClick={() => addToFavorite.mutate(recipe.id)}
-                  >
-                    <FavoriteBorderIcon />
-                  </IconButton>
-                )}
-              </StyledBox>
-            )}
+              )}
+             </StyledBox>
+            
 
             <Typography variant="h3" component="h1" fontWeight="bold" sx={{ lineHeight: 1.2 }}>
               {recipe.title}

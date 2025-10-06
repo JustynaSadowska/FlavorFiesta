@@ -32,9 +32,9 @@ namespace Application.Profiles.Queries
                     .Where(x => x.IsDeleted == false && x.UserId == request.UserId && (request.Params.Cursor == null || x.CreatedAt <= request.Params.Cursor))
                 .AsQueryable();
 
-                if (request.UserId != currentUser.Id)
+                if (currentUser == null || request.UserId != currentUser.Id)
                 {
-                    query = query.Where(x => x.IsVisible);//jesli user jest na swoim profilu to widzi swoje wszystkie przepisy
+                    query = query.Where(x => x.IsVisible);
                 }
                               
                 var projectedRecipes = query.ProjectTo<RecipeDto>(mapper.ConfigurationProvider);

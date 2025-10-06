@@ -20,6 +20,8 @@ import { useState } from "react";
 import ProfileFollowings from "./ProfileFollowings";
 import EditIcon from '@mui/icons-material/Edit';
 import { useAllergens } from "../../lib/hooks/useAllergens";
+import { useAccount } from "../../lib/hooks/useAccount";
+import { isAdmin } from "../../lib/util/permissions";
 
 export default function ProfileHeader() {
     const { id } = useParams();
@@ -27,7 +29,8 @@ export default function ProfileHeader() {
     const [openDialog, setOpenDialog] = useState<null | "followers" | "followings">(null);
     const navigate = useNavigate();
     const {userAllergens} = useAllergens();
-
+    const {currentUser} = useAccount();
+    const auth = {user: currentUser};
 
     if (!profile) return null;
 
@@ -156,9 +159,15 @@ export default function ProfileHeader() {
                         </Box>
                     </Box>
                     <Divider sx={{ width: "100%" }} />
-                    {!isCurrentUser && (
+                    {!isCurrentUser && !isAdmin(auth) && (
                         <Button
-                        onClick={() => updateFollowing.mutate(profile.id)}
+                         onClick={() => {
+                            if (!currentUser) {
+                            navigate("/login"); 
+                            } else {
+                            updateFollowing.mutate(profile.id);
+                            }
+                        }}
                         disabled={updateFollowing.isPending}
                         fullWidth
                         variant="outlined"

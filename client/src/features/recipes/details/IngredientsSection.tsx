@@ -2,6 +2,9 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } fr
 import { useState } from "react";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import AddIngredientsDialog from "../dialogs/AddIngredientsDialog";
+import { useNavigate } from "react-router";
+import { useAccount } from "../../../lib/hooks/useAccount";
+import {isAdmin } from "../../../lib/util/permissions";
 
 type IngredientsSectionProps = {
   ingredients: Ingredient[];
@@ -15,6 +18,9 @@ export default function IngredientsSection({
   const [selectedServings, setSelectedServings] = useState(baseServings);
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [dialogIngredients, setDialogIngredients] = useState<Ingredient[]>([]);
+  const { currentUser } = useAccount();
+  const navigate = useNavigate();
+  const auth= {user: currentUser};
 
   const getScaledQuantity = (quantity: number) => {
     if (!baseServings || baseServings === 0) return quantity;
@@ -24,6 +30,10 @@ export default function IngredientsSection({
   const sortedIngredients = [...ingredients].sort((a, b) => a.order - b.order);
 
   const handleOpenDialog = () => {
+     if (!currentUser) {
+      navigate("/login");
+      return;
+    }
     const converted: Ingredient[] = ingredients.map((i, index) => ({
       id: i.id,
       name: i.name,
@@ -71,7 +81,7 @@ export default function IngredientsSection({
             </Typography>
           </Box>
         ))}
-
+        { !isAdmin(auth) && (
         <Box display="flex" justifyContent="center" mt={2}>
           <Button
             variant="outlined"
@@ -93,6 +103,9 @@ export default function IngredientsSection({
             Add ingredients to shopping list
           </Button>
         </Box>
+  )
+  }
+        
       </Box>
 
       <AddIngredientsDialog

@@ -19,6 +19,8 @@ import { Link, useParams } from "react-router";
 //import ReviewForm from "../form/ReviewForm";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AvatarPopover from "../../../app/shared/components/AvatarPopover";
+import { isAdmin } from "../../../lib/util/permissions";
+import { useAccount } from "../../../lib/hooks/useAccount";
 
 type Props = {
   review: Review;
@@ -29,6 +31,8 @@ export default function ReviewCard({ review }: Props) {
     const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const { id: recipeId } = useParams();
+    const { currentUser } = useAccount();
+    const auth = {user: currentUser}
   return (
     <><Card variant="outlined" sx={{ borderRadius: 3, boxShadow: 1 }}>
       <CardContent>
@@ -58,7 +62,7 @@ export default function ReviewCard({ review }: Props) {
             </Box>
           </Stack>
           <Box pr={1} mt={-2}>
-            {review.isReviewAuthor && (
+            {review.isReviewAuthor  && (
               <>
                   <IconButton
                    onClick={() => setIsFormOpen(true)}
@@ -71,6 +75,13 @@ export default function ReviewCard({ review }: Props) {
                   <DeleteIcon />
                 </IconButton>
               </>
+            )}
+            { isAdmin(auth) && (
+                <IconButton 
+                  onClick={() => setDeleteDialogOpen(true)}
+                  aria-label="delete">
+                  <DeleteIcon />
+                </IconButton>
             )}
           </Box>
 

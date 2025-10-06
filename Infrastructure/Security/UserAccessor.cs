@@ -13,26 +13,29 @@ namespace Infrastructure.Security
 {
     public class UserAccessor(IHttpContextAccessor httpContextAccessor, AppDbContext dbContext) : IUserAccessor
     {
-        public async Task<User> GetUserAsync()
-        {
-            return await dbContext.Users.FindAsync(GetUserId())
-                ?? throw new UnauthorizedAccessException("No user is logged in");
-        }
-
-        public string GetUserId()
-        {
-            return httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier)
-                ?? throw new Exception("No user found");
-        }
-
-        public async Task<User> GetUserWithPhotosAsync()
+        public async Task<User?> GetUserAsync()
         {
             var userId = GetUserId();
+            if (string.IsNullOrEmpty(userId))
+                return null; // brak zalogowanego usera
 
-            return await dbContext.Users
-                .Include(x => x.Photos)
-                .FirstOrDefaultAsync(x => x.Id == userId)
-                    ?? throw new UnauthorizedAccessException("No user is logged in");
+             return await dbContext.Users.FindAsync(userId);
+        }
+
+        public string? GetUserId()
+        {
+           return httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
+        public async Task<User?> GetUserWithPhotosAsync()
+        {
+            var userId = GetUserId();
+        if (string.IsNullOrEmpty(userId))
+            return null; // brak zalogowanego usera
+
+        return await dbContext.Users
+            .Include(x => x.Photos)
+            .FirstOrDefaultAsync(x => x.Id == userId);
         }
     }
 }

@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Box, Button, Card, CardContent, Dialog, DialogTitle, Stack, Typography } from "@mui/material";
 import ReviewList from "./details/ReviewList";
 import ReviewForm from "./form/ReviewForm";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useRecipes } from "../../lib/hooks/useRecipes";
 import AddIcon from '@mui/icons-material/Add';
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import { useAccount } from "../../lib/hooks/useAccount";
+import { isAdmin} from "../../lib/util/permissions";
 
 
 type Props = {
@@ -14,9 +16,11 @@ type Props = {
 
 export default function ReviewSection({ reviews }: Props) {
   const [open, setOpen] = useState(false);
-    const {id} = useParams(); 
-    const { recipe } = useRecipes(id);
-
+  const {id} = useParams(); 
+  const { recipe } = useRecipes(id);
+  const navigate = useNavigate();
+  const { currentUser } = useAccount();
+  const auth = {user: currentUser}
 
   return (
     <Card  sx={{ maxWidth: 1200, margin: "auto", borderRadius: 3, my: 4, p: 2}}>
@@ -26,7 +30,7 @@ export default function ReviewSection({ reviews }: Props) {
                     <Typography variant="h5" fontWeight="bold">
                     Reviews
                     </Typography>           
-                {!recipe?.isAuthor && (
+                {!recipe?.isAuthor && !isAdmin(auth) && (
                     <Box display="flex" alignItems="center"  >
                         <Button
                             variant="outlined"
@@ -43,7 +47,13 @@ export default function ReviewSection({ reviews }: Props) {
                                     borderColor: '#e6c5ae',
                                 },
                             }}
-                            onClick={() => setOpen(true)}
+                            onClick={() => {
+                              if (!currentUser) {
+                                navigate("/login"); 
+                              } else {
+                                setOpen(true); 
+                              }
+                            }}
                         >
                             Add Review
                         </Button>
@@ -58,14 +68,15 @@ export default function ReviewSection({ reviews }: Props) {
                 sx={{ mt: 4, mb: 2 }}
               >
                 <RateReviewOutlinedIcon sx={{ fontSize: 64, mb: 1 }} />
-                {recipe?.isAuthor && (
+                {(recipe?.isAuthor || isAdmin(auth)) ? (
                 <Typography variant="subtitle1" fontStyle="italic">
                   No reviews yet.
-                </Typography>)}
-                 {!recipe?.isAuthor && (
-                <Typography variant="subtitle1" fontStyle="italic">
-                  Be the first one to leave a review!
-                </Typography>)}
+                </Typography>
+                ): (
+                  <Typography variant="subtitle1" fontStyle="italic">
+                    Be the first one to leave a review!
+                  </Typography>
+                  )}
               </Box>
             )
            : (
