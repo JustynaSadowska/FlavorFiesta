@@ -1,13 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
+import { useAccount } from "./useAccount";
 
 export const useShoppingLists = (id?: string) => {
   const queryClient = useQueryClient();
+  const { currentUser } = useAccount();
 
   const { data: shoppingLists = [], isLoading } = useQuery({
     queryKey: ["shoppingLists"],
     queryFn: () =>
       agent.get<ShoppingList[]>("/shoppingLists").then((res) => res.data),
+    enabled: !!currentUser,
   });
 
   const { data: shoppingList, isLoading: isLoadingShoppingList } = useQuery({
@@ -16,7 +19,7 @@ export const useShoppingLists = (id?: string) => {
       const response = await agent.get<ShoppingList>(`/shoppingLists/${id}`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && !!currentUser,
   });
 
   const checkedToggle = useMutation({

@@ -56,20 +56,37 @@ builder.Services.AddIdentityApiEndpoints<User>(opt =>
 .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAuthorization(opt =>
 {
+    opt.AddPolicy("IsRecipeAuthorOrAdmin", policy =>
+    {
+        policy.Requirements.Add(new IsRecipeAuthorOrAdminRequirement());
+    });
+});
+builder.Services.AddAuthorization(opt =>
+{
     opt.AddPolicy("IsRecipeAuthor", policy =>
     {
-        policy.Requirements.Add(new IsAuthorRequirement());
+        policy.Requirements.Add(new IsRecipeAuthorOnlyRequirement());
     });
 });
 builder.Services.AddAuthorization(opt =>
 {
     opt.AddPolicy("IsReviewAuthor", policy =>
     {
-        policy.Requirements.Add(new IsReviewAuthorRequirement());
+        policy.Requirements.Add(new IsReviewAuthorOnlyRequirement());
     });
 });
-builder.Services.AddTransient<IAuthorizationHandler, IsAuthorRequirementHandler>();
-builder.Services.AddTransient<IAuthorizationHandler, IsReviewAuthorRequirementHandler>();
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("IsReviewAuthorOrAdmin", policy =>
+    {
+        policy.Requirements.Add(new IsReviewAuthorOrAdminRequirement());
+    });
+});
+
+builder.Services.AddTransient<IAuthorizationHandler, IsRecipeAuthorOrAdminRequirementHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, IsRecipeAuthorOnlyRequirementHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, IsReviewAuthorOnlyRequirementHandler>();
+builder.Services.AddTransient<IAuthorizationHandler, IsReviewAuthorOrAdminRequirementHandler>();
 builder.Services.AddScoped<RatingService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 

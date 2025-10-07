@@ -22,13 +22,15 @@ public class RecipesController : BaseApiController
    {
       return HandleResult (await Mediator.Send(new GetRecipeList.Query{ Params = recipeParams }));
    }
-
+   
+   [AllowAnonymous]
    [HttpGet("{id}")]
    public async Task<ActionResult<RecipeDto>> GetRecipeDetail(string id)
    {
       return HandleResult(await Mediator.Send(new GetRecipeDetails.Query { Id = id }));
    }
 
+   [Authorize(StaticUserRoles.CREATOR)]
    [HttpPost]
    public async Task<ActionResult<string>> CreateRecipe(CreateRecipeDto recipeDto)
    {
@@ -42,9 +44,9 @@ public class RecipesController : BaseApiController
       recipe.Id = id;
       return HandleResult(await Mediator.Send(new EditRecipe.Command { RecipeDto = recipe }));
    }
-
+   
    [HttpDelete("{id}")]
-   [Authorize(Policy = "IsRecipeAuthor")]
+   [Authorize(Policy = "IsRecipeAuthorOrAdmin")]
    public async Task<ActionResult> DeleteRecipe(string id)
    {
       return HandleResult(await Mediator.Send(new DeleteRecipe.Command { Id = id }));
@@ -70,12 +72,15 @@ public class RecipesController : BaseApiController
    {
       return await Mediator.Send(new GetUnits.Query());
    }
+
+   [Authorize(Roles = StaticUserRoles.CREATOR)]
    [HttpPost("{id}/favorites")]
    public async Task<ActionResult> AddToFavorites(string id)
    {
       return HandleResult(await Mediator.Send(new AddToFavorites.Command { Id = id }));
    }
 
+   [Authorize(Roles = StaticUserRoles.CREATOR)]
    [HttpDelete("{id}/favorites")]
    public async Task<ActionResult> RemoveFromFavorites(string id)
    {

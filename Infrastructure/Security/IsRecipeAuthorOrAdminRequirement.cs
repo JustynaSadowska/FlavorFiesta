@@ -9,14 +9,11 @@ using Persistence;
 
 namespace Infrastructure.Security;
 
-public class IsAuthorRequirement : IAuthorizationRequirement
+public class IsRecipeAuthorOrAdminRequirement : IAuthorizationRequirement {}
+public class IsRecipeAuthorOrAdminRequirementHandler(AppDbContext dbContext, IHttpContextAccessor httpContextAccessor) 
+    : AuthorizationHandler<IsRecipeAuthorOrAdminRequirement>
 {
-
-}
-public class IsAuthorRequirementHandler(AppDbContext dbContext, IHttpContextAccessor httpContextAccessor) 
-    : AuthorizationHandler<IsAuthorRequirement>
-{
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, IsAuthorRequirement requirement)
+    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, IsRecipeAuthorOrAdminRequirement requirement)
     {
         var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId == null) return;

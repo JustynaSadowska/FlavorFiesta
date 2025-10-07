@@ -11,25 +11,24 @@ using Persistence;
 
 namespace Infrastructure.Security
 {
-    public class IsReviewAuthorRequirement : IAuthorizationRequirement
+    public class IsReviewAuthorOrAdminRequirement : IAuthorizationRequirement
     {
 
     }
-
-    public class IsReviewAuthorRequirementHandler(AppDbContext dbContext, IHttpContextAccessor httpContextAccessor) : AuthorizationHandler<IsReviewAuthorRequirement>
+    public class IsReviewAuthorOrAdminRequirementHandler(AppDbContext dbContext, IHttpContextAccessor httpContextAccessor) : AuthorizationHandler<IsReviewAuthorOrAdminRequirement>
     {
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, IsReviewAuthorRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, IsReviewAuthorOrAdminRequirement requirement)
         {
             var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return;
+            
             var role = context.User.FindFirstValue(ClaimTypes.Role);
             if (role == StaticUserRoles.ADMIN)
             {
                 context.Succeed(requirement);
                 return;
-            }
-            
+            }            
             var httpContext = httpContextAccessor.HttpContext;
 
             if (httpContext?.GetRouteValue("id") is not string reviewId) return;

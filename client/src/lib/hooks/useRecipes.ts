@@ -61,7 +61,7 @@ export const useRecipes = (id?: string) => {
       const response = await agent.get<Recipe>(`/recipes/${id}`);
       return response.data;
     },
-    enabled: !!id && !!currentUser,
+    enabled: !!id,
     select: (data) => {
       return {
         ...data,

@@ -2,10 +2,11 @@ import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClie
 import agent from "../api/agent";
 import { useMemo } from "react";
 import { useStore } from "./useStore";
-//import { useAccount } from "./useAccount";
+import { useAccount } from "./useAccount";
 export const useProfile = (id?: string, predicate?: string) => {
   const queryClient = useQueryClient();
   const {profileStore: {name}} = useStore();
+  const {currentUser} = useAccount();
 
   const { data: profile, isLoading: loadingProfile } = useQuery<Profile>({
     queryKey: ["profile", id],
@@ -103,7 +104,7 @@ export const useProfile = (id?: string, predicate?: string) => {
     initialPageParam: null,
     placeholderData: keepPreviousData,
     getNextPageParam:(lastPage)=> lastPage.nextCursor,
-    enabled: !! id
+    enabled: !! id && !!currentUser
 
   });
 

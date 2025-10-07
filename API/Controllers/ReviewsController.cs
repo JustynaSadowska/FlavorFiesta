@@ -7,16 +7,19 @@ using Application.Reviews.DTOs;
 using Application.Reviews.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Persistence;
 
 namespace API.Controllers
 {
     public class ReviewsController : BaseApiController
     {
+        [AllowAnonymous]
         [HttpGet("{recipeId}")]//pobiera liste recenzji dla danego przepisu 
         public async Task<ActionResult<List<ReviewDto>>> GetReviewList(string recipeId)
         {
             return await Mediator.Send(new GetReviewList.Query { Id = recipeId });
         }
+        [Authorize(Roles = StaticUserRoles.CREATOR)]
         [HttpPost]
         public async Task<ActionResult<string>> CreateReview(CreateReviewDto reviewDto)
         {
@@ -31,7 +34,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Policy = "IsReviewAuthor")]
+        [Authorize(Policy = "IsReviewAuthorOrAdmin")]
         public async Task<ActionResult> DeleteReview(string id)
         {
             return HandleResult(await Mediator.Send(new DeleteReview.Command { Id = id }));

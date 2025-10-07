@@ -6,10 +6,13 @@ using Application.Ingredients.DTOs;
 using Application.ShoppingLists.Commands;
 using Application.ShoppingLists.DTOs;
 using Application.ShoppingLists.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Persistence;
 
 namespace API.Controllers
 {
+    [Authorize(Roles = StaticUserRoles.CREATOR)]
     public class ShoppingListsController : BaseApiController
     {
         [HttpGet]
@@ -52,8 +55,8 @@ namespace API.Controllers
         [HttpPost("{listId}/addIngredients")]
         public async Task<ActionResult> AddIngredients(string listId, [FromBody] List<CreateIngredientDto> ingredients)
         {
-            return HandleResult(await Mediator.Send(new AddIngredients.Command { ListId = listId, Ingredients = ingredients}));
+            return HandleResult(await Mediator.Send(new AddIngredients.Command { ListId = listId, Ingredients = ingredients }));
         }
-        
+
     }
 }

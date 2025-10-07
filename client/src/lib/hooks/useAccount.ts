@@ -64,6 +64,9 @@ export const useAccount = () => {
       queryClient.removeQueries({
         queryKey: ["recipes"],
       });
+      queryClient.removeQueries({ 
+        queryKey: ["userAllergens"] 
+      });
       navigate("/");
     },
   });
