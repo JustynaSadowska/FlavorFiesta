@@ -3,10 +3,12 @@ import agent from "../api/agent";
 import { useMemo } from "react";
 import { useStore } from "./useStore";
 import { useAccount } from "./useAccount";
+import { isAdmin } from "../util/permissions";
 export const useProfile = (id?: string, predicate?: string) => {
   const queryClient = useQueryClient();
   const {profileStore: {name}} = useStore();
   const {currentUser} = useAccount();
+  const auth = {user: currentUser};
 
   const { data: profile, isLoading: loadingProfile } = useQuery<Profile>({
     queryKey: ["profile", id],
@@ -104,7 +106,7 @@ export const useProfile = (id?: string, predicate?: string) => {
     initialPageParam: null,
     placeholderData: keepPreviousData,
     getNextPageParam:(lastPage)=> lastPage.nextCursor,
-    enabled: !! id && !!currentUser
+    enabled: !! id && !!currentUser && !isAdmin(auth)
 
   });
 

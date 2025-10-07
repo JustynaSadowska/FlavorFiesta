@@ -1,16 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 import { useAccount } from "./useAccount";
+import { isAdmin } from "../util/permissions";
 
 export const useShoppingLists = (id?: string) => {
   const queryClient = useQueryClient();
   const { currentUser } = useAccount();
+  const auth = {user: currentUser};
 
   const { data: shoppingLists = [], isLoading } = useQuery({
     queryKey: ["shoppingLists"],
     queryFn: () =>
       agent.get<ShoppingList[]>("/shoppingLists").then((res) => res.data),
-    enabled: !!currentUser,
+    enabled: !!currentUser && !isAdmin(auth),
   });
 
   const { data: shoppingList, isLoading: isLoadingShoppingList } = useQuery({
@@ -19,7 +21,7 @@ export const useShoppingLists = (id?: string) => {
       const response = await agent.get<ShoppingList>(`/shoppingLists/${id}`);
       return response.data;
     },
-    enabled: !!id && !!currentUser,
+    enabled: !!id && !!currentUser 
   });
 
   const checkedToggle = useMutation({

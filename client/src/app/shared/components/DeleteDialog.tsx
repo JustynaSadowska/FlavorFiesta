@@ -55,10 +55,10 @@ export default function DeleteDialog<T extends { id: string }>({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel} autoFocus>
+        <Button onClick={handleCancel} autoFocus variant="contained">
           Cancel
         </Button>
-        <Button loading={isSubmitting} onClick={handleDelete} color="error" variant="contained">
+        <Button loading={isSubmitting} onClick={handleDelete} color="error">
           Delete
         </Button>
       </DialogActions>
