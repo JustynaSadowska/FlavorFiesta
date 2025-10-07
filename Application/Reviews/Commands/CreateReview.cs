@@ -27,6 +27,9 @@ namespace Application.Reviews.Commands
             public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await userAccessor.GetUserAsync();
+                if (user == null)
+                    return Result<string>.Failure("Unauthorized", 401);
+                    
                 var recipe = await context.Recipes
                     .Include(r => r.Reviews)
                     .FirstOrDefaultAsync(r => r.Id == request.ReviewDto.RecipeId, cancellationToken);

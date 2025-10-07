@@ -25,6 +25,9 @@ public class CreateRecipe
         {
             var user = await userAccessor.GetUserAsync();
 
+            if (user == null)
+                return Result<string>.Failure("Unauthorized", 401);
+
             var recipe = mapper.Map<Recipe>(request.RecipeDto);
 
             recipe.UserId = user.Id;

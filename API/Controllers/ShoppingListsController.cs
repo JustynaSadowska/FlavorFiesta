@@ -15,7 +15,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ShoppingListDto>>> GetShoppingLists()
         {
-            return await Mediator.Send(new GetShoppingLists.Query());
+            return HandleResult(await Mediator.Send(new GetShoppingLists.Query()));
         }
 
         [HttpGet("{id}")]

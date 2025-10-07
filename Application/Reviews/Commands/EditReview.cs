@@ -25,6 +25,8 @@ namespace Application.Reviews.Commands
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await userAccessor.GetUserAsync();
+                if (user == null)
+                    return Result<Unit>.Failure("Unauthorized", 401);
 
                 var review = await context.Reviews.FirstOrDefaultAsync(x => x.Id == request.ReviewDto.Id, cancellationToken);
 

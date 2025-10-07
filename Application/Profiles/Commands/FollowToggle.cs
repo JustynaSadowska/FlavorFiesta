@@ -24,6 +24,10 @@ namespace Application.Profiles.Commands
             public async Task<Result<MediatR.Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var observer = await userAccessor.GetUserAsync();
+                
+                if (observer == null)
+                    return Result<MediatR.Unit>.Failure("Unauthorized", 401);
+
                 var target = await context.Users.FindAsync([request.TargetUserId], cancellationToken);
 
                 if (target == null) return Result<MediatR.Unit>.Failure("Target user not found", 400);

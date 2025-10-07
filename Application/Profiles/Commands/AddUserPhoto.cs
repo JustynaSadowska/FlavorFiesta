@@ -24,6 +24,8 @@ public class AddUserPhoto
             if (uploadResult == null) return Result<Photo>.Failure("Failed to upload photo", 400);
 
             var user = await userAccessor.GetUserAsync();
+            if (user == null)
+                return Result<Photo>.Failure("Unauthorized", 401);
 
             var photo = new Photo
             {

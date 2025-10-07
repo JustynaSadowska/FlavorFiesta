@@ -27,6 +27,9 @@ namespace Application.Profiles.Queries
             {
                 var currentUser = await userAccessor.GetUserAsync();
 
+                if (currentUser == null)
+                    return Result<PagedList<RecipeDto, DateTime?>>.Failure("Unauthorized", 401);
+
                 var query = context.UserFavoriteRecipes
                     .Where(f => f.UserId == currentUser.Id)
                     .Select(f => f.Recipe)

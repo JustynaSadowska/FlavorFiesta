@@ -24,6 +24,9 @@ namespace Application.ShoppingLists.Commands
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await userAccessor.GetUserAsync();
+                
+                if (user == null)
+                    return Result<Unit>.Failure("Unauthorized", 401);
 
                 var shoppingList = await context.ShoppingLists
                     .Include(sl => sl.ShoppingListItems)

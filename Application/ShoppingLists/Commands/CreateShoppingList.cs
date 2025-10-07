@@ -24,6 +24,8 @@ namespace Application.ShoppingLists.Commands
         public async Task<Result<string>> Handle(Command request, CancellationToken cancellationToken)
         {
             var user = await userAccessor.GetUserAsync();
+            if (user == null)
+                return Result<string>.Failure("Unauthorized", 401);
 
             var shoppingList = mapper.Map<ShoppingList>(request.ShoppingListDto);
 
