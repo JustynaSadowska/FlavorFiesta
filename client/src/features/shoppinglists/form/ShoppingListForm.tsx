@@ -149,7 +149,7 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen, initia
                                 control={control}
                                 name={`shoppingListItems.${index}.isChecked`}
                                 render={({ field }) => (
-                                    <Checkbox  sx={{ml:-1}} {...field} checked={field.value} size="small" />
+                                    <Checkbox  sx={{ml:-1}} {...field} checked={!!field.value} size="small" />
                                 )}
                             />
                         )}
