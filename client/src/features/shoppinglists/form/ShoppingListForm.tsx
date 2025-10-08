@@ -143,7 +143,7 @@ export default function ShoppingListForm({ shoppingListId, open, setOpen, initia
                 <Typography variant="subtitle1" fontWeight="bold"  mt={2}>Items</Typography>
                 <Stack spacing={1}>
                 {fields.map((field, index) => (
-                    <Box key={field.id} display="flex" gap={1} alignItems="center">
+                    <Box key={field.id} display="flex" gap={1} alignItems="flex-start">
                         {isEdit && (
                             <Controller
                                 control={control}
