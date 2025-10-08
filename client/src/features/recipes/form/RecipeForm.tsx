@@ -160,9 +160,9 @@ export default function RecipeForm() {
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} display="flex" flexDirection="column" gap={3}>
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3, alignItems: "flex-start"}}>
           <TextInput label="Title" control={control} name="title" sx={{ maxWidth: 400 }} />
-          <Box display="flex" gap={3} justifyContent="flex-end" alignItems="flex-end">
+          <Box display="flex" gap={3} justifyContent="flex-end">
             <TextInput
               label="Preparation time"
               control={control}
@@ -217,7 +217,7 @@ export default function RecipeForm() {
           <TextInput label='Description(optional)' control = {control} name='description'  sx={{maxWidth: 1200}} multiline rows={2} />
         </Box> 
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "flex-start"}}>
           <Stack spacing={3} sx={{ width: 610 }}>
             <Controller
               control={control}
@@ -262,11 +262,11 @@ export default function RecipeForm() {
 
         <Divider sx={{ mt: 3 }} />
 
-<Box display="flex" gap={4} flexWrap="wrap" mt={3}>
+        <Box display="flex" gap={4} flexWrap="wrap" mt={3}>
             <Stack spacing={3} sx={{ flex: 1, minWidth: 300 }}>
               <Typography variant="h6">Ingredients</Typography>
               {ingredientFields.map((field, index) => (
-                <Box key={field.id} display="flex" gap={2} alignItems="center">
+                <Box key={field.id} display="flex" gap={2} alignItems="flex-start">
                   <TextInput
                     control={control}
                     name={`ingredients.${index}.name`}
