@@ -11,6 +11,7 @@ import {
     ListItemAvatar,
     ListItemText,
     Button,
+    CircularProgress,
 } from "@mui/material";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,7 +33,13 @@ export default function ProfileFollowings({ type, onNavigate }: Props) {
             .includes(search.toLowerCase())
     );
 
-    if (loadingFollowings) return <Typography>Loading...</Typography>;
+    if (loadingFollowings) {
+        return (
+          <Box display="flex" justifyContent="center" mt={2}>
+            <CircularProgress />
+          </Box>
+        );
+      } 
 
     return (
         <Box>
