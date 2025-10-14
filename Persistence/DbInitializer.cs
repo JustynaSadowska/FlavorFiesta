@@ -1516,21 +1516,6 @@ public class DbInitializer
         }
         context.UserFollowings.AddRange(followers);
 
-        var favorites = new List<UserFavoriteRecipe>
-            {
-                new()
-                {
-                    UserId = users[0].Id,
-                    RecipeId = recipes[1].Id,
-                },
-                new()
-                {
-                    UserId = users[1].Id,
-                    RecipeId = recipes[2].Id,
-                }
-            };
-
-        context.UserFavoriteRecipes.AddRange(favorites);
         await context.SaveChangesAsync();
 
     }
