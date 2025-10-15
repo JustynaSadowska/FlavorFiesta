@@ -20,13 +20,14 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../lib/hooks/useStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import KitchenIcon from '@mui/icons-material/Kitchen';
 import TuneIcon from '@mui/icons-material/Tune';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { difficultyFilterOptions } from "../../../lib/util/constants";
 import ClearIcon from '@mui/icons-material/Clear';
+import { useAccount } from "../../../lib/hooks/useAccount";
 
 const sortOptions = [
   { value: "newest", label: "Newest" },
@@ -54,6 +55,7 @@ const RecipeFilters = observer(function RecipeFilters() {
     },
   } = useStore();
   const { tags } = useRecipes();
+  const {currentUser} = useAccount();
 
   const [fridgeOpen, setFridgeOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -74,6 +76,18 @@ const RecipeFilters = observer(function RecipeFilters() {
     setSelectedIngredients(selectedIngredients.filter((i) => i !== name));
   };
 
+  useEffect(() => {
+    if (!currentUser) {
+      resetFridge();
+      resetFilters();
+      setIncludeUserAllergens(false);
+      setSelectedTags([]);
+      setSortBy("newest");
+      setDifficulty(0);
+      setTitle("");
+    }
+  }, [currentUser, resetFridge, resetFilters, setIncludeUserAllergens, setSelectedTags, setSortBy, setDifficulty, setTitle]);
+
   return (
     <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
       <Grid2 container spacing={2} alignItems="center">
@@ -89,8 +103,8 @@ const RecipeFilters = observer(function RecipeFilters() {
 
         <Grid2  sx={{ display: "flex", justifyContent: "flex-end", xs:12 ,md:6}}>
           <Tooltip title="Fridge">
-            <IconButton onClick={toggleFridge} color="default">
-              <KitchenIcon />
+            <IconButton onClick={toggleFridge}>
+              <KitchenIcon color={selectedIngredients.length > 0 ? 'secondary': 'inherit' } />
             </IconButton>
           </Tooltip>
 
@@ -117,31 +131,52 @@ const RecipeFilters = observer(function RecipeFilters() {
       <Collapse in={filtersOpen} timeout="auto" unmountOnExit>
         <Stack direction={{ xs: "column", md: "row" }} spacing={2} mt={3} alignItems="center">
           <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={includeUserAllergens}
-                  onChange={(e) => setIncludeUserAllergens(e.target.checked)}
-                />
+            <Tooltip
+              title={
+                !currentUser
+                  ? "You need to log in to use this option"
+                  : ""
               }
-              label="Exclude your allergens"
-            />
-          </FormGroup>
-
-            <TextField
-              select
-              label="Sort by"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              sx={{ minWidth: 150 }}
-              variant="outlined"
             >
-              {sortOptions.map((opt) => (
-                <MenuItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </MenuItem>
-              ))}
-            </TextField>
+              <span>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={includeUserAllergens}
+                      onChange={(e) => setIncludeUserAllergens(e.target.checked)}
+                      disabled={!currentUser} // wyłączone, jeśli nie zalogowany
+                    />
+                  }
+                  label="Exclude your allergens"
+                />
+              </span>
+            </Tooltip>
+          </FormGroup>
+            <Tooltip
+              title={
+                selectedIngredients.length > 0
+                  ? "Cannot sort while ingredients are selected in the fridge"
+                  : ""
+              }
+            >
+              <span> 
+                <TextField
+                  select
+                  label="Sort by"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  sx={{ minWidth: 150 }}
+                  variant="outlined"
+                  disabled={selectedIngredients.length > 0} 
+                >
+                  {sortOptions.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </span>
+            </Tooltip>
             
             <TextField
               select
