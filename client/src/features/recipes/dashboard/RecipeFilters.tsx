@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../../lib/hooks/useStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRecipes } from "../../../lib/hooks/useRecipes";
 import KitchenIcon from '@mui/icons-material/Kitchen';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -75,18 +75,6 @@ const RecipeFilters = observer(function RecipeFilters() {
   const removeIngredient = (name: string) => {
     setSelectedIngredients(selectedIngredients.filter((i) => i !== name));
   };
-
-  useEffect(() => {
-    if (!currentUser) {
-      resetFridge();
-      resetFilters();
-      setIncludeUserAllergens(false);
-      setSelectedTags([]);
-      setSortBy("newest");
-      setDifficulty(0);
-      setTitle("");
-    }
-  }, [currentUser, resetFridge, resetFilters, setIncludeUserAllergens, setSelectedTags, setSortBy, setDifficulty, setTitle]);
 
   return (
     <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
