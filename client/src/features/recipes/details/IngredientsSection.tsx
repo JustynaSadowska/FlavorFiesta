@@ -39,7 +39,7 @@ export default function IngredientsSection({
     const converted: Ingredient[] = ingredients.map((i, index) => ({
       id: i.id,
       name: i.name,
-      quantity: getScaledQuantity(i.quantity),
+      quantity: Number(getScaledQuantity(i.quantity).toFixed(2)),
       unit: i.unit,
       order: index + 1
     }));
