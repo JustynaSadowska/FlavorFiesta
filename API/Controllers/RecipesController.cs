@@ -30,7 +30,7 @@ public class RecipesController : BaseApiController
       return HandleResult(await Mediator.Send(new GetRecipeDetails.Query { Id = id }));
    }
 
-   [Authorize(StaticUserRoles.CREATOR)]
+   [Authorize(Roles = StaticUserRoles.CREATOR)]
    [HttpPost]
    public async Task<ActionResult<string>> CreateRecipe(CreateRecipeDto recipeDto)
    {
