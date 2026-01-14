@@ -214,16 +214,19 @@ export default function RecipeForm() {
               )}
             />
           </Box>
-          <TextInput label='Description(optional)' control = {control} name='description'  sx={{maxWidth: 1200}} multiline rows={2} />
+          <TextInput label='Description (optional)' control = {control} name='description'  sx={{maxWidth: 1200}} multiline rows={2} />
         </Box> 
 
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 4, alignItems: "flex-start"}}>
           <Stack spacing={3} sx={{ width: 610 }}>
             <Controller
-              control={control}
-              name="tags"
-              defaultValue={recipe?.tags}
-              render={({ field: { onChange, value } }) => (
+            control={control}
+            name="tags"
+            defaultValue={recipe?.tags || []} 
+            render={({ field: { onChange, value } }) => {
+              const safeValue = value || []; 
+
+              return (
                 <Autocomplete
                   multiple
                   options={tags}
@@ -231,12 +234,22 @@ export default function RecipeForm() {
                   getOptionLabel={(opt) => opt.name}
                   filterSelectedOptions
                   isOptionEqualToValue={(opt, val) => opt.id === val.id}
-                  value={value}
+                  value={safeValue}
                   onChange={(_, data) => onChange(data)}
-                  renderInput={(params) => <TextField {...params} label="Tags" error={!!errors.tags} helperText={errors.tags?.message} />}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Tags"
+                      error={!!errors.tags || safeValue.length === 0}
+                      helperText={
+                        errors.tags?.message || (safeValue.length === 0 ? "At least one tag is required" : "")
+                      }
+                    />
+                  )}
                 />
-              )}
-            />
+              );
+            }}
+          />
           </Stack>
           <Stack spacing={3} sx={{ width: 610 }}>
             <Controller
@@ -282,28 +295,33 @@ export default function RecipeForm() {
                     type="number"
                     sx={{ minWidth: 100, maxWidth:100 }}
                   />
-                  <Controller
+                 <Controller
                     control={control}
                     name={`ingredients.${index}.unit`}
-                    render={({ field: { onChange, value } }) => (
-                      <Autocomplete
-                        options={units}
-                        getOptionLabel={(option) => option?.displayName || ""}
-                        filterSelectedOptions
-                        isOptionEqualToValue={(option, value) => option.id === value?.id}
-                        value={value}
-                        onChange={(_, data) => onChange(data)}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Units"
-                            error={!!errors.ingredients?.[index]?.unit}
-                            helperText={errors.ingredients?.[index]?.unit?.message}
-                          />
-                        )}
-                        sx={{ minWidth: 120 }}
-                      />
-                    )}
+                    render={({ field: { onChange, value } }) => {
+                      const safeValue = value || null; 
+                      return (
+                        <Autocomplete
+                          options={units}
+                          getOptionLabel={(option) => option?.displayName || ""}
+                          filterSelectedOptions
+                          isOptionEqualToValue={(option, val) => option.id === val?.id}
+                          value={safeValue}
+                          onChange={(_, data) => onChange(data)}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Units"
+                              error={!!errors.ingredients?.[index]?.unit || safeValue === null}
+                              helperText={
+                                errors.ingredients?.[index]?.unit?.message || (safeValue === null ? "Unit is required" : "")
+                              }
+                            />
+                          )}
+                          sx={{ minWidth: 120 }}
+                        />
+                      );
+                    }}
                   />
                   <IconButton
                     aria-label="remove ingredient"
@@ -341,8 +359,8 @@ export default function RecipeForm() {
                   multiline           
                   minRows={1}       
                   maxRows={6}  
-                  error={!!errors.steps}
-                  helperText={errors.steps?.message}
+                  error={!!errors.steps?.[index]?.description}
+                  helperText={errors.steps?.[index]?.description?.message}
                 />
                 <IconButton
                   aria-label="remove step"

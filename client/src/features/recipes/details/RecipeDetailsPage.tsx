@@ -65,7 +65,7 @@ export default function RecipeDetails() {
   const reviewSectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(recipe?.isVisible);
   const { favoriteRecipesGroup } = useProfile(currentUser?.id);
-const [stepDialogOpen, setStepDialogOpen] = useState(false);
+  const [stepDialogOpen, setStepDialogOpen] = useState(false);
   const navigate = useNavigate();
   const auth = {user: currentUser}
   const { userAllergens } = useAllergens();
@@ -82,7 +82,8 @@ const [stepDialogOpen, setStepDialogOpen] = useState(false);
   const scrollToReviews = () => {
     reviewSectionRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-useEffect(() => {
+
+  useEffect(() => {
     if (typeof recipe?.isVisible === "boolean") setIsVisible(recipe.isVisible);
     return () => { files.forEach(file => URL.revokeObjectURL(file.preview)); }
   }, [recipe?.isVisible, files]);
@@ -92,6 +93,7 @@ useEffect(() => {
       acceptedFiles.map(file => Object.assign(file, { preview: URL.createObjectURL(file) }))
     );
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const onCrop = useCallback(() => {
@@ -110,13 +112,14 @@ useEffect(() => {
       }
     });
   }, [uploadRecipePhoto, recipe?.id]);
+  
   useEffect(() => {
     if (typeof recipe?.isVisible === "boolean") {
       setIsVisible(recipe.isVisible);
     }
   }, [recipe?.isVisible]);
 
-  if (isLoadingRecipe) return (
+  if (isLoadingRecipe || author === undefined) return (
     <Box display="flex" justifyContent="center" mt={2}>
       <CircularProgress />
     </Box>

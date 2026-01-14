@@ -28,7 +28,7 @@ export const recipeSchema = z.object({
   steps: z
     .array(
       z.object({
-        description: requiredString("Step description is required"),
+        description: requiredString("Step description"),
       })
     )
     .min(1, { message: "At least one step is required" }),

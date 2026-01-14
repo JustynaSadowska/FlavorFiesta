@@ -30,13 +30,14 @@ export default function ProfilePage() {
     setSearchParams({ tab: tabMapping[newValue] });
   };
 
-if (loadingProfile) {
+if (loadingProfile || isCurrentUser === undefined) {
     return (
       <Box display="flex" justifyContent="center" mt={2}>
         <CircularProgress />
       </Box>
     );
-  }   if (!profile) return <Typography>Profile not found</Typography>
+  } 
+  if (!profile) return <Typography>Profile not found</Typography>
 
   return (
     <div style={{ position: "relative", minHeight: "100vh" }}>

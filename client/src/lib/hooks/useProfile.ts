@@ -30,7 +30,7 @@ export const useProfile = (id?: string, predicate?: string) => {
       });
       return response.data;
     },
-        staleTime: 1000 * 60 * 5,//dopiero po 5 minutach trzeba bedzie je na nowo załadowywać
+        //staleTime: 1000 * 60 * 5,//dopiero po 5 minutach trzeba bedzie je na nowo załadowywać
         placeholderData: keepPreviousData,
         initialPageParam: null,
         getNextPageParam:(lastPage)=> lastPage.nextCursor,
@@ -110,7 +110,12 @@ export const useProfile = (id?: string, predicate?: string) => {
 
   });
 
-  const isCurrentUser = useMemo(() => {
+// const isCurrentUser = useMemo(() => {
+//   if (!currentUser || !id) return false;
+//   return currentUser.id.toString() === id.toString();
+// }, [currentUser, id]);
+
+const isCurrentUser = useMemo(() => {
     return id === queryClient.getQueryData<User>(["user"])?.id;
   }, [id, queryClient]);
 
