@@ -5,10 +5,12 @@ import { useNavigate } from "react-router";
 import { RegisterSchema } from "../schemas/registerSchema";
 import { toast } from "react-toastify";
 import { ChangePasswordSchema } from "../schemas/changePasswordSchema";
+import { useStore } from "./useStore";
 
 export const useAccount = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { recipeStore } = useStore();
 
   const loginUser = useMutation({
     mutationFn: async (creds: LoginSchema) => {
@@ -67,6 +69,8 @@ export const useAccount = () => {
       queryClient.removeQueries({ 
         queryKey: ["userAllergens"] 
       });
+      recipeStore.resetFilters();
+      recipeStore.resetFridge();
       navigate("/");
     },
   });
@@ -80,23 +84,23 @@ export const useAccount = () => {
   });
 
   const changePassword = useMutation({
-        mutationFn: async (data: ChangePasswordSchema) => {
-            await agent.post('/account/change-password', data);
-        }
-    });
+    mutationFn: async (data: ChangePasswordSchema) => {
+      await agent.post("/account/change-password", data);
+    },
+  });
 
   const forgotPassword = useMutation({
-      mutationFn: async (email: string) => {
-          await agent.post('/forgotPassword', {email})
-      }
-  })
+    mutationFn: async (email: string) => {
+      await agent.post("/forgotPassword", { email });
+    },
+  });
 
   const resetPassword = useMutation({
-      mutationFn: async (data: ResetPassword) => {
-          await agent.post('/resetPassword', data);
-      }
-  })
-  
+    mutationFn: async (data: ResetPassword) => {
+      await agent.post("/resetPassword", data);
+    },
+  });
+
   return {
     loginUser,
     currentUser,
@@ -107,6 +111,6 @@ export const useAccount = () => {
     resendConfirmationEmail,
     changePassword,
     forgotPassword,
-    resetPassword
+    resetPassword,
   };
 };
