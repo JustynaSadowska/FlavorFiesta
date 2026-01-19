@@ -240,10 +240,8 @@ export default function RecipeForm() {
                     <TextField
                       {...params}
                       label="Tags"
-                      error={!!errors.tags || safeValue.length === 0}
-                      helperText={
-                        errors.tags?.message || (safeValue.length === 0 ? "At least one tag is required" : "")
-                      }
+                      error={!!errors.tags}
+                      helperText={errors.tags?.message}
                     />
                   )}
                 />
